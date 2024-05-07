@@ -1,0 +1,5 @@
+[deps]
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+LightweightCharts = "d6998af1-87ca-4e7f-83d4-864c79a249fa"
+NanoDates = "46f1a544-deae-4307-8689-c12aa3c955c6"
