@@ -12,7 +12,7 @@
 [![Coverage](https://codecov.io/gh/bhftbootcamp/LightweightCharts.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/bhftbootcamp/LightweightCharts.jl)
 [![Registry](https://img.shields.io/badge/registry-General-4063d8)](https://github.com/JuliaRegistries/General)
 
-LightweightCharts is a convenient Julia wrapper for the [Lightweight Charts](https://github.com/tradingview/lightweight-charts) library by [TradingView, Inc.](https://www.tradingview.com/), designed to output graphical data to an HTML page.
+LightweightCharts is a convenient Julia wrapper for the [Lightweight Charts™](https://github.com/tradingview/lightweight-charts) library by [TradingView, Inc.](https://www.tradingview.com/), designed to output graphical data to an HTML page.
 
 ## Installation
 To install LightweightCharts, simply use the Julia package manager:
@@ -51,9 +51,7 @@ chart = lwc_line(
 lwc_show(chart)
 ```
 
-<div align=center>
-  <img src=docs/src/assets/chart.png valign=center>
-</div>
+![chart](docs/src/assets/chart.png)
 
 Panel candlestick and histogram chart, (using data from [CryptoAPIs](https://github.com/bhftbootcamp/CryptoAPIs.jl)):
 
@@ -96,9 +94,7 @@ panel = lwc_panel(
 lwc_show(panel)
 ```
 
-<div align=center>
-  <img src=docs/src/assets/panel.png valign=center>
-</div>
+![panel](docs/src/assets/panel.png)
 
 Composite layout featuring diverse chart types:
 
@@ -155,9 +151,7 @@ layout = lwc_layout(
 lwc_show(layout)
 ```
 
-<div align=center>
-  <img src=docs/src/assets/layout.png valign=center>
-</div>
+![layout](docs/src/assets/layout.png)
 
 Scatter plot with distinct color:
 
@@ -195,9 +189,7 @@ chart = lwc_panel(
 lwc_show(chart)
 ```
 
-<div align=center>
-  <img src=docs/src/assets/scatter.png valign=center>
-</div>
+![scatter](docs/src/assets/scatter.png)
 
 ## Contributing
 
