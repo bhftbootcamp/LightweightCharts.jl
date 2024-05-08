@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+    tags: ['*']
   pull_request:
   workflow_dispatch:
 
@@ -32,10 +33,6 @@ jobs:
           - x64
     steps:
       - uses: actions/checkout@v4
-      - uses: julia-actions/add-julia-registry@v2
-        with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          registry: bhftbootcamp/Green
       - uses: julia-actions/setup-julia@v2
         with:
           version: ${{ matrix.version }}
@@ -60,10 +57,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: julia-actions/add-julia-registry@v2
-        with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          registry: bhftbootcamp/Green
       - uses: julia-actions/setup-julia@latest
       - uses: julia-actions/cache@v2
       - name: Install dependencies
@@ -85,4 +78,3 @@ jobs:
             })
         env:
           preview_url: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/PR${{ github.event.number }}/
-          
