@@ -51,9 +51,7 @@ chart = lwc_line(
 lwc_show(chart)
 ```
 
-<div align=center>
-  <img src=docs/src/assets/chart.png valign=center>
-</div>
+![chart](docs/src/assets/chart.png)
 
 Panel candlestick and histogram chart, (using data from [CryptoAPIs](https://github.com/bhftbootcamp/CryptoAPIs.jl)):
 
@@ -96,9 +94,7 @@ panel = lwc_panel(
 lwc_show(panel)
 ```
 
-<div align=center>
-  <img src=docs/src/assets/panel.png valign=center>
-</div>
+![panel](docs/src/assets/panel.png)
 
 Composite layout featuring diverse chart types:
 
@@ -155,9 +151,7 @@ layout = lwc_layout(
 lwc_show(layout)
 ```
 
-<div align=center>
-  <img src=docs/src/assets/layout.png valign=center>
-</div>
+![layout](docs/src/assets/layout.png)
 
 Scatter plot with distinct color:
 
@@ -195,9 +189,7 @@ chart = lwc_panel(
 lwc_show(chart)
 ```
 
-<div align=center>
-  <img src=docs/src/assets/scatter.png valign=center>
-</div>
+![scatter](docs/src/assets/scatter.png)
 
 ## Contributing
 
