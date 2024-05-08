@@ -12,7 +12,7 @@
 [![Coverage](https://codecov.io/gh/bhftbootcamp/LightweightCharts.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/bhftbootcamp/LightweightCharts.jl)
 [![Registry](https://img.shields.io/badge/registry-General-4063d8)](https://github.com/JuliaRegistries/General)
 
-LightweightCharts is a convenient Julia wrapper for the [Lightweight Charts](https://github.com/tradingview/lightweight-charts) library by [TradingView, Inc.](https://www.tradingview.com/), designed to output graphical data to an HTML page.
+LightweightCharts is a convenient Julia wrapper for the [Lightweight Charts™](https://github.com/tradingview/lightweight-charts) library by [TradingView, Inc.](https://www.tradingview.com/), designed to output graphical data to an HTML page.
 
 ## Installation
 To install LightweightCharts, simply use the Julia package manager:
