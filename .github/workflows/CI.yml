@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+    tags: ['*']
   pull_request:
   workflow_dispatch:
 
@@ -26,16 +27,13 @@ jobs:
           - '1'
           - '1.8'
           - '1.9'
+          - '1.10'
         os:
           - ubuntu-latest
         arch:
           - x64
     steps:
       - uses: actions/checkout@v4
-      - uses: julia-actions/add-julia-registry@v2
-        with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          registry: bhftbootcamp/Green
       - uses: julia-actions/setup-julia@v2
         with:
           version: ${{ matrix.version }}
@@ -50,7 +48,7 @@ jobs:
         with:
           files: lcov.info
 
-  Documenter:
+  docs:
     permissions:
       contents: write
       statuses: write
@@ -60,14 +58,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: julia-actions/add-julia-registry@v2
-        with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          registry: bhftbootcamp/Green
       - uses: julia-actions/setup-julia@latest
       - uses: julia-actions/cache@v2
       - name: Install dependencies
-        run: julia --project=docs/ -e 'using Pkg; Pkg.develop(PackageSpec(path = pwd())); Pkg.instantiate()'
+        run: julia --project=docs/ -e 'using Pkg; Pkg.develop(PackageSpec(; path = pwd())); Pkg.instantiate();'
       - name: Build and deploy
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -85,4 +79,3 @@ jobs:
             })
         env:
           preview_url: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/PR${{ github.event.number }}/
-          
