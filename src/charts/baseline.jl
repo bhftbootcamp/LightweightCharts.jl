@@ -69,7 +69,7 @@ Wrapper function for [`Baseline`](https://tradingview.github.io/lightweight-char
 function lwc_baseline end
 
 function lwc_baseline(
-    timearray::AbstractVector{Tuple{D,T}};
+    data::AbstractVector{<:AbstractChartData};
     price_scale_id::LWC_PRICE_SCALE_ID = LWC_LEFT,
     label_name::String = "",
     visible::Bool = true,
@@ -93,9 +93,7 @@ function lwc_baseline(
     crosshair_marker_background_color::String = "",
     crosshair_marker_border_width::Float64 = 2.0,
     plugins::Vector{LWCPlugin} = Vector{LWCPlugin}(),
-)::LWCChart where {D<:Union{Real,TimeType},T<:Real}
-    data = lwc_convert_data(timearray)
-
+)::LWCChart
     settings = BaseLineChartSettings(
         price_scale_id,
         label_name,
@@ -131,6 +129,15 @@ function lwc_baseline(
         plugins = plugins,
     )
 end
+
+function lwc_baseline(
+    timearray::AbstractVector{Tuple{D,T}};
+    kw...
+)::LWCChart where {D<:Union{Real,TimeType},T<:Real}
+    data = lwc_convert_data(timearray)
+    return lwc_baseline(data; kw...)
+end
+
 
 function lwc_baseline(
     timestamps::Vector{D},
