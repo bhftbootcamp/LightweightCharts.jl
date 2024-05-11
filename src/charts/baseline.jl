@@ -138,7 +138,6 @@ function lwc_baseline(
     return lwc_baseline(data; kw...)
 end
 
-
 function lwc_baseline(
     timestamps::Vector{D},
     values::Vector{T};
