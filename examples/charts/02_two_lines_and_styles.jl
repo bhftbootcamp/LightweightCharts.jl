@@ -14,7 +14,7 @@ plt = lwc_layout(
         lwc_line(
             [LWCSimpleChartData(now() + Second(i), sin(i / 5), color = randcolor()) for i in RANGE];
             label_name = "sin",
-            line_style = LWC_DOTTED,  # LWC_SOLID, LWC_DOTTED, LWC_DASHED, LWC_LARGE_DASHED, LWC_SPARSE_DOTTED
+            line_style = LWC_DOTTED, # LWC_SOLID, LWC_DOTTED, LWC_DASHED, LWC_LARGE_DASHED, LWC_SPARSE_DOTTED
             line_width = 5,
             line_color = "blue",
         ),
@@ -22,8 +22,8 @@ plt = lwc_layout(
             now() + Second.(RANGE),
             10 * cos.(RANGE / 10);
             label_name = "cos",
-            line_type = LWC_STEP, # LWC_SIMPLE LWC_STEP LWC_CURVED
-            price_scale_id = LWC_RIGHT, # LWC_LEFT LWC_RIGHT
+            line_type = LWC_STEP, # LWC_SIMPLE, LWC_STEP, LWC_CURVED
+            price_scale_id = LWC_RIGHT, # LWC_LEFT, LWC_RIGHT
         ),
     ),
 )
