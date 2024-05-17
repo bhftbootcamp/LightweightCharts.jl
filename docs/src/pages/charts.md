@@ -2,6 +2,7 @@
 
 ```@docs
 LWCChart
+LWCSimpleChartData
 ```
 
 ## Line
