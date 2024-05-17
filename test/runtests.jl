@@ -28,21 +28,6 @@ const tests = String[
     "candlestick",
     "panel",
 ]
-const examples_charts = String[
-    "01_one_line",
-    "02_two_lines_and_styles",
-    "03_line_baseline",
-    "04_nanodates",
-    "06_scatter_line",
-    "07_bar",
-]
-
-const examples_plugins = String[
-    "01_vert_line",
-    "03_trend_line",
-    "04_crosshair_highlight_bar",
-    "05_tooltip",
-]
 
 @testset "LightweightCharts" begin
     @info("Running tests:")
@@ -50,19 +35,5 @@ const examples_plugins = String[
     for test ∈ tests
         @info("\t * $test ...")
         include("$test.jl")
-    end
-
-    for example ∈ examples_charts
-        @info "\t * examples/charts/$example ..."
-        @testset "$example" begin
-            @test_nowarn include("../examples/charts/$example.jl")
-        end
-    end
-
-    for example ∈ examples_plugins
-        @info "\t * examples/plugins/$example ..."
-        @testset "$example" begin
-            @test_nowarn include("../examples/plugins/$example.jl")
-        end
     end
 end

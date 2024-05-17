@@ -71,11 +71,16 @@ panel = lwc_panel(
         price_scale_id = LWC_LEFT,
     ),
     lwc_histogram(
-        map(x -> x.openTime, ohlc.result),
-        map(x -> x.volume, ohlc.result);
+        map(
+            x -> LWCSimpleChartData(
+                x.openTime,
+                x.volume,
+                color = x.openPrice > x.closePrice ? "rgba(222, 94, 87, 0.5)" : "rgba(82, 164, 154, 0.5)",
+            ),
+            ohlc.result,
+        );
         label_name = "lwc_histogram",
         base = -100.0,
-        color = "rgba(47, 112, 181, 0.5)",
         price_scale_id = LWC_RIGHT,
     ),
     name = "ETHUSDT | Binance Spot",
