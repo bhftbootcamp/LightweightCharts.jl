@@ -235,27 +235,23 @@ import LightweightCharts: randcolor
 
 t_range = 1:500
 
-chart = lwc_layout(
-    lwc_panel(
-        lwc_baseline(
-            map(
-                x -> LWCSimpleChartData(
-                    now() + Second(x),
-                    cos.(x / 10);
-                    color = randcolor(),
-                    top_line_color = randcolor(),
-                    top_fill_color_1 = randcolor(),
-                    bottom_line_color = randcolor(),
-                    bottom_fill_color_2 = randcolor(),
-                ),
-                t_range,
-            );
-            label_name = "lwc_baseline",
-            line_type = LWC_STEP,
-            price_scale_id = LWC_RIGHT,
-            line_width = 4,
+chart = lwc_baseline(
+    map(
+        x -> LWCSimpleChartData(
+            now() + Second(x),
+            cos.(x / 10);
+            color = randcolor(),
+            top_line_color = randcolor(),
+            top_fill_color_1 = randcolor(),
+            bottom_line_color = randcolor(),
+            bottom_fill_color_2 = randcolor(),
         ),
-    ),
+        t_range,
+    );
+    label_name = "lwc_baseline",
+    line_type = LWC_STEP,
+    price_scale_id = LWC_RIGHT,
+    line_width = 4,
 )
 
 lwc_save("colors_example.html", chart)
