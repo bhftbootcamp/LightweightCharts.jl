@@ -39,7 +39,7 @@ panel = lwc_panel(
         map(
             x -&gt; LWCCandle(x.openTime, x.openPrice, x.highPrice, x.lowPrice, x.closePrice),
             ohlc.result,
-        ),
+        );
         label_name = &quot;lwc_candlestick&quot;,
         up_color = &quot;#52a49a&quot;,
         down_color = &quot;#de5e57&quot;,
@@ -47,13 +47,18 @@ panel = lwc_panel(
         price_scale_id = LWC_LEFT,
     ),
     lwc_histogram(
-        map(x -&gt; x.openTime, ohlc.result),
-        map(x -&gt; x.volume, ohlc.result);
+        map(
+            x -&gt; LWCSimpleChartData(
+                x.openTime,
+                x.volume,
+                color = x.openPrice &gt; x.closePrice ? &quot;#de5e5780&quot; : &quot;#52a49a80&quot;,
+            ),
+            ohlc.result,
+        );
         label_name = &quot;lwc_histogram&quot;,
-        base = -100.0,
-        color = &quot;rgba(47, 112, 181, 0.5)&quot;,
+        base = 0.0,
         price_scale_id = LWC_RIGHT,
-    ),
+    );
     name = &quot;ETHUSDT | Binance Spot&quot;,
 )
 
@@ -64,11 +69,11 @@ layout = lwc_layout(
     lwc_panel(
         lwc_area(
             NanoDate(&quot;2024-01-01&quot;) .+ Second.(1:500),
-            map(x -&gt; rand(1:500), collect(1:500)),
+            map(x -&gt; rand(1:500), collect(1:500));
             label_name = &quot;lwc_area&quot;,
             line_color = &quot;#49c7e3&quot;,
             top_color = &quot;#74d7ed&quot;,
-            bottom_color = &quot;rgba(133, 242, 240, 0)&quot;,
+            bottom_color = &quot;#85f2f000&quot;,
             line_style = LWC_SOLID,
             line_type = LWC_STEP,
             line_width = 2,
@@ -84,7 +89,7 @@ layout = lwc_layout(
             line_type = LWC_SIMPLE,
             line_width = 3,
             price_scale_id = LWC_RIGHT,
-        ),
+        );
         x = 1,
         y = 1,
     ),
@@ -99,10 +104,10 @@ layout = lwc_layout(
             line_width = 3,
             precision = 4,
             price_scale_id = LWC_RIGHT,
-        ),
+        );
         x = 2,
         y = 1,
-    ),
+    );
     name = &quot;LightweightCharts ❤️ Julia&quot;
 )
 
@@ -132,8 +137,8 @@ chart = lwc_panel(
         line_color = &quot;#cb3c33&quot;,
         point_markers_visible = true,
         line_visible = false,
-    ),
+    );
     max_y = 1.6
 )
 
-lwc_show(chart)</code></pre><p><img src="assets/scatter.png" alt="scatter"/></p></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="pages/charts/">Charts »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.4.1 on <span class="colophon-date" title="Wednesday 8 May 2024 19:09">Wednesday 8 May 2024</span>. Using Julia version 1.10.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+lwc_show(chart)</code></pre><p><img src="assets/scatter.png" alt="scatter"/></p></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="pages/charts/">Charts »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.4.1 on <span class="colophon-date" title="Saturday 18 May 2024 18:36">Saturday 18 May 2024</span>. Using Julia version 1.10.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
