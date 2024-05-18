@@ -12,9 +12,11 @@ end
 
 """
     lwc_histogram([, timestamps], values::Vector{Real}; kw...) -> LWCChart
+    lwc_histogram(Vector{LWCSimpleChartData}; kw...) -> LWCChart
 
 Creates a [`LWCChart`](@ref) object that contains histogram chart information.
 The `timestamps` can be passed as `Vector{Integer}` of Unix time or `Vector{TimeType}`.
+You can also use type [`LWCSimpleChartData`](@ref) for more flexible color settings.
 
 Wrapper function for [`Histogram`](https://tradingview.github.io/lightweight-charts/docs/series-types#histogram).
 

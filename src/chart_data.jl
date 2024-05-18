@@ -22,11 +22,12 @@ using ..LightweightCharts
     LWCSimpleChartData(time::Int64, value::Real; kw...)
     LWCSimpleChartData(time::TimeType, value::Real; kw...)
 
-Representation of data for [`lwc_line`](@ref), [`lwc_area`](@ref), [`lwc_baseline`](@ref) and [`lwc_histogram`](@ref) methods.
+This data type allows you to customize the colors for each point of your chart.
+Supported for [`lwc_line`](@ref), [`lwc_area`](@ref), [`lwc_baseline`](@ref) and [`lwc_histogram`](@ref) methods.
 
 ## Fields
-- `time::Int64`
-- `value::Float64`
+- `time::Int64`: Data unix time.
+- `value::Float64`: Data value.
 
 ## Keyword arguments
 | Name::Type | Default (Posible values) | Description |

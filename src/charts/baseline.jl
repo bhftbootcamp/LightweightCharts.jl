@@ -33,9 +33,11 @@ end
 
 """
     lwc_baseline([, timestamps], values::Vector{Real}; kw...) -> LWCChart
+    lwc_baseline(Vector{LWCSimpleChartData}; kw...) -> LWCChart
 
 Creates a [`LWCChart`](@ref) object that contains baseline chart information.
 The `timestamps` can be passed as `Vector{Integer}` of Unix time or `Vector{TimeType}`.
+You can also use type [`LWCSimpleChartData`](@ref) for more flexible color settings.
 
 Wrapper function for [`Baseline`](https://tradingview.github.io/lightweight-charts/docs/series-types#baseline).
 

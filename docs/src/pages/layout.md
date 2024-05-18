@@ -75,7 +75,7 @@ layout = lwc_layout(
             line_width = 3,
             precision = 4,
             price_scale_id = LWC_RIGHT,
-        ),
+        );
         x = 1,
         y = 1,
     ),
@@ -102,7 +102,7 @@ layout = lwc_layout(
             line_type = LWC_SIMPLE,
             line_width = 3,
             price_scale_id = LWC_RIGHT,
-        ),
+        );
         x = 1,
         y = 2,
     );

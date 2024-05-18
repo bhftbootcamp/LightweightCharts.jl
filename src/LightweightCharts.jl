@@ -307,13 +307,14 @@ function Base.propertynames(h::AbstractChartSettings)
     return to_camelcase.(n)
 end
 
-
 function Serde.SerJson.ser_name(::Type{A}, ::Val{T}) where {A<:AbstractChartData,T}
     return to_camelcase(T)
 end
+
 function Serde.SerJson.ser_name(::Type{A}, ::Val{T}) where {A<:AbstractChartSettings,T}
     return to_camelcase(T)
 end
+
 function Serde.SerJson.ser_name(::Type{A}, ::Val{T}) where {A<:AbstractPluginSettings,T}
     return to_camelcase(T)
 end

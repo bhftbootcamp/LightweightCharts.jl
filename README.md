@@ -73,7 +73,7 @@ panel = lwc_panel(
         map(
             x -> LWCCandle(x.openTime, x.openPrice, x.highPrice, x.lowPrice, x.closePrice),
             ohlc.result,
-        ),
+        );
         label_name = "lwc_candlestick",
         up_color = "#52a49a",
         down_color = "#de5e57",
@@ -85,14 +85,14 @@ panel = lwc_panel(
             x -> LWCSimpleChartData(
                 x.openTime,
                 x.volume,
-                color = x.openPrice > x.closePrice ? "#de5e57d9" : "#52a49a80",
+                color = x.openPrice > x.closePrice ? "#de5e5780" : "#52a49a80",
             ),
             ohlc.result,
         );
         label_name = "lwc_histogram",
-        base = -100.0,
+        base = 0.0,
         price_scale_id = LWC_RIGHT,
-    ),
+    );
     name = "ETHUSDT | Binance Spot",
 )
 
@@ -131,7 +131,7 @@ layout = lwc_layout(
             line_type = LWC_SIMPLE,
             line_width = 3,
             price_scale_id = LWC_RIGHT,
-        ),
+        );
         x = 1,
         y = 1,
     ),
@@ -146,10 +146,10 @@ layout = lwc_layout(
             line_width = 3,
             precision = 4,
             price_scale_id = LWC_RIGHT,
-        ),
+        );
         x = 2,
         y = 1,
-    ),
+    );
     name = "LightweightCharts ❤️ Julia"
 )
 
@@ -187,7 +187,7 @@ chart = lwc_panel(
         line_color = "#cb3c33",
         point_markers_visible = true,
         line_visible = false,
-    ),
+    );
     max_y = 1.6
 )
 

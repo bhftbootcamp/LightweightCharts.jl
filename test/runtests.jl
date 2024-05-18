@@ -14,10 +14,6 @@ function Base.:(==)(l::T, r::T) where {T<:Union{LWCChart,LWCPanel}}
     return true
 end
 
-function lwc_show(plt; filepath = joinpath(homedir(), "lightweightcharts.html"))
-    return "html"
-end
-
 const tests = String[
     "common",
     "area",
