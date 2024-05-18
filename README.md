@@ -85,7 +85,7 @@ panel = lwc_panel(
             x -> LWCSimpleChartData(
                 x.openTime,
                 x.volume,
-                color = x.openPrice > x.closePrice ? "rgba(222, 94, 87, 0.5)" : "rgba(82, 164, 154, 0.5)",
+                color = x.openPrice > x.closePrice ? "#de5e57d9" : "#52a49a80",
             ),
             ohlc.result,
         );
@@ -111,11 +111,11 @@ layout = lwc_layout(
     lwc_panel(
         lwc_area(
             NanoDate("2024-01-01") .+ Second.(1:500),
-            map(x -> rand(1:500), collect(1:500)),
+            map(x -> rand(1:500), collect(1:500));
             label_name = "lwc_area",
             line_color = "#49c7e3",
             top_color = "#74d7ed",
-            bottom_color = "rgba(133, 242, 240, 0)",
+            bottom_color = "#85f2f000",
             line_style = LWC_SOLID,
             line_type = LWC_STEP,
             line_width = 2,
