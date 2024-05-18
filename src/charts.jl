@@ -63,6 +63,8 @@ Serde.SerJson.ser_type(::Type{A}, x::LWC_LINE_STYLES) where {A<:AbstractChartSet
 
 Serde.SerJson.ser_type(::Type{A}, x::LWC_PRICE_SCALE_ID) where {A<:AbstractChartSettings} = x == LWC_RIGHT ? "right" : "left"
 
+(Serde.SerJson.ser_ignore_null(::Type{A})::Bool) where {A<:AbstractChartData} = true
+
 function prepare_data(
     timestamps::Vector{D},
     values::Vector{T};

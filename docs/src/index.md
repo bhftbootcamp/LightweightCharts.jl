@@ -63,7 +63,7 @@ panel = lwc_panel(
         map(
             x -> LWCCandle(x.openTime, x.openPrice, x.highPrice, x.lowPrice, x.closePrice),
             ohlc.result,
-        ),
+        );
         label_name = "lwc_candlestick",
         up_color = "#52a49a",
         down_color = "#de5e57",
@@ -71,13 +71,18 @@ panel = lwc_panel(
         price_scale_id = LWC_LEFT,
     ),
     lwc_histogram(
-        map(x -> x.openTime, ohlc.result),
-        map(x -> x.volume, ohlc.result);
+        map(
+            x -> LWCSimpleChartData(
+                x.openTime,
+                x.volume,
+                color = x.openPrice > x.closePrice ? "#de5e5780" : "#52a49a80",
+            ),
+            ohlc.result,
+        );
         label_name = "lwc_histogram",
-        base = -100.0,
-        color = "rgba(47, 112, 181, 0.5)",
+        base = 0.0,
         price_scale_id = LWC_RIGHT,
-    ),
+    );
     name = "ETHUSDT | Binance Spot",
 )
 
@@ -96,11 +101,11 @@ layout = lwc_layout(
     lwc_panel(
         lwc_area(
             NanoDate("2024-01-01") .+ Second.(1:500),
-            map(x -> rand(1:500), collect(1:500)),
+            map(x -> rand(1:500), collect(1:500));
             label_name = "lwc_area",
             line_color = "#49c7e3",
             top_color = "#74d7ed",
-            bottom_color = "rgba(133, 242, 240, 0)",
+            bottom_color = "#85f2f000",
             line_style = LWC_SOLID,
             line_type = LWC_STEP,
             line_width = 2,
@@ -116,7 +121,7 @@ layout = lwc_layout(
             line_type = LWC_SIMPLE,
             line_width = 3,
             price_scale_id = LWC_RIGHT,
-        ),
+        );
         x = 1,
         y = 1,
     ),
@@ -131,10 +136,10 @@ layout = lwc_layout(
             line_width = 3,
             precision = 4,
             price_scale_id = LWC_RIGHT,
-        ),
+        );
         x = 2,
         y = 1,
-    ),
+    );
     name = "LightweightCharts ❤️ Julia"
 )
 
@@ -172,7 +177,7 @@ chart = lwc_panel(
         line_color = "#cb3c33",
         point_markers_visible = true,
         line_visible = false,
-    ),
+    );
     max_y = 1.6
 )
 

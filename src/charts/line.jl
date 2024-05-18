@@ -22,9 +22,11 @@ end
 
 """
     lwc_line([, timestamps], values::Vector{Real}; kw...) -> LWCChart
+    lwc_line(Vector{LWCSimpleChartData}; kw...) -> LWCChart
 
 Creates a [`LWCChart`](@ref) object that contains line chart information.
 The `timestamps` can be passed as `Vector{Integer}` of Unix time or `Vector{TimeType}`.
+You can also use type [`LWCSimpleChartData`](@ref) for more flexible color settings.
 
 Wrapper function for [`Line`](https://tradingview.github.io/lightweight-charts/docs/series-types#line).
 
@@ -52,7 +54,7 @@ Wrapper function for [`Line`](https://tradingview.github.io/lightweight-charts/d
 function lwc_line end
 
 function lwc_line(
-    timearray::AbstractVector{Tuple{D,T}};
+    data::AbstractVector{<:AbstractChartData};
     price_scale_id::LWC_PRICE_SCALE_ID = LWC_LEFT,
     label_name::String = "",
     visible::Bool = true,
@@ -70,9 +72,7 @@ function lwc_line(
     crosshair_marker_background_color::String = "",
     crosshair_marker_border_width::Float64 = 2.0,
     plugins::Vector{LWCPlugin} = Vector{LWCPlugin}(),
-)::LWCChart where {D<:Union{Real,TimeType},T<:Real}
-    data = lwc_convert_data(timearray)
-
+)::LWCChart
     settings = LineChartSettings(
         price_scale_id,
         label_name,
@@ -101,6 +101,14 @@ function lwc_line(
         data = data,
         plugins = plugins,
     )
+end
+
+function lwc_line(
+    timearray::AbstractVector{Tuple{D,T}};
+    kw...
+)::LWCChart where {D<:Union{Real,TimeType},T<:Real}
+    data = lwc_convert_data(timearray)
+    return lwc_line(data; kw...)
 end
 
 function lwc_line(

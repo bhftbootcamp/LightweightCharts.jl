@@ -24,9 +24,11 @@ end
 
 """
     lwc_area([, timestamps], values::Vector{Real}; kw...) -> LWCChart
+    lwc_area(Vector{LWCSimpleChartData}; kw...) -> LWCChart
 
 Creates a [`LWCChart`](@ref) object that contains area chart information.
 The `timestamps` can be passed as `Vector{Integer}` of Unix time or `Vector{TimeType}`.
+You can also use type [`LWCSimpleChartData`](@ref) for more flexible color settings.
 
 Wrapper function for [`Area`](https://tradingview.github.io/lightweight-charts/docs/series-types#area).
 
@@ -56,7 +58,7 @@ Wrapper function for [`Area`](https://tradingview.github.io/lightweight-charts/d
 function lwc_area end
 
 function lwc_area(
-    timearray::AbstractVector{Tuple{D,T}};
+    data::AbstractVector{<:AbstractChartData};
     price_scale_id::LWC_PRICE_SCALE_ID = LWC_LEFT,
     label_name::String = "",
     visible::Bool = true,
@@ -76,9 +78,7 @@ function lwc_area(
     crosshair_marker_background_color::String = "",
     crosshair_marker_border_width::Float64 = 2.0,
     plugins::Vector{LWCPlugin} = Vector{LWCPlugin}(),
-)::LWCChart where {D<:Union{Real,TimeType},T<:Real}
-    data = lwc_convert_data(timearray)
-
+)::LWCChart
     settings = AreaChartSettings(
         price_scale_id,
         label_name,
@@ -109,6 +109,14 @@ function lwc_area(
         data = data,
         plugins = plugins,
     )
+end
+
+function lwc_area(
+    timearray::AbstractVector{Tuple{D,T}};
+    kw...
+)::LWCChart where {D<:Union{Real,TimeType},T<:Real}
+    data = lwc_convert_data(timearray)
+    return lwc_area(data; kw...)
 end
 
 function lwc_area(
