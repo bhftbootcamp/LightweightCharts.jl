@@ -131,11 +131,20 @@ const ChartPanel = ({ settings, id, setPanels }) => {
                 autoscaleInfoProvider: (original) => {
                     const res = original();
                     if (res !== null) {
-                        if (settings.minY != null) {
-                            res.priceRange.minValue = settings.minY;
+                        let isLeftPriceScaleId = chart.settings.priceScaleId === "left";
+                        const minYValue = isLeftPriceScaleId
+                            ? (settings.leftMinY ?? settings.minY)
+                            : (settings.rightMinY ?? settings.minY);
+
+                        const maxYValue = isLeftPriceScaleId
+                            ? (settings.leftMaxY ?? settings.maxY)
+                            : (settings.rightMaxY ?? settings.maxY);
+
+                        if (minYValue !== null) {
+                            res.priceRange.minValue = minYValue;
                         }
-                        if (settings.maxY != null) {
-                            res.priceRange.maxValue = settings.maxY;
+                        if (maxYValue !== null) {
+                            res.priceRange.maxValue = maxYValue;
                         }
                     }
                     return res;
