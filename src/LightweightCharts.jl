@@ -128,7 +128,11 @@ mutable struct LWCPanel <: AbstractChartSettings
     y::Int64
     name::String
     min_y::Union{Real,Nothing}
+    left_min_y::Union{Real,Nothing}
+    right_min_y::Union{Real,Nothing}
     max_y::Union{Real,Nothing}
+    left_max_y::Union{Real,Nothing}
+    right_max_y::Union{Real,Nothing}
     seconds_visible::Bool
     bar_spacing::Real
     min_bar_spacing::Real
@@ -153,7 +157,11 @@ Creates a panel combining several [`charts`](@ref charts).
 | `y::Int64` | `-999` | Panel's vertical coordinates |
 | `name::String` |` "LightweightCharts ❤️ Julia"` | Panel name (will be displayed in the browser tab title). |
 | `min_y::Union{Real,Nothing}` | `nothing` | Lower bound on the y-axis. |
-| `max_y::Union{Real,Nothing}` | `nothing` | Lower bound on the y-axis. |
+| `left_min_y::Union{Real,Nothing}` | `nothing` | Lower bound on the left y-axis. |
+| `right_min_y::Union{Real,Nothing}` | `nothing` | Lower bound on the right y-axis. |
+| `max_y::Union{Real,Nothing}` | `nothing` | Upper bound on the y-axis. |
+| `left_max_y::Union{Real,Nothing}` | `nothing` | Upper bound on the left y-axis. |
+| `right_max_y::Union{Real,Nothing}` | `nothing` | Upper bound on the right y-axis. |
 | `seconds_visible::Bool` | `false` | Seconds visibility on the x-axis. |
 | `bar_spacing::Real` | `6` | Distance between the stripes in pixels. |
 | `min_bar_spacing::Real` | `0.5` | Minimum distance between the stripes in pixels. |
@@ -166,7 +174,11 @@ function lwc_panel(
     y::Int64 = -999,
     name::String = "LightweightCharts ❤️ Julia",
     min_y::Union{Real,Nothing} = nothing,
+    left_min_y::Union{Real,Nothing} = nothing,
+    right_min_y::Union{Real,Nothing} = nothing,
     max_y::Union{Real,Nothing} = nothing,
+    left_max_y::Union{Real,Nothing} = nothing,
+    right_max_y::Union{Real,Nothing} = nothing,
     seconds_visible::Bool = false,
     bar_spacing::Real = 6,
     min_bar_spacing::Real = 0.5,
@@ -178,7 +190,11 @@ function lwc_panel(
         y,
         name,
         min_y,
+        left_min_y,
+        right_min_y,
         max_y,
+        left_max_y,
+        right_max_y,
         seconds_visible,
         bar_spacing,
         min_bar_spacing,
