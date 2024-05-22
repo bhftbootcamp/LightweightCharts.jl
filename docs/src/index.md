@@ -84,6 +84,8 @@ panel = lwc_panel(
         price_scale_id = LWC_RIGHT,
     );
     name = "ETHUSDT | Binance Spot",
+    right_max_y = 8000000,
+    left_min_y = 1000,
 )
 
 lwc_show(panel)
