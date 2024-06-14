@@ -110,6 +110,10 @@ function Base.show(io::IO, h::LWCChart)
     return println(io, "LightweightCharts.LWCChart($(h.label_name))")
 end
 
+function Base.show(io::IO, m::MIME"text/html", h::LWCChart)
+    return write(io, string(h))
+end
+
 include("charts.jl")
 using .LWCCharts
 
@@ -143,6 +147,10 @@ end
 
 function Base.show(io::IO, h::LWCPanel)
     return println(io, "LightweightCharts.LWCPanel($(h.name))")
+end
+
+function Base.show(io::IO, m::MIME"text/html", h::LWCPanel)
+    return write(io, string(h))
 end
 
 """
@@ -219,6 +227,10 @@ end
 
 function Base.show(io::IO, h::LWCLayout)
     return println(io, "LightweightCharts.LWCLayout($(h.name))")
+end
+
+function Base.show(io::IO, m::MIME"text/html", h::LWCLayout)
+    return write(io, string(h))
 end
 
 function update_not_set_coords!(panels::Tuple{Vararg{LWCPanel}})
