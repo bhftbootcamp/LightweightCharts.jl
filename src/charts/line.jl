@@ -104,24 +104,26 @@ function lwc_line(
 end
 
 function lwc_line(
-    timearray::AbstractVector{Tuple{D,T}};
+    timestamps::AbstractVector{D},
+    values::AbstractVector{T};
     kw...
 )::LWCChart where {D<:Union{Real,TimeType},T<:Real}
-    data = lwc_convert_data(timearray)
+    data = prepare_data(timestamps, values)
     return lwc_line(data; kw...)
 end
 
 function lwc_line(
-    timestamps::Vector{D},
-    values::Vector{T};
+    timearray::AbstractVector{T};
     kw...
-)::LWCChart where {D<:Union{Real,TimeType},T<:Real}
-    return lwc_line(prepare_data(timestamps, values); kw...)
+)::LWCChart where {T<:Real}
+    data = prepare_data(timearray)
+    return lwc_line(data; kw...)
 end
 
 function lwc_line(
-    values::Vector{T};
+    timearray::AbstractVector;
     kw...
-)::LWCChart where {T<:Real}
-    return lwc_line(prepare_data(values); kw...)
+)::LWCChart
+    data = lwc_convert_data(LWCSimpleChartData, timearray)
+    return lwc_line(data; kw...)
 end

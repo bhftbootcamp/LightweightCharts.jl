@@ -74,6 +74,13 @@ function prepare_data(
 end
 
 function prepare_data(
+    values::Vector{T};
+)::Vector{Tuple{Union{Real,TimeType},T}} where {T<:Real}
+    timestamps = [d + Second(1) for d in DateTime(1970):Second(1):DateTime(1970) + Second(length(values) - 1)]
+    return prepare_data(timestamps, values)
+end
+
+function prepare_data(
     timestamps::Vector{D},
     open::Vector{O},
     high::Vector{H},
@@ -82,13 +89,6 @@ function prepare_data(
 )::Vector{Tuple{D,O,H,L,C}} where {D<:Union{Real,TimeType},O<:Real,H<:Real,L<:Real,C<:Real}
     @assert length(timestamps) === length(open) == length(high) == length(low) == length(close) "length(timestamps) != length(open) != length(high) != length(low) != (close)"
     return collect(zip(timestamps, open, high, low, close))
-end
-
-function prepare_data(
-    values::Vector{T};
-)::Vector{Tuple{Union{Real,TimeType},T}} where {T<:Real}
-    timestamps = [d + Second(1) for d in DateTime(1970):Second(1):DateTime(1970) + Second(length(values) - 1)]
-    return prepare_data(timestamps, values)
 end
 
 include("charts/line.jl")

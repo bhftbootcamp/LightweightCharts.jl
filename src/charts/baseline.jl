@@ -133,24 +133,26 @@ function lwc_baseline(
 end
 
 function lwc_baseline(
-    timearray::AbstractVector{Tuple{D,T}};
+    timestamps::AbstractVector{D},
+    values::AbstractVector{T};
     kw...
 )::LWCChart where {D<:Union{Real,TimeType},T<:Real}
-    data = lwc_convert_data(timearray)
+    data = prepare_data(timestamps, values)
     return lwc_baseline(data; kw...)
 end
 
 function lwc_baseline(
-    timestamps::Vector{D},
-    values::Vector{T};
+    timearray::AbstractVector{T};
     kw...
-)::LWCChart where {D<:Union{Real,TimeType},T<:Real}
-    return lwc_baseline(prepare_data(timestamps, values); kw...)
+)::LWCChart where {T<:Real}
+    data = prepare_data(timearray)
+    return lwc_baseline(data; kw...)
 end
 
 function lwc_baseline(
-    values::Vector{T};
+    timearray::AbstractVector;
     kw...
-)::LWCChart where {T<:Real}
-    return lwc_baseline(prepare_data(values); kw...)
+)::LWCChart
+    data = lwc_convert_data(LWCSimpleChartData, timearray)
+    return lwc_baseline(data; kw...)
 end

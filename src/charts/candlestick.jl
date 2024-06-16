@@ -125,5 +125,17 @@ function lwc_candlestick(
     data::AbstractVector{Tuple{D,O,H,L,C}};
     kw...
 )::LWCChart where {D<:Union{Real,TimeType},O<:Real,H<:Real,L<:Real,C<:Real}
-    return lwc_candlestick(lwc_convert_data(data); kw...)
+    return lwc_candlestick(prepare_data(data); kw...)
+end
+
+function lwc_candlestick(
+    timestamp::AbstractVector{T},
+    ohlc::AbstractVector{Tuple{O,H,L,C}};
+    kw...
+)::LWCChart where {T<:Union{TimeType,Real},O<:Real,H<:Real,L<:Real,C<:Real}
+    return lwc_candlestick(prepare_data(data); kw...)
+end
+
+function lwc_candlestick(data::AbstractVector; kw...)::LWCChart
+    return lwc_candlestick(lwc_convert_data(LWCCandle, data); kw...)
 end
