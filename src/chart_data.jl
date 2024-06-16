@@ -223,6 +223,15 @@ function lwc_convert_data!(data::T)::T where {T<:AbstractVector{<:AbstractChartD
     return data
 end
 
+function lwc_convert_data(
+    timearray::AbstractVector{Tuple{D,O,H,L,C}},
+)::Vector{LWCCandle} where {D<:Union{Real,TimeType},O<:Real,H<:Real,L<:Real,C<:Real}
+    data::Vector{LWCCandle} = [
+        LWCCandle(datetime2epochns(datetime), open, high, low, close) for (datetime, open, high, low, close) in timearray
+    ]
+    return lwc_convert_data!(data)
+end
+
 function lwc_convert_data(::Type{T}, timearray::AbstractVector) where {T<:AbstractChartData}
     element_type = eltype(timearray)
     V = if hasmethod(convert, (Type{Pair}, element_type))
