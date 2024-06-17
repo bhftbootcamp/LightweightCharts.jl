@@ -224,65 +224,33 @@ function lwc_convert_data!(data::T)::T where {T<:AbstractVector{<:AbstractChartD
 end
 
 function lwc_convert_data(
-    timearray::AbstractVector{Tuple{D,O,H,L,C}},
-)::Vector{LWCCandle} where {D<:Union{Real,TimeType},O<:Real,H<:Real,L<:Real,C<:Real}
-    data::Vector{LWCCandle} = [
-        LWCCandle(datetime2epochns(datetime), open, high, low, close) for (datetime, open, high, low, close) in timearray
-    ]
-    return lwc_convert_data!(data)
-end
-
-function lwc_convert_data(::Type{T}, timearray::AbstractVector) where {T<:AbstractChartData}
-    element_type = eltype(timearray)
-    V = if hasmethod(convert, (Type{Pair}, element_type))
-        Pair
-    elseif hasmethod(convert, (Type{Tuple}, element_type))
-        Tuple
-    else
-        throw(ErrorException("Type $element_type must have a `convert` method to Tuple type or Pair type."))
-    end
-
-    data = lwc_convert_data(T, V, timearray)
-    return lwc_convert_data!(data)
-end
-
-function lwc_convert_data(::Type{LWCSimpleChartData}, ::Type{V}, timearray::AbstractVector)::Vector{LWCSimpleChartData} where {V}
-    return map(timearray) do element
-        datetime, value = convert(V, element)
+    timearray::AbstractVector{Tuple{D,T}},
+)::Vector{LWCSimpleChartData} where {D<:Union{Real,TimeType},T<:Real}
+    data = map(timearray) do timetick
+        datetime, value = timetick
         return LWCSimpleChartData(datetime2epochns(datetime), value)
     end
+    return lwc_convert_data!(data)
 end
 
-function lwc_convert_data(::Type{LWCCandle}, ::Type{V}, timearray::AbstractVector)::Vector{LWCCandle} where {V}
-    return map(timearray) do element
-        candle = convert(V, element)
-        return if length(candle) == 2
-            datetime, value = candle
-            open, high, low, close = if hasmethod(iterate, Tuple{typeof(value)})
-                value
-            elseif hasmethod(convert, (Type{Tuple}, typeof(value)))
-                convert(Tuple, value)
-            else
-                throw(ErrorException(
-                    """
-                    Invalid custom candlestick value data ($(typeof(value))).
-                    Candlestick value must be iterable or convertable to Tuple{Real,Real,Real,Real}.
-                    """
-                ))
-            end
-            LWCCandle(datetime2epochns(datetime), open, high, low, close)
-        elseif length(candle) == 5
-            datetime, open, high, low, close = candle
-            LWCCandle(datetime2epochns(datetime), open, high, low, close)
-        else
-            throw(ErrorException(
-                """
-                Invalid custom candlestick data ($(eltype(timearray))).
-                Candle must be convertable to Tuple{Union{TimeType,Real},NTuple{4,Real}} or Tuple{Union{TimeType,Real},Real,Real,Real,Real} 
-                """
-            ))
-        end
+function lwc_convert_data(
+    timearray::AbstractVector,
+)::Vector{LWCSimpleChartData}
+    return map(timearray) do timetick
+        datetime, value = convert(Tuple, timetick)
+        return LWCSimpleChartData(datetime2epochns(datetime), value)
     end
+    return lwc_convert_data!(data)
+end
+
+function lwc_convert_data(
+    timearray::AbstractVector{Tuple{D,O,H,L,C}},
+)::Vector{LWCCandle} where {D<:Union{Real,TimeType},O<:Real,H<:Real,L<:Real,C<:Real}
+    data = map(timearray) do candle
+        datetime, open, high, low, close = candle
+        return LWCCandle(datetime2epochns(datetime), open, high, low, close)
+    end
+    return lwc_convert_data!(data)
 end
 
 function lwc_convert_data(time::D)::Int64 where {D<:Union{Real,TimeType}}

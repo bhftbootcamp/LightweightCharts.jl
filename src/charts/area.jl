@@ -25,12 +25,16 @@ end
 """
     lwc_area([, timestamps], values::Vector{Real}; kw...) -> LWCChart
     lwc_area(Vector{LWCSimpleChartData}; kw...) -> LWCChart
+    lwc_area(timearray::Vector; kw...) -> LWCChart
 
 Creates a [`LWCChart`](@ref) object that contains area chart information.
 The `timestamps` can be passed as `Vector{Integer}` of Unix time or `Vector{TimeType}`.
 You can also use type [`LWCSimpleChartData`](@ref) for more flexible color settings.
 
 Wrapper function for [`Area`](https://tradingview.github.io/lightweight-charts/docs/series-types#area).
+
+!!! note
+    You can use a `timearray` with custom type elements for which a [conversion method](https://docs.julialang.org/en/v1/base/base/#Base.convert) to types `Tuple{Real,Real}` or `Tuple{TimeType,Real}` is defined.
 
 ## Keyword arguments
 | Name::Type | Default (Posible values) | Description |
@@ -121,10 +125,10 @@ function lwc_area(
 end
 
 function lwc_area(
-    timearray::AbstractVector{T};
+    values::AbstractVector{T};
     kw...
 )::LWCChart where {T<:Real}
-    data = prepare_data(timearray)
+    data = prepare_data(values)
     return lwc_area(data; kw...)
 end
 
@@ -132,6 +136,6 @@ function lwc_area(
     timearray::AbstractVector;
     kw...
 )::LWCChart
-    data = lwc_convert_data(LWCSimpleChartData, timearray)
+    data = lwc_convert_data(timearray)
     return lwc_area(data; kw...)
 end

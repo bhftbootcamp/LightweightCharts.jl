@@ -70,7 +70,9 @@ function prepare_data(
     values::Vector{T};
 )::Vector{Tuple{D,T}} where {D<:Union{Real,TimeType},T<:Real}
     @assert length(timestamps) === length(values) "length(timestamps) != length(values)"
-    return collect(zip(timestamps, values))
+    return map(timestamps, values) do timestamp, value
+        return (timestamp, value)
+    end
 end
 
 function prepare_data(
