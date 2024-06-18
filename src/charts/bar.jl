@@ -44,7 +44,6 @@ function lwc_bar(
     thin_bars::Bool = true,
     plugins::Vector{LWCPlugin} = Vector{LWCPlugin}(),
 )::LWCChart
-    data = lwc_convert_data!(data)
 
     settings = BarChartSettings(
         price_scale_id,
@@ -69,6 +68,19 @@ function lwc_bar(
 end
 
 """
+    wc_bar(data::Vector{Tuple{D,O,H,L,C}}; kw...) -> LWCChart
+
+Takes a single vector with tuples containing the corresponding candlestick values.
+Here `D` is a `Real` or `TimeType` and `O,H,L,C` are `Real`s.
+"""
+function lwc_bar(
+    data::AbstractVector{Tuple{D,O,H,L,C}};
+    kw...
+)::LWCChart where {D<:Union{Real,TimeType},O<:Real,H<:Real,L<:Real,C<:Real}
+    return lwc_bar(wrap_data(data); kw...)
+end
+
+"""
     lwc_bar(arg...; kw...) -> LWCChart
 
 Takes as input individual vectors with the corresponding candlestick values.
@@ -88,18 +100,6 @@ function lwc_bar(
     close::Vector{C};
     kw...
 )::LWCChart where {D<:Union{Real,TimeType},O<:Real,H<:Real,L<:Real,C<:Real}
-    return lwc_bar(prepare_data(timestamps, open, high, low, close); kw...)
-end
-
-"""
-    wc_bar(data::Vector{Tuple{D,O,H,L,C}}; kw...) -> LWCChart
-
-Takes a single vector with tuples containing the corresponding candlestick values.
-Here `D` is a `Real` or `TimeType` and `O,H,L,C` are `Real`s.
-"""
-function lwc_bar(
-    data::AbstractVector{Tuple{D,O,H,L,C}};
-    kw...
-)::LWCChart where {D<:Union{Real,TimeType},O<:Real,H<:Real,L<:Real,C<:Real}
-    return lwc_bar(lwc_convert_data(data); kw...)
+    data = normalize_data(timestamps, open, high, low, close)
+    return lwc_bar(wrap_data(data); kw...)
 end

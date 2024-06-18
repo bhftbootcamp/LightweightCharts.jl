@@ -23,9 +23,7 @@ export lwc_time,
     lwc_open,
     lwc_high,
     lwc_close,
-    lwc_low,
-    lwc_convert_data,
-    lwc_convert_data!
+    lwc_low
 
 export AbstractChartData,
     AbstractChartSettings,
@@ -54,10 +52,6 @@ export LWC_SOLID,
 export LWC_RIGHT,
     LWC_LEFT
 
-export LWC_DISABLED,
-    LWC_CONTINUOUS,
-    LWC_UPDATE
-
 export LWC_TOOLTIP_TYPE,
     LWC_TOOLTIP_TOP,
     LWC_TOOLTIP_TRACK
@@ -66,13 +60,13 @@ using Dates
 using NanoDates
 using Serde
 
-include("color_utils.jl")
-
 abstract type AbstractChartData end
 abstract type AbstractChartSettings end
 abstract type AbstractPluginSettings end
 
 const LWC_CHART_ID = Ref{Int64}(0)
+
+include("color_utils.jl")
 
 include("chart_data.jl")
 using .LWCChartData
@@ -106,12 +100,12 @@ Base.@kwdef struct LWCChart <: AbstractChartSettings
     plugins::Vector{LWCPlugin}
 end
 
-function Base.show(io::IO, h::LWCChart)
-    return println(io, "LightweightCharts.LWCChart($(h.label_name))")
+function Base.show(io::IO, x::LWCChart)
+    return println(io, "LightweightCharts.LWCChart($(x.label_name))")
 end
 
-function Base.show(io::IO, m::MIME"text/html", h::LWCChart)
-    return write(io, string(h))
+function Base.show(io::IO, m::MIME"text/html", x::LWCChart)
+    return write(io, string(x))
 end
 
 include("charts.jl")
@@ -145,12 +139,12 @@ mutable struct LWCPanel <: AbstractChartSettings
     charts::Tuple{Vararg{LWCChart}}
 end
 
-function Base.show(io::IO, h::LWCPanel)
-    return println(io, "LightweightCharts.LWCPanel($(h.name))")
+function Base.show(io::IO, x::LWCPanel)
+    return println(io, "LightweightCharts.LWCPanel($(x.name))")
 end
 
-function Base.show(io::IO, m::MIME"text/html", h::LWCPanel)
-    return write(io, string(h))
+function Base.show(io::IO, m::MIME"text/html", x::LWCPanel)
+    return write(io, string(x))
 end
 
 """
@@ -192,7 +186,7 @@ function lwc_panel(
     min_bar_spacing::Real = 0.5,
     copyright::Bool = true,
     min_charts_for_search = 10,
-)::LWCPanel
+)
     return LWCPanel(
         x,
         y,
@@ -225,12 +219,12 @@ mutable struct LWCLayout <: AbstractChartSettings
     panels::Dict{String,LWCPanel}
 end
 
-function Base.show(io::IO, h::LWCLayout)
-    return println(io, "LightweightCharts.LWCLayout($(h.name))")
+function Base.show(io::IO, x::LWCLayout)
+    return println(io, "LightweightCharts.LWCLayout($(x.name))")
 end
 
-function Base.show(io::IO, m::MIME"text/html", h::LWCLayout)
-    return write(io, string(h))
+function Base.show(io::IO, m::MIME"text/html", x::LWCLayout)
+    return write(io, string(x))
 end
 
 function update_not_set_coords!(panels::Tuple{Vararg{LWCPanel}})
@@ -300,7 +294,7 @@ function lwc_layout(
 end
 
 function Base.string(chart::LWCChart)
-    return string(lwc_layout(lwc_panel(chart, ), name = chart.label_name))
+    return string(lwc_layout(lwc_panel(chart), name = chart.label_name))
 end
 
 function Base.string(panel::LWCPanel)
@@ -330,8 +324,8 @@ function to_camelcase(x::Symbol)
     return Symbol(to_camelcase(string(x)))
 end
 
-function Base.propertynames(h::AbstractChartSettings)
-    n = fieldnames(typeof(h))
+function Base.propertynames(x::AbstractChartSettings)
+    n = fieldnames(typeof(x))
     return to_camelcase.(n)
 end
 
@@ -347,7 +341,7 @@ function Serde.SerJson.ser_name(::Type{A}, ::Val{T}) where {A<:AbstractPluginSet
     return to_camelcase(T)
 end
 
-function open_browser(url::String)::Bool
+function open_browser(url::String)
     if Sys.isapple()
         Base.run(`open $url`)
         true
@@ -369,7 +363,7 @@ Saves a chart `plt` by the `filepath` (the preferred saved file extension is `ht
 
 See also [`lwc_show`](@ref).
 """
-function lwc_save(filepath::String, plt)::String
+function lwc_save(filepath::String, plt)
     write(filepath, string(plt))
     return filepath
 end
@@ -381,7 +375,7 @@ Saves a chart `plt` by the `filepath` and then displays it in the browser.
 
 See also [`lwc_save`](@ref).
 """
-function lwc_show(plt; filepath = joinpath(homedir(), "lightweightcharts.html"))::Bool
+function lwc_show(plt; filepath = joinpath(homedir(), "lightweightcharts.html"))
     return open_browser(lwc_save(filepath, plt))
 end
 

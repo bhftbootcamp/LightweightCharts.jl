@@ -5,9 +5,7 @@ export lwc_time,
     lwc_open,
     lwc_high,
     lwc_close,
-    lwc_low,
-    lwc_convert_data,
-    lwc_convert_data!
+    lwc_low
 
 export LWCSimpleChartData,
     LWCCandle
@@ -117,7 +115,7 @@ lwc_color(x::LWCSimpleChartData) = x.color
 
 function Base.:(==)(left::LWCSimpleChartData, right::LWCSimpleChartData)
     return isequal(lwc_time(left), lwc_time(right)) &&
-           isequal(lwc_value(left), lwc_value(right))
+        isequal(lwc_value(left), lwc_value(right))
 end
 
 """
@@ -210,51 +208,11 @@ function Base.:(==)(left::LWCCandle, right::LWCCandle)
     )
 end
 
-const UNIXEPOCH_NS::Int128 = Dates.UNIXEPOCH * Int128(1_000_000)
+const UNIXEPOCH_NS = Dates.UNIXEPOCH * Int128(1_000_000)
 
 datetime2epochns(x::DateTime)::Int64 = (Dates.value(x) - Dates.UNIXEPOCH) * 1_000_000
 datetime2epochns(x::Date)::Int64     = datetime2epochns(DateTime(x))
 datetime2epochns(x::NanoDate)::Int64 = Dates.value(x) - UNIXEPOCH_NS
 datetime2epochns(x::Real)::Int64     = x * 1_000_000_000
-
-function lwc_convert_data!(data::T)::T where {T<:AbstractVector{<:AbstractChartData}}
-    sort!(data, by = lwc_time)
-    unique!(lwc_time, data)
-    return data
-end
-
-function lwc_convert_data(
-    timearray::AbstractVector{Tuple{D,T}},
-)::Vector{LWCSimpleChartData} where {D<:Union{Real,TimeType},T<:Real}
-    data = map(timearray) do timetick
-        datetime, value = timetick
-        return LWCSimpleChartData(datetime2epochns(datetime), value)
-    end
-    return lwc_convert_data!(data)
-end
-
-function lwc_convert_data(
-    timearray::AbstractVector,
-)::Vector{LWCSimpleChartData}
-    return map(timearray) do timetick
-        datetime, value = convert(Tuple, timetick)
-        return LWCSimpleChartData(datetime2epochns(datetime), value)
-    end
-    return lwc_convert_data!(data)
-end
-
-function lwc_convert_data(
-    timearray::AbstractVector{Tuple{D,O,H,L,C}},
-)::Vector{LWCCandle} where {D<:Union{Real,TimeType},O<:Real,H<:Real,L<:Real,C<:Real}
-    data = map(timearray) do candle
-        datetime, open, high, low, close = candle
-        return LWCCandle(datetime2epochns(datetime), open, high, low, close)
-    end
-    return lwc_convert_data!(data)
-end
-
-function lwc_convert_data(time::D)::Int64 where {D<:Union{Real,TimeType}}
-    return datetime2epochns(time)
-end
 
 end

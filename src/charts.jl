@@ -22,10 +22,6 @@ export LWC_SOLID,
 export LWC_RIGHT,
     LWC_LEFT
 
-export LWC_DISABLED,
-    LWC_CONTINUOUS,
-    LWC_UPDATE
-
 using Serde
 using Dates
 
@@ -51,46 +47,77 @@ end
     LWC_LEFT = 1
 end
 
-@enum LWC_LAST_PRICE_ANIMATION_MODE begin
-    LWC_DISABLED = 0
-    LWC_CONTINUOUS = 1
-    LWC_UPDATE = 2
+Serde.SerJson.ser_type(::Type{<:AbstractChartSettings}, x::LWC_LINE_TYPES) = Int64(x)
+
+Serde.SerJson.ser_type(::Type{<:AbstractChartSettings}, x::LWC_LINE_STYLES) = Int64(x)
+
+Serde.SerJson.ser_type(::Type{<:AbstractChartSettings}, x::LWC_PRICE_SCALE_ID) = x == LWC_RIGHT ? "right" : "left"
+
+Serde.SerJson.ser_ignore_null(::Type{<:AbstractChartData}) = true
+
+function sort_and_unique!(data::AbstractVector{<:AbstractChartData})
+    sort!(data, by = lwc_time)
+    unique!(lwc_time, data)
+    return data
 end
 
-Serde.SerJson.ser_type(::Type{A}, x::LWC_LINE_TYPES) where {A<:AbstractChartSettings} = Int64(x)
+function wrap_data(
+    timearray::AbstractVector{Tuple{D,T}},
+) where {D<:Union{Real,TimeType},T<:Real}
+    data = map(timearray) do timetick
+        datetime, value = timetick
+        return LWCSimpleChartData(datetime, value)
+    end
+    return sort_and_unique!(data)
+end
 
-Serde.SerJson.ser_type(::Type{A}, x::LWC_LINE_STYLES) where {A<:AbstractChartSettings} = Int64(x)
+function wrap_data(
+    timearray::AbstractVector{Tuple{D,O,H,L,C}},
+) where {D<:Union{Real,TimeType},O<:Real,H<:Real,L<:Real,C<:Real}
+    data = map(timearray) do candle
+        datetime, open, high, low, close = candle
+        return LWCCandle(datetime, open, high, low, close)
+    end
+    return sort_and_unique!(data)
+end
 
-Serde.SerJson.ser_type(::Type{A}, x::LWC_PRICE_SCALE_ID) where {A<:AbstractChartSettings} = x == LWC_RIGHT ? "right" : "left"
+function normalize_data(timearray::AbstractVector)
+    return map(timearray) do timetick
+        return convert(Tuple, timetick)
+    end
+end
 
-(Serde.SerJson.ser_ignore_null(::Type{A})::Bool) where {A<:AbstractChartData} = true
-
-function prepare_data(
-    timestamps::Vector{D},
-    values::Vector{T};
-)::Vector{Tuple{D,T}} where {D<:Union{Real,TimeType},T<:Real}
-    @assert length(timestamps) === length(values) "length(timestamps) != length(values)"
+function normalize_data(
+    timestamps::AbstractVector{D},
+    values::AbstractVector{T},
+) where {D<:Union{Real,TimeType},T<:Real}
+    @assert length(timestamps) === length(values) "length(timestamps) ≠ length(values)"
     return map(timestamps, values) do timestamp, value
         return (timestamp, value)
     end
 end
 
-function prepare_data(
-    values::Vector{T};
-)::Vector{Tuple{Union{Real,TimeType},T}} where {T<:Real}
-    timestamps = [d + Second(1) for d in DateTime(1970):Second(1):DateTime(1970) + Second(length(values) - 1)]
-    return prepare_data(timestamps, values)
+function normalize_data(values::AbstractVector{<:Real})
+    return map(enumerate(values)) do i, value
+        timestamp = DateTime(1970) + Second(i - 1)
+        return (timestamp, value)
+    end
 end
 
-function prepare_data(
-    timestamps::Vector{D},
-    open::Vector{O},
-    high::Vector{H},
-    low::Vector{L},
-    close::Vector{C}
-)::Vector{Tuple{D,O,H,L,C}} where {D<:Union{Real,TimeType},O<:Real,H<:Real,L<:Real,C<:Real}
-    @assert length(timestamps) === length(open) == length(high) == length(low) == length(close) "length(timestamps) != length(open) != length(high) != length(low) != (close)"
-    return collect(zip(timestamps, open, high, low, close))
+function normalize_data(
+    timestamps::AbstractVector{<:Union{Real,TimeType}},
+    open::AbstractVector{<:Real},
+    high::AbstractVector{<:Real},
+    low::AbstractVector{<:Real},
+    close::AbstractVector{<:Real}
+)
+    @assert length(timestamps) === length(open)  "length(timestamps) ≠ length(open)"
+    @assert length(timestamps) === length(high)  "length(timestamps) ≠ length(high)"
+    @assert length(timestamps) === length(low)   "length(timestamps) ≠ length(low)"
+    @assert length(timestamps) === length(close) "length(timestamps) ≠ length(close)"
+    return map(timestamps, open, high, low, close) do t, o, h, l, c
+        return (t, o, h, l, c)
+    end
 end
 
 include("charts/line.jl")

@@ -32,9 +32,10 @@ struct BaseLineChartSettings <: AbstractChartSettings
 end
 
 """
+    lwc_baseline(data::Vector{Tuple{Union{TimeType,Real},Real}}; kw...) -> LWCChart
     lwc_baseline([, timestamps], values::Vector{Real}; kw...) -> LWCChart
     lwc_baseline(Vector{LWCSimpleChartData}; kw...) -> LWCChart
-    lwc_baseline(timearray::Vector; kw...) -> LWCChart
+    lwc_baseline(custom_data::Vector; kw...) -> LWCChart
 
 Creates a [`LWCChart`](@ref) object that contains baseline chart information.
 The `timestamps` can be passed as `Vector{Integer}` of Unix time or `Vector{TimeType}`.
@@ -43,7 +44,7 @@ You can also use type [`LWCSimpleChartData`](@ref) for more flexible color setti
 Wrapper function for [`Baseline`](https://tradingview.github.io/lightweight-charts/docs/series-types#baseline).
 
 !!! note
-    You can use a `timearray` with custom type elements for which a [conversion method](https://docs.julialang.org/en/v1/base/base/#Base.convert) to types `Tuple{Real,Real}` or `Tuple{TimeType,Real}` is defined.
+    You can use a `custom_data` with custom type elements for which is defined a [conversion method](https://docs.julialang.org/en/v1/base/base/#Base.convert) to type `Tuple` with two elements: `timestamp::Union{TimeType,Real}` and `value::Real`.
 
 ## Keyword arguments
 | Name::Type | Default (Posible values) | Description |
@@ -137,11 +138,18 @@ function lwc_baseline(
 end
 
 function lwc_baseline(
+    data::AbstractVector{Tuple{D,T}};
+    kw...
+)::LWCChart where {D<:Union{Real,TimeType},T<:Real}
+    return lwc_baseline(wrap_data(data); kw...)
+end
+
+function lwc_baseline(
     timestamps::AbstractVector{D},
     values::AbstractVector{T};
     kw...
 )::LWCChart where {D<:Union{Real,TimeType},T<:Real}
-    data = prepare_data(timestamps, values)
+    data = normalize_data(timestamps, values)
     return lwc_baseline(data; kw...)
 end
 
@@ -149,14 +157,14 @@ function lwc_baseline(
     values::AbstractVector{T};
     kw...
 )::LWCChart where {T<:Real}
-    data = prepare_data(values)
+    data = normalize_data(values)
     return lwc_baseline(data; kw...)
 end
 
 function lwc_baseline(
-    timearray::AbstractVector;
+    custom_data::AbstractVector;
     kw...
 )::LWCChart
-    data = lwc_convert_data(timearray)
+    data = normalize_data(custom_data)
     return lwc_baseline(data; kw...)
 end

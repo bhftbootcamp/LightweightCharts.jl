@@ -58,7 +58,7 @@ const COLORS = [
 
 const STATE_COLOR = Ref{Int64}(0)
 
-function randcolor()::String
+function randcolor()
     number = STATE_COLOR[] % length(COLORS)
     number += 1
     STATE_COLOR[] += 1

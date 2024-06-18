@@ -262,3 +262,35 @@ nothing # hide
     <iframe src="../colors_example.html" style="height:500px;width:100%;"></iframe>
 ```
 
+## Custom data
+
+Vectors with custom data types can also be visualized.
+To do this, they must have a [conversion method](https://docs.julialang.org/en/v1/base/base/#Base.convert) to type `Tuple` with two elements: `timestamp::Union{TimeType,Real}` and `value::Real`.
+
+```@example
+using Dates
+using LightweightCharts
+
+struct Point
+    timestamp::DateTime
+    value::Float64
+end
+
+Base.convert(::Type{Tuple}, x::Point) = (x.timestamp, x.value)
+
+points = [Point(now() + Second(x), sin(x / 10.0)) for x in 1:500]
+
+chart = lwc_line(
+    points;
+    label_name = "custom points",
+    line_color = "#a8dadc",
+    line_width = 3,
+)
+
+lwc_save("custom_type_example.html", chart)
+nothing # hide
+```
+
+```@raw html
+    <iframe src="../custom_type_example.html" style="height:500px;width:100%;"></iframe>
+```
