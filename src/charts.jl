@@ -115,6 +115,7 @@ function normalize_data(
     @assert length(timestamps) === length(high)  "length(timestamps) ≠ length(high)"
     @assert length(timestamps) === length(low)   "length(timestamps) ≠ length(low)"
     @assert length(timestamps) === length(close) "length(timestamps) ≠ length(close)"
+
     return map(timestamps, open, high, low, close) do t, o, h, l, c
         return (t, o, h, l, c)
     end
