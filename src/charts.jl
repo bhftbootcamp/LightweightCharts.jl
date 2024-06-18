@@ -1,4 +1,4 @@
-module LWCCharts
+module Charts
 
 export lwc_line,
     lwc_baseline,
@@ -55,39 +55,7 @@ Serde.SerJson.ser_type(::Type{<:AbstractChartSettings}, x::LWC_PRICE_SCALE_ID) =
 
 Serde.SerJson.ser_ignore_null(::Type{<:AbstractChartData}) = true
 
-function sort_and_unique!(data::AbstractVector{<:AbstractChartData})
-    sort!(data, by = lwc_time)
-    unique!(lwc_time, data)
-    return data
-end
-
-function wrap_data(
-    timearray::AbstractVector{Tuple{D,T}},
-) where {D<:Union{Real,TimeType},T<:Real}
-    data = map(timearray) do timetick
-        datetime, value = timetick
-        return LWCSimpleChartData(datetime, value)
-    end
-    return sort_and_unique!(data)
-end
-
-function wrap_data(
-    timearray::AbstractVector{Tuple{D,O,H,L,C}},
-) where {D<:Union{Real,TimeType},O<:Real,H<:Real,L<:Real,C<:Real}
-    data = map(timearray) do candle
-        datetime, open, high, low, close = candle
-        return LWCCandle(datetime, open, high, low, close)
-    end
-    return sort_and_unique!(data)
-end
-
-function normalize_data(timearray::AbstractVector)
-    return map(timearray) do timetick
-        return convert(Tuple, timetick)
-    end
-end
-
-function normalize_data(
+function prepare_data(
     timestamps::AbstractVector{D},
     values::AbstractVector{T},
 ) where {D<:Union{Real,TimeType},T<:Real}
@@ -97,14 +65,20 @@ function normalize_data(
     end
 end
 
-function normalize_data(values::AbstractVector{<:Real})
+function prepare_data(values::AbstractVector{<:Real})
     return map(enumerate(values)) do i, value
         timestamp = DateTime(1970) + Second(i - 1)
         return (timestamp, value)
     end
 end
 
-function normalize_data(
+function prepare_data(data::AbstractVector)
+    return map(data) do item
+        return convert(Tuple, item)
+    end
+end
+
+function prepare_data(
     timestamps::AbstractVector{<:Union{Real,TimeType}},
     open::AbstractVector{<:Real},
     high::AbstractVector{<:Real},

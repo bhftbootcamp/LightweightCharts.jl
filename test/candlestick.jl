@@ -43,7 +43,7 @@
         label_name = "OK.ICX-USDT",
         label_color = "#378658",
         type = "addCandlestickSeries",
-        settings = LightweightCharts.LWCCharts.CandlestickChartSettings(
+        settings = LightweightCharts.Charts.CandlestickChartSettings(
             LWC_LEFT,
             "OK.ICX-USDT",
             true,
@@ -59,7 +59,7 @@
             "#26a69a",
             "#ef5350",
         ),
-        data = Vector{LWCCandle}([
+        data = LWCChartData([
             LWCCandle(1680086570373_000000, 1, 1, 1, 1),
             LWCCandle(1680086571373_000000, 5, 5, 5, 5),
             LWCCandle(1680086572373_000000, 2, 2, 2, 2),
@@ -69,9 +69,9 @@
         plugins = Vector{LWCPlugin}([
             LWCPlugin(
                 "addTrendLine",
-                LightweightCharts.LWCPlugins.TrendLineSettings(
-                    LightweightCharts.LWCPlugins.TrendPoint(20, 0.5),
-                    LightweightCharts.LWCPlugins.TrendPoint(120, 0.7),
+                LightweightCharts.Plugins.TrendLineSettings(
+                    LightweightCharts.Plugins.TrendPoint(20, 0.5),
+                    LightweightCharts.Plugins.TrendPoint(120, 0.7),
                     "red",
                     6,
                     true,
@@ -124,7 +124,7 @@ end
         label_name = "OK.ICX-USDT",
         label_color = "#378658",
         type = "addCandlestickSeries",
-        settings = LightweightCharts.LWCCharts.CandlestickChartSettings(
+        settings = LightweightCharts.Charts.CandlestickChartSettings(
             LWC_LEFT,
             "OK.ICX-USDT",
             true,
@@ -140,7 +140,7 @@ end
             "#26a69a",
             "#ef5350",
         ),
-        data = Vector{LWCCandle}([
+        data = LWCChartData([
             LWCCandle(1680086570373_000000, 1, 1, 1, 1),
             LWCCandle(1680086571373_000000, 5, 5, 5, 5),
             LWCCandle(1680086572373_000000, 2, 2, 2, 2),
@@ -150,9 +150,9 @@ end
         plugins = Vector{LWCPlugin}([
             LWCPlugin(
                 "addTrendLine",
-                LightweightCharts.LWCPlugins.TrendLineSettings(
-                    LightweightCharts.LWCPlugins.TrendPoint(20, 0.5),
-                    LightweightCharts.LWCPlugins.TrendPoint(120, 0.7),
+                LightweightCharts.Plugins.TrendLineSettings(
+                    LightweightCharts.Plugins.TrendPoint(20, 0.5),
+                    LightweightCharts.Plugins.TrendPoint(120, 0.7),
                     "red",
                     6,
                     true,

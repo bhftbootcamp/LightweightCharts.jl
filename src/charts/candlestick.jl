@@ -86,7 +86,7 @@ function lwc_candlestick(
         label_color = border_color,
         type = "addCandlestickSeries",
         settings = settings,
-        data = data,
+        data = LWCChartData(data),
         plugins = plugins,
     )
 end
@@ -101,7 +101,7 @@ function lwc_candlestick(
     data::AbstractVector{Tuple{D,O,H,L,C}};
     kw...
 )::LWCChart where {D<:Union{Real,TimeType},O<:Real,H<:Real,L<:Real,C<:Real}
-    return lwc_candlestick(wrap_data(data); kw...)
+    return lwc_candlestick(convert(Vector{LWCCandle}, data); kw...)
 end
 
 """
@@ -124,6 +124,5 @@ function lwc_candlestick(
     close::Vector{C};
     kw...
 )::LWCChart where {D<:Union{Real,TimeType},O<:Real,H<:Real,L<:Real,C<:Real}
-    data = normalize_data(timestamps, open, high, low, close)
-    return lwc_candlestick(wrap_data(data); kw...)
+    return lwc_candlestick(prepare_data(timestamps, open, high, low, close); kw...)
 end

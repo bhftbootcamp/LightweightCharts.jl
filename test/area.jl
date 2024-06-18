@@ -49,7 +49,7 @@ end
         label_name = "area1",
         label_color = "red",
         type = "addAreaSeries",
-        settings = LightweightCharts.LWCCharts.AreaChartSettings(
+        settings = LightweightCharts.Charts.AreaChartSettings(
             LWC_LEFT,
             "area1",
             false,
@@ -69,7 +69,7 @@ end
             "",
             2.0,
         ),
-        data = Vector{LWCSimpleChartData}([
+        data = LWCChartData([
             LWCSimpleChartData(1680086570373_000000, 1.0),
             LWCSimpleChartData(1680086571373_000000, 5.0),
             LWCSimpleChartData(1680086572373_000000, 2.0),
@@ -79,7 +79,7 @@ end
         plugins = Vector{LWCPlugin}([
             LWCPlugin(
                 "addVertLine",
-                LightweightCharts.LWCPlugins.VertLineSettings(
+                LightweightCharts.Plugins.VertLineSettings(
                     3,
                     "red",
                     "test",
@@ -136,7 +136,7 @@ end
         label_name = "area2",
         label_color = "red",
         type = "addAreaSeries",
-        settings = LightweightCharts.LWCCharts.AreaChartSettings(
+        settings = LightweightCharts.Charts.AreaChartSettings(
             LWC_LEFT,
             "area2",
             false,
@@ -156,7 +156,7 @@ end
             "",
             2.0,
         ),
-        data = Vector{LWCSimpleChartData}([
+        data = LWCChartData([
             LWCSimpleChartData(1680086570373_000000, 1.0),
             LWCSimpleChartData(1680086571373_000000, 5.0),
             LWCSimpleChartData(1680086572373_000000, 2.0),
@@ -166,7 +166,7 @@ end
         plugins = Vector{LWCPlugin}([
             LWCPlugin(
                 "addVertLine",
-                LightweightCharts.LWCPlugins.VertLineSettings(
+                LightweightCharts.Plugins.VertLineSettings(
                     3,
                     "red",
                     "test",

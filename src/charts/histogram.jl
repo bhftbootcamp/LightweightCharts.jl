@@ -63,7 +63,7 @@ function lwc_histogram(
         label_color = color,
         type = "addHistogramSeries",
         settings = settings,
-        data = data,
+        data = LWCChartData(data),
         plugins = plugins,
     )
 end
@@ -72,7 +72,7 @@ function lwc_histogram(
     data::AbstractVector{Tuple{D,T}};
     kw...
 )::LWCChart where {D<:Union{Real,TimeType},T<:Real}
-    return lwc_histogram(wrap_data(data); kw...)
+    return lwc_histogram(convert(Vector{LWCSimpleChartData}, data); kw...)
 end
 
 function lwc_histogram(
@@ -80,22 +80,19 @@ function lwc_histogram(
     values::AbstractVector{T};
     kw...
 )::LWCChart where {D<:Union{Real,TimeType},T<:Real}
-    data = normalize_data(timestamps, values)
-    return lwc_histogram(data; kw...)
+    return lwc_histogram(prepare_data(timestamps, values); kw...)
 end
 
 function lwc_histogram(
     values::AbstractVector{T};
     kw...
 )::LWCChart where {T<:Real}
-    data = normalize_data(values)
-    return lwc_histogram(data; kw...)
+    return lwc_histogram(prepare_data(values); kw...)
 end
 
 function lwc_histogram(
     custom_data::AbstractVector;
     kw...
 )::LWCChart
-    data = normalize_data(custom_data)
-    return lwc_histogram(data; kw...)
+    return lwc_histogram(prepare_data(custom_data); kw...)
 end

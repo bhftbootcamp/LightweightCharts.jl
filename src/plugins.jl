@@ -1,4 +1,4 @@
-module LWCPlugins
+module Plugins
 
 export lwc_vert_line,
     lwc_delta_tooltip,

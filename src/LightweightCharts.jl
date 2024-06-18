@@ -29,7 +29,8 @@ export AbstractChartData,
     AbstractChartSettings,
     AbstractPluginSettings
 
-export LWCSimpleChartData,
+export LWCChartData,
+    LWCSimpleChartData,
     LWCCandle,
     LWCChart,
     LWCPlugin,
@@ -69,7 +70,7 @@ const LWC_CHART_ID = Ref{Int64}(0)
 include("color_utils.jl")
 
 include("chart_data.jl")
-using .LWCChartData
+using .ChartData
 
 """
     LWCPlugin
@@ -96,7 +97,7 @@ Base.@kwdef struct LWCChart <: AbstractChartSettings
     label_color::String
     type::String
     settings::T where {T<:AbstractChartSettings}
-    data::Vector{D} where {D<:AbstractChartData}
+    data::LWCChartData
     plugins::Vector{LWCPlugin}
 end
 
@@ -109,10 +110,10 @@ function Base.show(io::IO, m::MIME"text/html", x::LWCChart)
 end
 
 include("charts.jl")
-using .LWCCharts
+using .Charts
 
 include("plugins.jl")
-using .LWCPlugins
+using .Plugins
 
 """
     LWCPanel

@@ -103,7 +103,7 @@ function lwc_line(
         label_color = line_color,
         type = "addLineSeries",
         settings = settings,
-        data = data,
+        data = LWCChartData(data),
         plugins = plugins,
     )
 end
@@ -112,7 +112,7 @@ function lwc_line(
     data::AbstractVector{Tuple{D,T}};
     kw...
 )::LWCChart where {D<:Union{Real,TimeType},T<:Real}
-    return lwc_line(wrap_data(data); kw...)
+    return lwc_line(convert(Vector{LWCSimpleChartData}, data); kw...)
 end
 
 function lwc_line(
@@ -120,22 +120,19 @@ function lwc_line(
     values::AbstractVector{T};
     kw...
 )::LWCChart where {D<:Union{Real,TimeType},T<:Real}
-    data = normalize_data(timestamps, values)
-    return lwc_line(data; kw...)
+    return lwc_line(prepare_data(timestamps, values); kw...)
 end
 
 function lwc_line(
     values::AbstractVector{T};
     kw...
 )::LWCChart where {T<:Real}
-    data = normalize_data(values)
-    return lwc_line(data; kw...)
+    return lwc_line(prepare_data(values); kw...)
 end
 
 function lwc_line(
     custom_data::AbstractVector;
     kw...
 )::LWCChart
-    data = normalize_data(custom_data)
-    return lwc_line(data; kw...)
+    return lwc_line(prepare_data(custom_data); kw...)
 end

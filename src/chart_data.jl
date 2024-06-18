@@ -1,4 +1,4 @@
-module LWCChartData
+module ChartData
 
 export lwc_time,
     lwc_value,
@@ -7,7 +7,8 @@ export lwc_time,
     lwc_close,
     lwc_low
 
-export LWCSimpleChartData,
+export LWCChartData,
+    LWCSimpleChartData,
     LWCCandle
 
 using Dates
@@ -15,6 +16,20 @@ using Serde
 using NanoDates
 
 using ..LightweightCharts
+
+struct LWCChartData{T<:AbstractChartData} <: AbstractVector{T}
+    data::Vector{T}
+
+    function LWCChartData(data::AbstractVector{T}) where {T<:AbstractChartData}
+        sort!(data; by = lwc_time)
+        unique!(lwc_time, data)
+        return new{T}(data)
+    end
+end
+
+Base.size(x::LWCChartData) = size(x.data)
+Base.length(x::LWCChartData) = length(x.data)
+Base.getindex(x::LWCChartData, i::Integer) = getindex(x.data, i)
 
 """
     LWCSimpleChartData(time::Int64, value::Real; kw...)
@@ -98,8 +113,6 @@ mutable struct LWCSimpleChartData <: AbstractChartData
     end
 end
 
-Serde.SerJson.ser_value(::Type{<:AbstractChartData}, ::Val{:time}, x::Int64) = string(x)
-
 lwc_time(x::LWCSimpleChartData) = x.time
 lwc_value(x::LWCSimpleChartData) = x.value
 lwc_line_color(x::LWCSimpleChartData) = x.line_color
@@ -113,9 +126,21 @@ lwc_bottom_fill_color_2(x::LWCSimpleChartData) = x.bottom_fill_color_2
 lwc_bottom_line_color(x::LWCSimpleChartData) = x.bottom_line_color
 lwc_color(x::LWCSimpleChartData) = x.color
 
+Serde.SerJson.ser_value(::Type{<:AbstractChartData}, ::Val{:time}, x::Int64) = string(x)
+
 function Base.:(==)(left::LWCSimpleChartData, right::LWCSimpleChartData)
     return isequal(lwc_time(left), lwc_time(right)) &&
         isequal(lwc_value(left), lwc_value(right))
+end
+
+function Base.convert(
+    ::Type{Vector{LWCSimpleChartData}},
+    data::AbstractVector{Tuple{D,T}},
+) where {D<:Union{TimeType,Real},T<:Real}
+    return map(data) do item
+        timestamp, value = item
+        return LWCSimpleChartData(timestamp, value)
+    end
 end
 
 """
@@ -206,6 +231,16 @@ function Base.:(==)(left::LWCCandle, right::LWCCandle)
         isequal(lwc_low(left), lwc_low(right))   &&
         isequal(lwc_close(left), lwc_close(right))
     )
+end
+
+function Base.convert(
+    ::Type{Vector{LWCCandle}},
+    data::AbstractVector{Tuple{D,O,H,L,C}},
+) where {D<:Union{Real,TimeType},O<:Real,H<:Real,L<:Real,C<:Real}
+    return map(data) do item
+        timestamp, open, high, low, close = item
+        return LWCCandle(timestamp, open, high, low, close)
+    end
 end
 
 const UNIXEPOCH_NS = Dates.UNIXEPOCH * Int128(1_000_000)

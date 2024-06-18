@@ -132,7 +132,7 @@ function lwc_baseline(
         label_color = top_fill_color1,
         type = "addBaselineSeries",
         settings = settings,
-        data = data,
+        data = LWCChartData(data),
         plugins = plugins,
     )
 end
@@ -141,7 +141,7 @@ function lwc_baseline(
     data::AbstractVector{Tuple{D,T}};
     kw...
 )::LWCChart where {D<:Union{Real,TimeType},T<:Real}
-    return lwc_baseline(wrap_data(data); kw...)
+    return lwc_baseline(convert(Vector{LWCSimpleChartData}, data); kw...)
 end
 
 function lwc_baseline(
@@ -149,22 +149,19 @@ function lwc_baseline(
     values::AbstractVector{T};
     kw...
 )::LWCChart where {D<:Union{Real,TimeType},T<:Real}
-    data = normalize_data(timestamps, values)
-    return lwc_baseline(data; kw...)
+    return lwc_baseline(prepare_data(timestamps, values); kw...)
 end
 
 function lwc_baseline(
     values::AbstractVector{T};
     kw...
 )::LWCChart where {T<:Real}
-    data = normalize_data(values)
-    return lwc_baseline(data; kw...)
+    return lwc_baseline(prepare_data(values); kw...)
 end
 
 function lwc_baseline(
     custom_data::AbstractVector;
     kw...
 )::LWCChart
-    data = normalize_data(custom_data)
-    return lwc_baseline(data; kw...)
+    return lwc_baseline(prepare_data(custom_data); kw...)
 end
