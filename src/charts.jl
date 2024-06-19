@@ -48,11 +48,8 @@ end
 end
 
 Serde.SerJson.ser_type(::Type{<:AbstractChartSettings}, x::LWC_LINE_TYPES) = Int64(x)
-
 Serde.SerJson.ser_type(::Type{<:AbstractChartSettings}, x::LWC_LINE_STYLES) = Int64(x)
-
 Serde.SerJson.ser_type(::Type{<:AbstractChartSettings}, x::LWC_PRICE_SCALE_ID) = x == LWC_RIGHT ? "right" : "left"
-
 Serde.SerJson.ser_ignore_null(::Type{<:AbstractChartData}) = true
 
 include("charts/line.jl")
