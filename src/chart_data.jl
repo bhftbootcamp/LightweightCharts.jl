@@ -11,6 +11,8 @@ export LWCChartData,
     LWCSimpleChartData,
     LWCCandle
 
+export prepare_data
+
 using Dates
 using Serde
 using NanoDates
