@@ -25,13 +25,15 @@ export lwc_time,
     lwc_close,
     lwc_low
 
+export to_lwc_data
+
 export AbstractChartData,
     AbstractChartSettings,
     AbstractPluginSettings
 
 export LWCChartData,
-    LWCSimpleChartData,
-    LWCCandle,
+    LWCSimpleChartItem,
+    LWCCandleChartItem,
     LWCChart,
     LWCPlugin,
     LWCPanel,
@@ -91,13 +93,13 @@ The base type that contains the necessary information for visualizing a single c
 
 See also: [`lwc_show`](@ref), [`lwc_save`](@ref).
 """
-Base.@kwdef struct LWCChart <: AbstractChartSettings
+Base.@kwdef struct LWCChart{T<:AbstractChartData} <: AbstractChartSettings
     id::Int64
     label_name::String
     label_color::String
     type::String
-    settings::T where {T<:AbstractChartSettings}
-    data::LWCChartData
+    settings::S where {S<:AbstractChartSettings}
+    data::LWCChartData{T}
     plugins::Vector{LWCPlugin}
 end
 

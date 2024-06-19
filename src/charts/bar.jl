@@ -13,7 +13,7 @@ struct BarChartSettings <: AbstractChartSettings
 end
 
 """
-    wc_bar(data::Vector{LWCCandle}; kw...) -> LWCChart
+    wc_bar(data...; kw...) -> LWCChart
 
 Creates a [`LWCChart`](@ref) object that contains candlesticks chart information.
 
@@ -33,7 +33,7 @@ Wrapper function for [`Bar`](https://tradingview.github.io/lightweight-charts/do
 | `plugins::Vector{LWCPlugin}` | `LWCPlugin[]` | Additional plugins.  |
 """
 function lwc_bar(
-    data::AbstractVector{LWCCandle};
+    data::AbstractVector...;
     price_scale_id::LWC_PRICE_SCALE_ID = LWC_LEFT,
     label_name::String = "",
     visible::Bool = true,
@@ -44,7 +44,6 @@ function lwc_bar(
     thin_bars::Bool = true,
     plugins::Vector{LWCPlugin} = Vector{LWCPlugin}(),
 )::LWCChart
-
     settings = BarChartSettings(
         price_scale_id,
         label_name,
@@ -56,49 +55,13 @@ function lwc_bar(
         thin_bars,
     )
 
-    return LWCChart(
+    return LWCChart{LWCCandleChartItem}(
         id = LWC_CHART_ID[] += 1,
         label_name = label_name,
         label_color = up_color,
         type = "addBarSeries",
         settings = settings,
-        data = LWCChartData(data),
+        data = prepare_data(data...),
         plugins = plugins,
     )
-end
-
-"""
-    wc_bar(data::Vector{Tuple{D,O,H,L,C}}; kw...) -> LWCChart
-
-Takes a single vector with tuples containing the corresponding candlestick values.
-Here `D` is a `Real` or `TimeType` and `O,H,L,C` are `Real`s.
-"""
-function lwc_bar(
-    data::AbstractVector{Tuple{D,O,H,L,C}};
-    kw...
-)::LWCChart where {D<:Union{Real,TimeType},O<:Real,H<:Real,L<:Real,C<:Real}
-    return lwc_bar(convert(Vector{LWCCandle}, data); kw...)
-end
-
-"""
-    lwc_bar(arg...; kw...) -> LWCChart
-
-Takes as input individual vectors with the corresponding candlestick values.
-
-## Arguments
-- `timestamps::Vector{Union{Real,TimeType}}`
-- `open::Vector{Real}`
-- `high::Vector{Real}`
-- `low::Vector{Real}`
-- `close::Vector{Real}`
-"""
-function lwc_bar(
-    timestamps::Vector{D},
-    open::Vector{O},
-    high::Vector{H},
-    low::Vector{L},
-    close::Vector{C};
-    kw...
-)::LWCChart where {D<:Union{Real,TimeType},O<:Real,H<:Real,L<:Real,C<:Real}
-    return lwc_bar(prepare_data(timestamps, open, high, low, close); kw...)
 end

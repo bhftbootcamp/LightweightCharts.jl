@@ -1,8 +1,8 @@
 # test/area
 
-@testset "LWCSimpleChartData(::Int64, ::Real)" begin
-    @test LWCSimpleChartData(1680086570373_000000, 1.0) ==
-          LWCSimpleChartData(1680086570373_000000, 1.0)
+@testset "LWCSimpleChartItem(::Int64, ::Real)" begin
+    @test LWCSimpleChartItem(1680086570373_000000, 1.0) ==
+          LWCSimpleChartItem(1680086570373_000000, 1.0)
 end
 
 @testset "Area" begin
@@ -70,11 +70,11 @@ end
             2.0,
         ),
         data = LWCChartData([
-            LWCSimpleChartData(1680086570373_000000, 1.0),
-            LWCSimpleChartData(1680086571373_000000, 5.0),
-            LWCSimpleChartData(1680086572373_000000, 2.0),
-            LWCSimpleChartData(1680086573373_000000, 3.0),
-            LWCSimpleChartData(1680086574373_000000, 4.0),
+            LWCSimpleChartItem(1680086570373_000000, 1.0),
+            LWCSimpleChartItem(1680086571373_000000, 5.0),
+            LWCSimpleChartItem(1680086572373_000000, 2.0),
+            LWCSimpleChartItem(1680086573373_000000, 3.0),
+            LWCSimpleChartItem(1680086574373_000000, 4.0),
         ]),
         plugins = Vector{LWCPlugin}([
             LWCPlugin(
@@ -157,11 +157,11 @@ end
             2.0,
         ),
         data = LWCChartData([
-            LWCSimpleChartData(1680086570373_000000, 1.0),
-            LWCSimpleChartData(1680086571373_000000, 5.0),
-            LWCSimpleChartData(1680086572373_000000, 2.0),
-            LWCSimpleChartData(1680086573373_000000, 3.0),
-            LWCSimpleChartData(1680086574373_000000, 4.0),
+            LWCSimpleChartItem(1680086570373_000000, 1.0),
+            LWCSimpleChartItem(1680086571373_000000, 5.0),
+            LWCSimpleChartItem(1680086572373_000000, 2.0),
+            LWCSimpleChartItem(1680086573373_000000, 3.0),
+            LWCSimpleChartItem(1680086574373_000000, 4.0),
         ]),
         plugins = Vector{LWCPlugin}([
             LWCPlugin(

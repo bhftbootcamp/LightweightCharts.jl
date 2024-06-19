@@ -48,11 +48,11 @@
             false,
         ),
         data = LWCChartData([
-            LWCCandle(1680086570373_000000, 1, 1, 1, 1),
-            LWCCandle(1680086571373_000000, 5, 5, 5, 5),
-            LWCCandle(1680086572373_000000, 2, 2, 2, 2),
-            LWCCandle(1680086573373_000000, 3, 3, 3, 3),
-            LWCCandle(1680086574373_000000, 4, 4, 4, 4),
+            LWCCandleChartItem(1680086570373_000000, 1, 1, 1, 1),
+            LWCCandleChartItem(1680086571373_000000, 5, 5, 5, 5),
+            LWCCandleChartItem(1680086572373_000000, 2, 2, 2, 2),
+            LWCCandleChartItem(1680086573373_000000, 3, 3, 3, 3),
+            LWCCandleChartItem(1680086574373_000000, 4, 4, 4, 4),
         ]),
         plugins = Vector{LWCPlugin}([
             LWCPlugin(
@@ -117,11 +117,11 @@ end
             false,
         ),
         data = LWCChartData([
-            LWCCandle(1680086570373_000000, 1, 1, 1, 1),
-            LWCCandle(1680086571373_000000, 5, 5, 5, 5),
-            LWCCandle(1680086572373_000000, 2, 2, 2, 2),
-            LWCCandle(1680086573373_000000, 3, 3, 3, 3),
-            LWCCandle(1680086574373_000000, 4, 4, 4, 4),
+            LWCCandleChartItem(1680086570373_000000, 1, 1, 1, 1),
+            LWCCandleChartItem(1680086571373_000000, 5, 5, 5, 5),
+            LWCCandleChartItem(1680086572373_000000, 2, 2, 2, 2),
+            LWCCandleChartItem(1680086573373_000000, 3, 3, 3, 3),
+            LWCCandleChartItem(1680086574373_000000, 4, 4, 4, 4),
         ]),
         plugins = Vector{LWCPlugin}([
             LWCPlugin(

@@ -142,7 +142,7 @@ nothing # hide
 # OHLC Candles
 
 ```@docs
-LWCCandle
+LWCCandleChartItem
 ```
 
 ## Candlestick
@@ -161,7 +161,7 @@ open_time = now() .+ Second.(1:500)
 x_values = map(x -> sin(2rand() + x / 10), 1:500)
 
 chart = lwc_candlestick(
-    LWCCandle.(
+    LWCCandleChartItem.(
         open_time,
         x_values,
         x_values .+ rand(500),
@@ -199,7 +199,7 @@ open_time = now() .+ Second.(1:500)
 x_values = map(x -> sin(2rand() + x / 10), 1:500)
 
 chart = lwc_bar(
-    LWCCandle.(
+    LWCCandleChartItem.(
         open_time,
         x_values,
         x_values .+ rand(500),
@@ -223,7 +223,7 @@ nothing # hide
 ## Multi-colors
 
 ```@docs
-LWCSimpleChartData
+LWCSimpleChartItem
 ```
 
 ### Example
@@ -237,7 +237,7 @@ t_range = 1:500
 
 chart = lwc_baseline(
     map(
-        x -> LWCSimpleChartData(
+        x -> LWCSimpleChartItem(
             now() + Second(x),
             cos.(x / 10);
             color = randcolor(),

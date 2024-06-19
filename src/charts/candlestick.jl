@@ -19,7 +19,7 @@ struct CandlestickChartSettings <: AbstractChartSettings
 end
 
 """
-    lwc_candlestick(data::Vector{LWCCandle}; kw...) -> LWCChart
+    lwc_candlestick(data::Vector{LWCCandleChartItem}; kw...) -> LWCChart
 
 Creates a [`LWCChart`](@ref) object that contains candlesticks chart information.
 
@@ -45,7 +45,7 @@ Wrapper function for [`Candlestick`](https://tradingview.github.io/lightweight-c
 | `plugins::Vector{LWCPlugin}` | `LWCPlugin[]` | Additional plugins. |
 """
 function lwc_candlestick(
-    data::AbstractVector{LWCCandle};
+    data::AbstractVector...;
     price_scale_id::LWC_PRICE_SCALE_ID = LWC_LEFT,
     label_name::String = "",
     visible::Bool = true,
@@ -62,7 +62,6 @@ function lwc_candlestick(
     wick_down_color::String = "#ef5350",
     plugins::Vector{LWCPlugin} = Vector{LWCPlugin}(),
 )::LWCChart
-
     settings = CandlestickChartSettings(
         price_scale_id,
         label_name,
@@ -80,49 +79,13 @@ function lwc_candlestick(
         wick_down_color,
     )
 
-    return LWCChart(
+    return LWCChart{LWCCandleChartItem}(
         id = LWC_CHART_ID[] += 1,
         label_name = label_name,
         label_color = border_color,
         type = "addCandlestickSeries",
         settings = settings,
-        data = LWCChartData(data),
+        data = prepare_data(data...),
         plugins = plugins,
     )
-end
-
-"""
-    lwc_candlestick(data::Vector{Tuple{D,O,H,L,C}}; kw...) -> LWCChart
-
-Takes a single vector with tuples containing the corresponding candlestick values.
-Here `D` is a `Real` or `TimeType` and `O,H,L,C` are `Real`s.
-"""
-function lwc_candlestick(
-    data::AbstractVector{Tuple{D,O,H,L,C}};
-    kw...
-)::LWCChart where {D<:Union{Real,TimeType},O<:Real,H<:Real,L<:Real,C<:Real}
-    return lwc_candlestick(convert(Vector{LWCCandle}, data); kw...)
-end
-
-"""
-    lwc_candlestick(arg...; kw...) -> LWCChart
-
-Takes as input individual vectors with the corresponding candlestick values.
-
-## Arguments
-- `timestamps::Vector{Union{Real,TimeType}}`
-- `open::Vector{Real}`
-- `high::Vector{Real}`
-- `low::Vector{Real}`
-- `close::Vector{Real}`
-"""
-function lwc_candlestick(
-    timestamps::Vector{D},
-    open::Vector{O},
-    high::Vector{H},
-    low::Vector{L},
-    close::Vector{C};
-    kw...
-)::LWCChart where {D<:Union{Real,TimeType},O<:Real,H<:Real,L<:Real,C<:Real}
-    return lwc_candlestick(prepare_data(timestamps, open, high, low, close); kw...)
 end

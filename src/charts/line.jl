@@ -23,17 +23,17 @@ end
 """
     lwc_line(data::Vector{Tuple{Union{TimeType,Real},Real}}; kw...) -> LWCChart
     lwc_line([, timestamps], values::Vector{Real}; kw...) -> LWCChart
-    lwc_line(Vector{LWCSimpleChartData}; kw...) -> LWCChart
+    lwc_line(Vector{LWCSimpleChartItem}; kw...) -> LWCChart
     lwc_line(custom_data::Vector; kw...) -> LWCChart
 
 Creates a [`LWCChart`](@ref) object that contains line chart information.
 The `timestamps` can be passed as `Vector{Integer}` of Unix time or `Vector{TimeType}`.
-You can also use type [`LWCSimpleChartData`](@ref) for more flexible color settings.
+You can also use type [`LWCSimpleChartItem`](@ref) for more flexible color settings.
 
 Wrapper function for [`Line`](https://tradingview.github.io/lightweight-charts/docs/series-types#line).
 
 !!! note
-    You can use a `custom_data` with custom type elements for which is defined a [conversion method](https://docs.julialang.org/en/v1/base/base/#Base.convert) to type `Tuple` with two elements: `timestamp::Union{TimeType,Real}` and `value::Real`.
+    You can use a `custom_data` with custom type elements that have a [conversion method](https://docs.julialang.org/en/v1/base/base/#Base.convert) to type `Tuple` with two elements: `timestamp::Union{TimeType,Real}` and `value::Real`.
 
 ## Keyword arguments
 | Name::Type | Default (Posible values) | Description |
@@ -56,10 +56,8 @@ Wrapper function for [`Line`](https://tradingview.github.io/lightweight-charts/d
 | `crosshair_marker_border_width::Float64` | `2.0` | Border width of the crosshair. |
 | `plugins::Vector{LWCPlugin}` | `LWCPlugin[]` | Additional plugins. |
 """
-function lwc_line end
-
 function lwc_line(
-    data::AbstractVector{<:AbstractChartData};
+    data::AbstractVector...;
     price_scale_id::LWC_PRICE_SCALE_ID = LWC_LEFT,
     label_name::String = "",
     visible::Bool = true,
@@ -97,42 +95,13 @@ function lwc_line(
         crosshair_marker_border_width,
     )
 
-    return LWCChart(
+    return LWCChart{LWCSimpleChartItem}(
         id = LWC_CHART_ID[] += 1,
         label_name = label_name,
         label_color = line_color,
         type = "addLineSeries",
         settings = settings,
-        data = LWCChartData(data),
+        data = prepare_data(data...),
         plugins = plugins,
     )
-end
-
-function lwc_line(
-    data::AbstractVector{Tuple{D,T}};
-    kw...
-)::LWCChart where {D<:Union{Real,TimeType},T<:Real}
-    return lwc_line(convert(Vector{LWCSimpleChartData}, data); kw...)
-end
-
-function lwc_line(
-    timestamps::AbstractVector{D},
-    values::AbstractVector{T};
-    kw...
-)::LWCChart where {D<:Union{Real,TimeType},T<:Real}
-    return lwc_line(prepare_data(timestamps, values); kw...)
-end
-
-function lwc_line(
-    values::AbstractVector{T};
-    kw...
-)::LWCChart where {T<:Real}
-    return lwc_line(prepare_data(values); kw...)
-end
-
-function lwc_line(
-    custom_data::AbstractVector;
-    kw...
-)::LWCChart
-    return lwc_line(prepare_data(custom_data); kw...)
 end

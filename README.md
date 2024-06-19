@@ -53,7 +53,7 @@ lwc_show(chart)
 
 ![chart](docs/src/assets/chart.png)
 
-Custom data types can also be visualized (e.g. time series from [TimeArrays](https://github.com/bhftbootcamp/TimeArrays.jl)). The following example shows how smoothed prices can be visualized:
+The package also support custom data types. In the following example we used [TimeArrays](https://github.com/bhftbootcamp/TimeArrays.jl) to smooth prices:
 
 ```julia
 using TimeArrays
