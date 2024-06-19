@@ -107,5 +107,5 @@ function lwc_line(
 end
 
 function lwc_line(data::AbstractVector...; kw...)
-    return lwc_line(to_lwc_data(LWCSimpleChartItem, data...); kw...) # convert(Vector{LWCSimpleChartItem}, prepare_data(data...) -> to_lwc_data
+    return lwc_line(to_lwc_data(LWCSimpleChartItem, data...); kw...)
 end
