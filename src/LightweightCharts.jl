@@ -27,7 +27,7 @@ export lwc_time,
 
 export to_lwc_data
 
-export AbstractChartData,
+export AbstractChartItem,
     AbstractChartSettings,
     AbstractPluginSettings
 
@@ -63,7 +63,7 @@ using Dates
 using NanoDates
 using Serde
 
-abstract type AbstractChartData end
+abstract type AbstractChartItem end
 abstract type AbstractChartSettings end
 abstract type AbstractPluginSettings end
 
@@ -99,7 +99,7 @@ Base.@kwdef struct LWCChart <: AbstractChartSettings
     label_color::String
     type::String
     settings::S where {S<:AbstractChartSettings}
-    data::LWCChartData{T} where {T<:AbstractChartData}
+    data::LWCChartData
     plugins::Vector{LWCPlugin}
 end
 
@@ -332,7 +332,7 @@ function Base.propertynames(x::AbstractChartSettings)
     return to_camelcase.(n)
 end
 
-function Serde.SerJson.ser_name(::Type{A}, ::Val{T}) where {A<:AbstractChartData,T}
+function Serde.SerJson.ser_name(::Type{A}, ::Val{T}) where {A<:AbstractChartItem,T}
     return to_camelcase(T)
 end
 

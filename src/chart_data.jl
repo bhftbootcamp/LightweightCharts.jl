@@ -45,7 +45,7 @@ Supported for [`lwc_line`](@ref), [`lwc_area`](@ref), [`lwc_baseline`](@ref) and
 | `bottom_line_color::String` | `nothing` | Bottom line color. |
 | `color::String` | `nothing` | Color. |
 """
-mutable struct LWCSimpleChartItem <: AbstractChartData
+mutable struct LWCSimpleChartItem <: AbstractChartItem
     time::Int64
     value::Float64
     line_color::Union{String,Nothing}
@@ -115,7 +115,7 @@ lwc_bottom_fill_color_2(x::LWCSimpleChartItem) = x.bottom_fill_color_2
 lwc_bottom_line_color(x::LWCSimpleChartItem) = x.bottom_line_color
 lwc_color(x::LWCSimpleChartItem) = x.color
 
-Serde.SerJson.ser_value(::Type{<:AbstractChartData}, ::Val{:time}, x::Int64) = string(x)
+Serde.SerJson.ser_value(::Type{<:AbstractChartItem}, ::Val{:time}, x::Int64) = string(x)
 
 function Base.:(==)(left::LWCSimpleChartItem, right::LWCSimpleChartItem)
     return isequal(lwc_time(left), lwc_time(right)) &&
@@ -142,7 +142,7 @@ Representation of candlestick data for [`lwc_candlestick`](@ref) and [`lwc_bar`]
 | `border_color::String` | `nothing` | Border color. |
 | `wick_color::String` | `nothing` | Wick color. |
 """
-mutable struct LWCCandleChartItem <: AbstractChartData
+mutable struct LWCCandleChartItem <: AbstractChartItem
     time::Int64
     open::Float64
     high::Float64
@@ -222,10 +222,10 @@ datetime2epochns(x::Real)::Int64     = x * 1_000_000_000
 to_lwc_data(::Type{LWCSimpleChartItem}, x::Any) = convert(Tuple, x)
 to_lwc_data(::Type{LWCCandleChartItem}, x::Any) = convert(Tuple, x)
 
-struct LWCChartData{T<:AbstractChartData} <: AbstractVector{T}
+struct LWCChartData{T<:AbstractChartItem} <: AbstractVector{T}
     data::Vector{T}
 
-    function LWCChartData(data::AbstractVector{T}) where {T<:AbstractChartData}
+    function LWCChartData(data::AbstractVector{T}) where {T<:AbstractChartItem}
         unique!(lwc_time, data)
         sort!(data; by = lwc_time)
         return new{T}(data)
@@ -240,19 +240,19 @@ function Base.convert(::Type{LWCChartData}, data::LWCChartData)
     return data
 end
 
-function Base.convert(::Type{LWCChartData}, data::AbstractVector{T}) where {T<:AbstractChartData}
+function Base.convert(::Type{LWCChartData}, data::AbstractVector{T}) where {T<:AbstractChartItem}
     return LWCChartData(data)
 end
 
-function Base.convert(::Type{T}, x::T) where {T<:AbstractChartData}
+function Base.convert(::Type{T}, x::T) where {T<:AbstractChartItem}
     return x
 end
 
-function Base.convert(::Type{T}, x::Any) where {T<:AbstractChartData}
+function Base.convert(::Type{T}, x::Any) where {T<:AbstractChartItem}
     return convert(T, to_lwc_data(T, x))
 end
 
-function Base.convert(::Type{T}, x::Tuple) where {T<:AbstractChartData}
+function Base.convert(::Type{T}, x::Tuple) where {T<:AbstractChartItem}
     throw(ErrorException("Incorrect conversion from custom type object to Tuple."))
 end
 
@@ -272,11 +272,11 @@ function Base.convert(
     return LWCCandleChartItem(timestamp, open, high, low, close)
 end
 
-function Base.convert(::Type{Vector{T}}, data::AbstractVector{T}) where {T<:AbstractChartData}
+function Base.convert(::Type{Vector{T}}, data::AbstractVector{T}) where {T<:AbstractChartItem}
     return data
 end
 
-function Base.convert(::Type{Vector{T}}, data::AbstractVector) where {T<:AbstractChartData}
+function Base.convert(::Type{Vector{T}}, data::AbstractVector) where {T<:AbstractChartItem}
     return map(item -> convert(T, item), data)
 end
 
