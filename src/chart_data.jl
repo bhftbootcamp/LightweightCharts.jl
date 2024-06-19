@@ -250,4 +250,43 @@ datetime2epochns(x::Date)::Int64     = datetime2epochns(DateTime(x))
 datetime2epochns(x::NanoDate)::Int64 = Dates.value(x) - UNIXEPOCH_NS
 datetime2epochns(x::Real)::Int64     = x * 1_000_000_000
 
+function prepare_data(
+    timestamps::AbstractVector{D},
+    values::AbstractVector{T},
+) where {D<:Union{Real,TimeType},T<:Real}
+    @assert length(timestamps) === length(values) "length(timestamps) ≠ length(values)"
+    return map(timestamps, values) do timestamp, value
+        return (timestamp, value)
+    end
+end
+
+function prepare_data(values::AbstractVector{<:Real})
+    return map(enumerate(values)) do i, value
+        return (DateTime(1970) + Second(i - 1), value)
+    end
+end
+
+function prepare_data(data::AbstractVector)
+    return map(data) do item
+        return convert(Tuple, item)
+    end
+end
+
+function prepare_data(
+    timestamps::AbstractVector{<:Union{Real,TimeType}},
+    open::AbstractVector{<:Real},
+    high::AbstractVector{<:Real},
+    low::AbstractVector{<:Real},
+    close::AbstractVector{<:Real}
+)
+    @assert length(timestamps) === length(open)  "length(timestamps) ≠ length(open)"
+    @assert length(timestamps) === length(high)  "length(timestamps) ≠ length(high)"
+    @assert length(timestamps) === length(low)   "length(timestamps) ≠ length(low)"
+    @assert length(timestamps) === length(close) "length(timestamps) ≠ length(close)"
+
+    return map(timestamps, open, high, low, close) do t, o, h, l, c
+        return (t, o, h, l, c)
+    end
+end
+
 end
