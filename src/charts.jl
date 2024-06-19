@@ -67,8 +67,7 @@ end
 
 function prepare_data(values::AbstractVector{<:Real})
     return map(enumerate(values)) do i, value
-        timestamp = DateTime(1970) + Second(i - 1)
-        return (timestamp, value)
+        return (DateTime(1970) + Second(i - 1), value)
     end
 end
 

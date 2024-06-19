@@ -21,8 +21,8 @@ struct LWCChartData{T<:AbstractChartData} <: AbstractVector{T}
     data::Vector{T}
 
     function LWCChartData(data::AbstractVector{T}) where {T<:AbstractChartData}
-        sort!(data; by = lwc_time)
         unique!(lwc_time, data)
+        sort!(data; by = lwc_time)
         return new{T}(data)
     end
 end
@@ -130,7 +130,7 @@ Serde.SerJson.ser_value(::Type{<:AbstractChartData}, ::Val{:time}, x::Int64) = s
 
 function Base.:(==)(left::LWCSimpleChartData, right::LWCSimpleChartData)
     return isequal(lwc_time(left), lwc_time(right)) &&
-        isequal(lwc_value(left), lwc_value(right))
+           isequal(lwc_value(left), lwc_value(right))
 end
 
 function Base.convert(
