@@ -74,7 +74,7 @@ Wrapper function for [`Baseline`](https://tradingview.github.io/lightweight-char
 | `plugins::Vector{LWCPlugin}` | `LWCPlugin[]` | Additional plugins. |
 """
 function lwc_baseline(
-    data::AbstractVector...;
+    data::AbstractVector{LWCSimpleChartItem};
     price_scale_id::LWC_PRICE_SCALE_ID = LWC_LEFT,
     label_name::String = "",
     visible::Bool = true,
@@ -124,13 +124,18 @@ function lwc_baseline(
         crosshair_marker_border_width,
     )
 
-    return LWCChart{LWCSimpleChartItem}(
+    return LWCChart(
         id = LWC_CHART_ID[] += 1,
         label_name = label_name,
         label_color = top_fill_color1,
         type = "addBaselineSeries",
         settings = settings,
-        data = prepare_data(data...),
+        data = data,
         plugins = plugins,
     )
 end
+
+function lwc_baseline(data::AbstractVector...; kw...)
+    return lwc_baseline(convert(Vector{LWCSimpleChartItem}, prepare_data(data...)); kw...)
+end
+

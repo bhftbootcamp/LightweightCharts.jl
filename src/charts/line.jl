@@ -57,7 +57,7 @@ Wrapper function for [`Line`](https://tradingview.github.io/lightweight-charts/d
 | `plugins::Vector{LWCPlugin}` | `LWCPlugin[]` | Additional plugins. |
 """
 function lwc_line(
-    data::AbstractVector...;
+    data::AbstractVector{LWCSimpleChartItem};
     price_scale_id::LWC_PRICE_SCALE_ID = LWC_LEFT,
     label_name::String = "",
     visible::Bool = true,
@@ -95,13 +95,17 @@ function lwc_line(
         crosshair_marker_border_width,
     )
 
-    return LWCChart{LWCSimpleChartItem}(
+    return LWCChart(
         id = LWC_CHART_ID[] += 1,
         label_name = label_name,
         label_color = line_color,
         type = "addLineSeries",
         settings = settings,
-        data = prepare_data(data...),
+        data = data,
         plugins = plugins,
     )
+end
+
+function lwc_line(data::AbstractVector...; kw...)
+    return lwc_line(convert(Vector{LWCSimpleChartItem}, prepare_data(data...)); kw...)
 end

@@ -236,11 +236,11 @@ Base.size(x::LWCChartData) = size(x.data)
 Base.length(x::LWCChartData) = length(x.data)
 Base.getindex(x::LWCChartData, i::Integer) = getindex(x.data, i)
 
-function Base.convert(::Type{LWCChartData{T}}, data::LWCChartData{T}) where {T<:AbstractChartData}
+function Base.convert(::Type{LWCChartData}, data::LWCChartData)
     return data
 end
 
-function Base.convert(::Type{LWCChartData{T}}, data::AbstractVector{T}) where {T<:AbstractChartData}
+function Base.convert(::Type{LWCChartData}, data::AbstractVector{T}) where {T<:AbstractChartData}
     return LWCChartData(data)
 end
 
@@ -272,8 +272,12 @@ function Base.convert(
     return LWCCandleChartItem(timestamp, open, high, low, close)
 end
 
-function Base.convert(::Type{LWCChartData{T}}, data::AbstractVector) where {T<:AbstractChartData}
-    return LWCChartData(map(item -> convert(T, item), data))
+function Base.convert(::Type{Vector{T}}, data::AbstractVector{T}) where {T<:AbstractChartData}
+    return data
+end
+
+function Base.convert(::Type{Vector{T}}, data::AbstractVector) where {T<:AbstractChartData}
+    return map(item -> convert(T, item), data)
 end
 
 function prepare_data(data::AbstractVector)

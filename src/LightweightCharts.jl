@@ -93,13 +93,13 @@ The base type that contains the necessary information for visualizing a single c
 
 See also: [`lwc_show`](@ref), [`lwc_save`](@ref).
 """
-Base.@kwdef struct LWCChart{T<:AbstractChartData} <: AbstractChartSettings
+Base.@kwdef struct LWCChart <: AbstractChartSettings
     id::Int64
     label_name::String
     label_color::String
     type::String
     settings::S where {S<:AbstractChartSettings}
-    data::LWCChartData{T}
+    data::LWCChartData{T} where {T<:AbstractChartData}
     plugins::Vector{LWCPlugin}
 end
 

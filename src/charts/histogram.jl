@@ -37,7 +37,7 @@ Wrapper function for [`Histogram`](https://tradingview.github.io/lightweight-cha
 | `plugins::Vector{LWCPlugin}` | `LWCPlugin[]` | Additional plugins. |
 """
 function lwc_histogram(
-    data::AbstractVector...;
+    data::AbstractVector{LWCSimpleChartItem};
     price_scale_id::LWC_PRICE_SCALE_ID = LWC_LEFT,
     label_name::String = "",
     visible::Bool = true,
@@ -55,13 +55,17 @@ function lwc_histogram(
         base,
     )
 
-    return LWCChart{LWCSimpleChartItem}(
+    return LWCChart(
         id = LWC_CHART_ID[] += 1,
         label_name = label_name,
         label_color = color,
         type = "addHistogramSeries",
         settings = settings,
-        data = prepare_data(data...),
+        data = data,
         plugins = plugins,
     )
+end
+
+function lwc_histogram(data::AbstractVector...; kw...)
+    return lwc_histogram(convert(Vector{LWCSimpleChartItem}, prepare_data(data...)); kw...)
 end

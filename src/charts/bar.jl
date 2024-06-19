@@ -33,7 +33,7 @@ Wrapper function for [`Bar`](https://tradingview.github.io/lightweight-charts/do
 | `plugins::Vector{LWCPlugin}` | `LWCPlugin[]` | Additional plugins.  |
 """
 function lwc_bar(
-    data::AbstractVector...;
+    data::AbstractVector{LWCCandleChartItem};
     price_scale_id::LWC_PRICE_SCALE_ID = LWC_LEFT,
     label_name::String = "",
     visible::Bool = true,
@@ -55,13 +55,17 @@ function lwc_bar(
         thin_bars,
     )
 
-    return LWCChart{LWCCandleChartItem}(
+    return LWCChart(
         id = LWC_CHART_ID[] += 1,
         label_name = label_name,
         label_color = up_color,
         type = "addBarSeries",
         settings = settings,
-        data = prepare_data(data...),
+        data = data,
         plugins = plugins,
     )
+end
+
+function lwc_bar(data::AbstractVector...; kw...)
+    return lwc_bar(convert(Vector{LWCCandleChartItem}, prepare_data(data...)); kw...)
 end
