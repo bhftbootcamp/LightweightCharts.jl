@@ -25,7 +25,8 @@ export lwc_time,
     lwc_close,
     lwc_low
 
-export to_lwc_data
+export to_lwc_data,
+    to_lwc_item
 
 export AbstractChartItem,
     AbstractChartSettings,

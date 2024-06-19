@@ -67,5 +67,5 @@ function lwc_bar(
 end
 
 function lwc_bar(data::AbstractVector...; kw...)
-    return lwc_bar(convert(Vector{LWCCandleChartItem}, prepare_data(data...)); kw...)
+    return lwc_bar(to_lwc_data(LWCCandleChartItem, data...); kw...)
 end

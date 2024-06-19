@@ -27,7 +27,7 @@ using Dates
 
 using ..LightweightCharts
 import ..randcolor
-import ..prepare_data
+import ..to_lwc_data
 
 @enum LWC_LINE_TYPES begin
     LWC_SIMPLE = 0

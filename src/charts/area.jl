@@ -115,6 +115,6 @@ function lwc_area(
 end
 
 function lwc_area(data::AbstractVector...; kw...)
-    return lwc_area(convert(Vector{LWCSimpleChartItem}, prepare_data(data...)); kw...)
+    return lwc_area(to_lwc_data(LWCSimpleChartItem, data...); kw...)
 end
 

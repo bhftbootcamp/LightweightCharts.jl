@@ -136,6 +136,6 @@ function lwc_baseline(
 end
 
 function lwc_baseline(data::AbstractVector...; kw...)
-    return lwc_baseline(convert(Vector{LWCSimpleChartItem}, prepare_data(data...)); kw...)
+    return lwc_baseline(to_lwc_data(LWCSimpleChartItem, data...); kw...)
 end
 

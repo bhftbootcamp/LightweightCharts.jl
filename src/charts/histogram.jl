@@ -67,5 +67,5 @@ function lwc_histogram(
 end
 
 function lwc_histogram(data::AbstractVector...; kw...)
-    return lwc_histogram(convert(Vector{LWCSimpleChartItem}, prepare_data(data...)); kw...)
+    return lwc_histogram(to_lwc_data(LWCSimpleChartItem, data...); kw...)
 end

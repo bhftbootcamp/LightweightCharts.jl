@@ -91,6 +91,6 @@ function lwc_candlestick(
 end
 
 function lwc_candlestick(data::AbstractVector...; kw...)
-    return lwc_candlestick(convert(Vector{LWCCandleChartItem}, prepare_data(data...)); kw...)
+    return lwc_candlestick(to_lwc_data(LWCCandleChartItem, data...); kw...)
 end
 

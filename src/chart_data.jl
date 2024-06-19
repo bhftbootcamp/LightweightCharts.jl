@@ -12,6 +12,7 @@ export LWCChartData,
     LWCCandleChartItem
 
 export to_lwc_data,
+    to_lwc_item,
     prepare_data
 
 using Dates
@@ -219,8 +220,8 @@ datetime2epochns(x::Date)::Int64     = datetime2epochns(DateTime(x))
 datetime2epochns(x::NanoDate)::Int64 = Dates.value(x) - UNIXEPOCH_NS
 datetime2epochns(x::Real)::Int64     = x * 1_000_000_000
 
-to_lwc_data(::Type{LWCSimpleChartItem}, x::Any) = convert(Tuple, x)
-to_lwc_data(::Type{LWCCandleChartItem}, x::Any) = convert(Tuple, x)
+to_lwc_item(::Type{LWCSimpleChartItem}, x::Any) = convert(Tuple, x)
+to_lwc_item(::Type{LWCCandleChartItem}, x::Any) = convert(Tuple, x)
 
 struct LWCChartData{T<:AbstractChartItem} <: AbstractVector{T}
     data::Vector{T}
@@ -249,7 +250,7 @@ function Base.convert(::Type{T}, x::T) where {T<:AbstractChartItem}
 end
 
 function Base.convert(::Type{T}, x::Any) where {T<:AbstractChartItem}
-    return convert(T, to_lwc_data(T, x))
+    return convert(T, to_lwc_item(T, x))
 end
 
 function Base.convert(::Type{T}, x::Tuple) where {T<:AbstractChartItem}
@@ -272,36 +273,33 @@ function Base.convert(
     return LWCCandleChartItem(timestamp, open, high, low, close)
 end
 
-function Base.convert(::Type{Vector{T}}, data::AbstractVector{T}) where {T<:AbstractChartItem}
-    return data
-end
-
-function Base.convert(::Type{Vector{T}}, data::AbstractVector) where {T<:AbstractChartItem}
+function to_lwc_data(::Type{T}, data::AbstractVector) where {T<:AbstractChartItem}
     return map(item -> convert(T, item), data)
 end
 
-function prepare_data(data::AbstractVector)
-    return data
-end
-
-function prepare_data(
+function to_lwc_data(
+    ::Type{LWCSimpleChartItem},
     timestamps::AbstractVector{D},
     values::AbstractVector{T},
 ) where {D<:Union{Real,TimeType},T<:Real}
     @assert length(timestamps) === length(values) "length(timestamps) ≠ length(values)"
     return map(timestamps, values) do timestamp, value
-        return (timestamp, value)
+        return LWCSimpleChartItem(timestamp, value)
     end
 end
 
-function prepare_data(values::AbstractVector{<:Real})
+function to_lwc_data(
+    ::Type{LWCSimpleChartItem},
+    values::AbstractVector{<:Real},
+)
     return map(enumerate(values)) do item
         i, value = item
-        return (DateTime(1970) + Second(i), value)
+        return LWCSimpleChartItem(DateTime(1970) + Second(i), value)
     end
 end
 
-function prepare_data(
+function to_lwc_data(
+    ::Type{LWCCandleChartItem},
     timestamps::AbstractVector{<:Union{Real,TimeType}},
     open::AbstractVector{<:Real},
     high::AbstractVector{<:Real},
@@ -314,7 +312,7 @@ function prepare_data(
     @assert length(timestamps) === length(close) "length(timestamps) ≠ length(close)"
 
     return map(timestamps, open, high, low, close) do t, o, h, l, c
-        return (t, o, h, l, c)
+        return LWCCandleChartItem(t, o, h, l, c)
     end
 end
 
