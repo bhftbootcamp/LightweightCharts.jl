@@ -22,49 +22,46 @@ chart = lwc_line(
     ],
 )
 
-lwc_show(chart)</code></pre><p><img src="assets/chart.png" alt="chart"/></p><p>Panel candlestick and histogram chart, (using data from <a href="https://github.com/bhftbootcamp/CryptoAPIs.jl">CryptoAPIs</a>):</p><pre><code class="language-julia hljs">using Dates
-using CryptoAPIs
+lwc_show(chart)</code></pre><p><img src="assets/chart.png" alt="chart"/></p><p>The package also support custom data types (for more information, see the <a href="https://bhftbootcamp.github.io/LightweightCharts.jl/stable/pages/charts/#custom_data">documentation</a>). In the following example we used <a href="https://github.com/bhftbootcamp/TimeArrays.jl">TimeArrays</a> to smooth prices:</p><pre><code class="language-julia hljs">using TimeArrays
 using LightweightCharts
 
-ohlc = CryptoAPIs.Binance.Spot.candle(;
-    symbol = &quot;ETHUSDT&quot;,
-    interval = CryptoAPIs.Binance.Spot.Candle.d1,
-    startTime = DateTime(&quot;2021-01-01&quot;),
-    endTime = DateTime(&quot;2023-09-27&quot;),
-    limit = 1000,
-)
+julia&gt; prices = ta_price_sample_data()
+7777-element TimeArray{DateTime, Float64}:
+ TimeTick(2024-04-01T00:00:00.661, 0.6501)
+ TimeTick(2024-04-01T00:05:57.481, 0.6505)
+ ⋮
+ TimeTick(2024-04-30T23:42:11.920, 0.4417)
 
 panel = lwc_panel(
-    lwc_candlestick(
-        map(
-            x -&gt; LWCCandle(x.openTime, x.openPrice, x.highPrice, x.lowPrice, x.closePrice),
-            ohlc.result,
-        );
-        label_name = &quot;lwc_candlestick&quot;,
-        up_color = &quot;#52a49a&quot;,
-        down_color = &quot;#de5e57&quot;,
-        border_visible = false,
-        price_scale_id = LWC_LEFT,
-    ),
-    lwc_histogram(
-        map(
-            x -&gt; LWCSimpleChartData(
-                x.openTime,
-                x.volume,
-                color = x.openPrice &gt; x.closePrice ? &quot;#de5e5780&quot; : &quot;#52a49a80&quot;,
-            ),
-            ohlc.result,
-        );
-        label_name = &quot;lwc_histogram&quot;,
-        base = 0.0,
-        price_scale_id = LWC_RIGHT,
-    );
-    name = &quot;ETHUSDT | Binance Spot&quot;,
-    right_max_y = 8000000,
-    left_min_y = 1000,
+   lwc_line(
+       prices;
+       label_name = &quot;price&quot;,
+       line_color = &quot;#adb5bd&quot;,
+       line_type = LWC_STEP,
+       precision = 4,
+   ),
+   lwc_line(
+       ta_sma(prices, 20);
+       label_name = &quot;sma price&quot;,
+       line_color = &quot;red&quot;,
+       precision = 4,
+   ),
+   lwc_line(
+       ta_wma(prices, 20);
+       label_name = &quot;wma price&quot;,
+       line_color = &quot;orange&quot;,
+       precision = 4,
+   ),
+   lwc_line(
+       ta_ema(prices, 20);
+       label_name = &quot;ema price&quot;,
+       line_color = &quot;green&quot;,
+       precision = 4,
+   );
+   name = &quot;LightweightCharts ❤️ TimeArrays&quot;
 )
 
-lwc_show(panel)</code></pre><p><img src="assets/panel.png" alt="panel"/></p><p>Composite layout featuring diverse chart types:</p><pre><code class="language-julia hljs">using Dates, NanoDates
+lwc_show(panel)</code></pre><p><img src="assets/smoothed_prices.png" alt="panel"/></p><p>Composite layout featuring diverse chart types:</p><pre><code class="language-julia hljs">using Dates, NanoDates
 using LightweightCharts
 
 layout = lwc_layout(
@@ -143,4 +140,4 @@ chart = lwc_panel(
     max_y = 1.6
 )
 
-lwc_show(chart)</code></pre><p><img src="assets/scatter.png" alt="scatter"/></p></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="pages/charts/">Charts »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.4.1 on <span class="colophon-date" title="Friday 14 June 2024 20:25">Friday 14 June 2024</span>. Using Julia version 1.10.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+lwc_show(chart)</code></pre><p><img src="assets/scatter.png" alt="scatter"/></p></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="pages/charts/">Charts »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.4.1 on <span class="colophon-date" title="Thursday 20 June 2024 17:01">Thursday 20 June 2024</span>. Using Julia version 1.10.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
