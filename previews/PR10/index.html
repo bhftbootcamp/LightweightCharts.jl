@@ -33,31 +33,32 @@ julia&gt; prices = ta_price_sample_data()
  TimeTick(2024-04-30T23:42:11.920, 0.4417)
 
 panel = lwc_panel(
-    lwc_line(
-        prices;
-        label_name = &quot;price&quot;,
-        line_color = &quot;#adb5bd&quot;,
-        line_type = LWC_STEP,
-        precision = 4,
-    ),
-    lwc_line(
-        ta_sma(prices, 20);
-        label_name = &quot;sma price&quot;,
-        line_color = &quot;red&quot;,
-        precision = 4,
-    ),
-    lwc_line(
-        ta_wma(prices, 20);
-        label_name = &quot;wma price&quot;,
-        line_color = &quot;orange&quot;,
-        precision = 4,
-    ),
-    lwc_line(
-        ta_ema(prices, 20);
-        label_name = &quot;ema price&quot;,
-        line_color = &quot;green&quot;,
-        precision = 4,
-    ),
+   lwc_line(
+       prices;
+       label_name = &quot;price&quot;,
+       line_color = &quot;#adb5bd&quot;,
+       line_type = LWC_STEP,
+       precision = 4,
+   ),
+   lwc_line(
+       ta_sma(prices, 20);
+       label_name = &quot;sma price&quot;,
+       line_color = &quot;red&quot;,
+       precision = 4,
+   ),
+   lwc_line(
+       ta_wma(prices, 20);
+       label_name = &quot;wma price&quot;,
+       line_color = &quot;orange&quot;,
+       precision = 4,
+   ),
+   lwc_line(
+       ta_ema(prices, 20);
+       label_name = &quot;ema price&quot;,
+       line_color = &quot;green&quot;,
+       precision = 4,
+   );
+   name = &quot;LightweightCharts ❤️ TimeArrays&quot;
 )
 
 lwc_show(panel)</code></pre><p><img src="assets/smoothed_prices.png" alt="panel"/></p><p>Composite layout featuring diverse chart types:</p><pre><code class="language-julia hljs">using Dates, NanoDates
@@ -139,4 +140,4 @@ chart = lwc_panel(
     max_y = 1.6
 )
 
-lwc_show(chart)</code></pre><p><img src="assets/scatter.png" alt="scatter"/></p></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="pages/charts/">Charts »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.4.1 on <span class="colophon-date" title="Thursday 20 June 2024 15:57">Thursday 20 June 2024</span>. Using Julia version 1.10.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+lwc_show(chart)</code></pre><p><img src="assets/scatter.png" alt="scatter"/></p></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="pages/charts/">Charts »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.4.1 on <span class="colophon-date" title="Thursday 20 June 2024 16:14">Thursday 20 June 2024</span>. Using Julia version 1.10.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
