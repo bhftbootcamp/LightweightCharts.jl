@@ -19,14 +19,15 @@ struct CandlestickChartSettings <: AbstractChartSettings
 end
 
 """
-    lwc_candlestick(data::Vector{LWCCandle}; kw...) -> LWCChart
+    lwc_candlestick(data::Vector{LWCCandleChartItem}; kw...) -> LWCChart
 
 Creates a [`LWCChart`](@ref) object that contains candlesticks chart information.
+A general method that allows you to customize each chart node using [`LWCCandleChartItem`](@ref).
 
 Wrapper function for [`Candlestick`](https://tradingview.github.io/lightweight-charts/docs/series-types#candlestick).
 
 ## Keyword arguments
-| Name::Type | Default (Posible values) | Description |
+| Name::Type | Default (Possible values) | Description |
 |:-----------|:-------------------------|:------------|
 | `price_scale_id::LWC_PRICE_SCALE_ID` | `LWC_LEFT` (`LWC_RIGHT`) | Y-axis display side. |
 | `label_name::String` | `""` | Chart name. |
@@ -45,7 +46,7 @@ Wrapper function for [`Candlestick`](https://tradingview.github.io/lightweight-c
 | `plugins::Vector{LWCPlugin}` | `LWCPlugin[]` | Additional plugins. |
 """
 function lwc_candlestick(
-    data::AbstractVector{LWCCandle};
+    data::AbstractVector{LWCCandleChartItem};
     price_scale_id::LWC_PRICE_SCALE_ID = LWC_LEFT,
     label_name::String = "",
     visible::Bool = true,
@@ -62,8 +63,6 @@ function lwc_candlestick(
     wick_down_color::String = "#ef5350",
     plugins::Vector{LWCPlugin} = Vector{LWCPlugin}(),
 )::LWCChart
-    data = lwc_convert_data!(data)
-
     settings = CandlestickChartSettings(
         price_scale_id,
         label_name,
@@ -95,7 +94,7 @@ end
 """
     lwc_candlestick(arg...; kw...) -> LWCChart
 
-Takes as input individual vectors with the corresponding candlestick values.
+Creates a [`LWCChart`](@ref) from the passed `arg` that describes the corresponding candlestick values.
 
 ## Arguments
 - `timestamps::Vector{Union{Real,TimeType}}`
@@ -105,25 +104,39 @@ Takes as input individual vectors with the corresponding candlestick values.
 - `close::Vector{Real}`
 """
 function lwc_candlestick(
-    timestamps::Vector{D},
-    open::Vector{O},
-    high::Vector{H},
-    low::Vector{L},
-    close::Vector{C};
-    kw...
-)::LWCChart where {D<:Union{Real,TimeType},O<:Real,H<:Real,L<:Real,C<:Real}
-    return lwc_candlestick(prepare_data(timestamps, open, high, low, close); kw...)
+    timestamps::AbstractVector{<:Union{Real,TimeType}},
+    open::AbstractVector{<:Real},
+    high::AbstractVector{<:Real},
+    low::AbstractVector{<:Real},
+    close::AbstractVector{<:Real};
+    kw...,
+)::LWCChart
+    return lwc_candlestick(
+        to_lwc_data(LWCCandleChartItem, timestamps, open, high, low, close);
+        kw...,
+    )
 end
 
 """
     lwc_candlestick(data::Vector{Tuple{D,O,H,L,C}}; kw...) -> LWCChart
 
-Takes a single vector with tuples containing the corresponding candlestick values.
+Creates a [`LWCChart`](@ref) from the passed `data` that describes a vector of candles.
 Here `D` is a `Real` or `TimeType` and `O,H,L,C` are `Real`s.
 """
 function lwc_candlestick(
     data::AbstractVector{Tuple{D,O,H,L,C}};
-    kw...
+    kw...,
 )::LWCChart where {D<:Union{Real,TimeType},O<:Real,H<:Real,L<:Real,C<:Real}
-    return lwc_candlestick(lwc_convert_data(data); kw...)
+    return lwc_candlestick(to_lwc_data(LWCCandleChartItem, data); kw...)
+end
+
+"""
+    lwc_candlestick(custom_data::Vector{Any}; kw...) -> LWCChart
+
+Creates a [`LWCChart`](@ref) from the passed `custom_data`.
+
+For more information see [Custom data](@ref custom_data) section.
+"""
+function lwc_candlestick(data::AbstractVector; kw...)::LWCChart
+    return lwc_candlestick(to_lwc_data(LWCCandleChartItem, data); kw...)
 end

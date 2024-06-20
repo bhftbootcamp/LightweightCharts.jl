@@ -20,7 +20,7 @@ end
 Adds a dynamic tooltip to the chart following the cursor and displaying the values.
 
 ## Keyword arguments
-| Name::Type | Default (Posible values) | Description |
+| Name::Type | Default (Possible values) | Description |
 |:-----------|:-------------------------|:------------|
 | `line_color::String` | `"rgba(0, 0, 0, 0.2)"` | Tooltip line color. |
 | `title::String` | `""` | Tooltip title. |

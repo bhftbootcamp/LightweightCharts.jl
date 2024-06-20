@@ -21,7 +21,7 @@ end
 end
 
 @testset "Data serialization" begin
-    data = LWCSimpleChartData(17500000, 0.29)
+    data = LWCSimpleChartItem(17500000, 0.29)
     result = "{\"time\":\"17500000\",\"value\":0.29}"
     @test Serde.to_json(data) == result
 end

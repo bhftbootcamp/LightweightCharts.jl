@@ -11,17 +11,15 @@ struct HistogramChartSettings <: AbstractChartSettings
 end
 
 """
-    lwc_histogram([, timestamps], values::Vector{Real}; kw...) -> LWCChart
-    lwc_histogram(Vector{LWCSimpleChartData}; kw...) -> LWCChart
+    lwc_histogram(Vector{LWCSimpleChartItem}; kw...) -> LWCChart
 
-Creates a [`LWCChart`](@ref) object that contains histogram chart information.
-The `timestamps` can be passed as `Vector{Integer}` of Unix time or `Vector{TimeType}`.
-You can also use type [`LWCSimpleChartData`](@ref) for more flexible color settings.
+Creates a [`LWCChart`](@ref) object that contains line chart information.
+A general method that allows you to customize each chart node using [`LWCSimpleChartItem`](@ref).
 
 Wrapper function for [`Histogram`](https://tradingview.github.io/lightweight-charts/docs/series-types#histogram).
 
 ## Keyword arguments
-| Name::Type | Default (Posible values) | Description |
+| Name::Type | Default (Possible values) | Description |
 |:-----------|:-------------------------|:------------|
 | `price_scale_id::LWC_PRICE_SCALE_ID` | `LWC_LEFT` (`LWC_RIGHT`) | Y-axis display side. |
 | `label_name::String` | `""` | Chart name. |
@@ -31,10 +29,8 @@ Wrapper function for [`Histogram`](https://tradingview.github.io/lightweight-cha
 | `base::Real` | `0.0` | The value relative to which the larger or smaller histogram values will be located. |
 | `plugins::Vector{LWCPlugin}` | `LWCPlugin[]` | Additional plugins. |
 """
-function lwc_histogram end
-
 function lwc_histogram(
-    data::AbstractVector{<:AbstractChartData};
+    data::AbstractVector{LWCSimpleChartItem};
     price_scale_id::LWC_PRICE_SCALE_ID = LWC_LEFT,
     label_name::String = "",
     visible::Bool = true,
@@ -63,25 +59,49 @@ function lwc_histogram(
     )
 end
 
+"""
+    lwc_histogram(timestamps::Vector{TimeType}, values::Vector{Real}; kw...) -> LWCChart
+    lwc_histogram(timestamps::Vector{Real}, values::Vector{Real}; kw...) -> LWCChart
+    
+Creates a [`LWCChart`](@ref) from the passed `timestamps` and `values`.
+"""
 function lwc_histogram(
-    timearray::AbstractVector{Tuple{D,T}};
-    kw...
-)::LWCChart where {D<:Union{Real,TimeType},T<:Real}
-    data = lwc_convert_data(timearray)
-    return lwc_histogram(data; kw...)
+    timestamps::AbstractVector{<:Union{Real,TimeType}},
+    values::AbstractVector{<:Real};
+    kw...,
+)::LWCChart
+    return lwc_histogram(to_lwc_data(LWCSimpleChartItem, timestamps, values); kw...)
 end
 
+"""
+    lwc_histogram(data::Vector{Tuple{TimeType,Real}}; kw...) -> LWCChart
+    lwc_histogram(data::Vector{Tuple{Real,Real}}; kw...) -> LWCChart
+
+Creates a [`LWCChart`](@ref) from the passed `data` that describes a vector of timestamps and values.
+"""
 function lwc_histogram(
-    timestamps::Vector{D},
-    values::Vector{T};
-    kw...
-)::LWCChart where {D<:Union{Real,TimeType},T<:Real}
-    return lwc_histogram(prepare_data(timestamps, values); kw...)
+    data::AbstractVector{Tuple{<:Union{Real,TimeType},<:Real}};
+    kw...,
+)::LWCChart
+    return lwc_histogram(to_lwc_data(LWCSimpleChartItem, data); kw...)
 end
 
-function lwc_histogram(
-    values::Vector{T};
-    kw...
-)::LWCChart where {T<:Real}
-    return lwc_histogram(prepare_data(values); kw...)
+"""
+    lwc_histogram(values::Vector{Real}; kw...) -> LWCChart
+
+Creates a [`LWCChart`](@ref) from the passed `values` (timestamps begin from `1970-01-01`).
+"""
+function lwc_histogram(values::AbstractVector{<:Real}; kw...)::LWCChart
+    return lwc_histogram(to_lwc_data(LWCSimpleChartItem, values); kw...)
+end
+
+"""
+    lwc_histogram(custom_data::Vector{Any}; kw...) -> LWCChart
+
+Creates a [`LWCChart`](@ref) from the passed `custom_data`.
+
+For more information see [Custom data](@ref custom_data) section.
+"""
+function lwc_histogram(data::AbstractVector; kw...)::LWCChart
+    return lwc_histogram(to_lwc_data(LWCSimpleChartItem, data); kw...)
 end
