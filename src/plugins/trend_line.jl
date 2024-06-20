@@ -21,7 +21,7 @@ end
 Adds a trend line to the chart starting with `start_index` and `start_price` and ending with `end_index` and `end_price`.
 
 ## Keyword arguments
-| Name::Type | Default (Posible values) | Description |
+| Name::Type | Default (Possible values) | Description |
 |:-----------|:-------------------------|:------------|
 | `line_color::String` | Random color | Line color. |
 | `width::Int64` | `6` | Line width. |

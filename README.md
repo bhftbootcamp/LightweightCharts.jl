@@ -53,55 +53,52 @@ lwc_show(chart)
 
 ![chart](docs/src/assets/chart.png)
 
-Panel candlestick and histogram chart, (using data from [CryptoAPIs](https://github.com/bhftbootcamp/CryptoAPIs.jl)):
+The package also support custom data types (for more information, see the [documentation](https://bhftbootcamp.github.io/LightweightCharts.jl/stable/pages/charts/#custom_data)). In the following example we used [TimeArrays](https://github.com/bhftbootcamp/TimeArrays.jl) to smooth prices:
 
 ```julia
-using Dates
-using CryptoAPIs
+using TimeArrays
 using LightweightCharts
 
-ohlc = CryptoAPIs.Binance.Spot.candle(;
-    symbol = "ETHUSDT",
-    interval = CryptoAPIs.Binance.Spot.Candle.d1,
-    startTime = DateTime("2021-01-01"),
-    endTime = DateTime("2023-09-27"),
-    limit = 1000,
-)
+julia> prices = ta_price_sample_data()
+7777-element TimeArray{DateTime, Float64}:
+ TimeTick(2024-04-01T00:00:00.661, 0.6501)
+ TimeTick(2024-04-01T00:05:57.481, 0.6505)
+ ⋮
+ TimeTick(2024-04-30T23:42:11.920, 0.4417)
 
 panel = lwc_panel(
-    lwc_candlestick(
-        map(
-            x -> LWCCandle(x.openTime, x.openPrice, x.highPrice, x.lowPrice, x.closePrice),
-            ohlc.result,
-        );
-        label_name = "lwc_candlestick",
-        up_color = "#52a49a",
-        down_color = "#de5e57",
-        border_visible = false,
-        price_scale_id = LWC_LEFT,
+    lwc_line(
+        prices;
+        label_name = "price",
+        line_color = "#adb5bd",
+        line_type = LWC_STEP,
+        precision = 4,
     ),
-    lwc_histogram(
-        map(
-            x -> LWCSimpleChartData(
-                x.openTime,
-                x.volume,
-                color = x.openPrice > x.closePrice ? "#de5e5780" : "#52a49a80",
-            ),
-            ohlc.result,
-        );
-        label_name = "lwc_histogram",
-        base = 0.0,
-        price_scale_id = LWC_RIGHT,
+    lwc_line(
+        ta_sma(prices, 20);
+        label_name = "sma price",
+        line_color = "red",
+        precision = 4,
+    ),
+    lwc_line(
+        ta_wma(prices, 20);
+        label_name = "wma price",
+        line_color = "orange",
+        precision = 4,
+    ),
+    lwc_line(
+        ta_ema(prices, 20);
+        label_name = "ema price",
+        line_color = "green",
+        precision = 4,
     );
-    name = "ETHUSDT | Binance Spot",
-    right_max_y = 8000000,
-    left_min_y = 1000,
+    name = "LightweightCharts ❤️ TimeArrays",
 )
 
 lwc_show(panel)
 ```
 
-![panel](docs/src/assets/panel.png)
+![panel](docs/src/assets/smoothed_prices.png)
 
 Composite layout featuring diverse chart types:
 

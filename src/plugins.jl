@@ -1,4 +1,4 @@
-module LWCPlugins
+module Plugins
 
 export lwc_vert_line,
     lwc_delta_tooltip,
@@ -21,7 +21,7 @@ import ..randcolor
     LWC_TOOLTIP_TRACK = 1
 end
 
-Serde.SerJson.ser_type(::Type{A}, x::LWC_TOOLTIP_TYPE) where {A<:AbstractPluginSettings} = Int64(x)
+Serde.SerJson.ser_type(::Type{<:AbstractPluginSettings}, x::LWC_TOOLTIP_TYPE) = Int64(x)
 
 include("plugins/vertical_line.jl")
 include("plugins/delta_tooltip.jl")

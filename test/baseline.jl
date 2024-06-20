@@ -1,8 +1,8 @@
 # test/baseline
 
-@testset "LWCSimpleChartData(::Int64, ::Real)" begin
-    @test LWCSimpleChartData(1680086570373_000000, 1.0) ==
-          LWCSimpleChartData(1680086570373_000000, 1.0)
+@testset "LWCSimpleChartItem(::Int64, ::Real)" begin
+    @test LWCSimpleChartItem(1680086570373_000000, 1.0) ==
+          LWCSimpleChartItem(1680086570373_000000, 1.0)
 end
 
 @testset "BaseLine" begin
@@ -50,7 +50,7 @@ end
         label_name = "baseline",
         label_color = "rgba(38, 166, 154, 0.28)",
         type = "addBaselineSeries",
-        settings = LightweightCharts.LWCCharts.BaseLineChartSettings(
+        settings = LightweightCharts.Charts.BaseLineChartSettings(
             LWC_RIGHT,
             "baseline",
             true,
@@ -74,17 +74,17 @@ end
             "",
             2.0,
         ),
-        data = Vector{LWCSimpleChartData}([
-            LWCSimpleChartData(1680086570373_000000, 1.0),
-            LWCSimpleChartData(1680086571373_000000, 5.0),
-            LWCSimpleChartData(1680086572373_000000, 2.0),
-            LWCSimpleChartData(1680086573373_000000, 3.0),
-            LWCSimpleChartData(1680086574373_000000, 4.0),
+        data = LWCChartData([
+            LWCSimpleChartItem(1680086570373_000000, 1.0),
+            LWCSimpleChartItem(1680086571373_000000, 5.0),
+            LWCSimpleChartItem(1680086572373_000000, 2.0),
+            LWCSimpleChartItem(1680086573373_000000, 3.0),
+            LWCSimpleChartItem(1680086574373_000000, 4.0),
         ]),
         plugins = Vector{LWCPlugin}([
             LWCPlugin(
                 "addVertLine",
-                LightweightCharts.LWCPlugins.VertLineSettings(
+                LightweightCharts.Plugins.VertLineSettings(
                     3,
                     "red",
                     "test",
@@ -144,7 +144,7 @@ end
         label_name = "baseline",
         label_color = "rgba(38, 166, 154, 0.28)",
         type = "addBaselineSeries",
-        settings = LightweightCharts.LWCCharts.BaseLineChartSettings(
+        settings = LightweightCharts.Charts.BaseLineChartSettings(
             LWC_RIGHT,
             "baseline",
             true,
@@ -168,17 +168,17 @@ end
             "",
             2.0,
         ),
-        data = Vector{LWCSimpleChartData}([
-            LWCSimpleChartData(1680086570373_000000, 1.0),
-            LWCSimpleChartData(1680086571373_000000, 5.0),
-            LWCSimpleChartData(1680086572373_000000, 2.0),
-            LWCSimpleChartData(1680086573373_000000, 3.0),
-            LWCSimpleChartData(1680086574373_000000, 4.0),
+        data = LWCChartData([
+            LWCSimpleChartItem(1680086570373_000000, 1.0),
+            LWCSimpleChartItem(1680086571373_000000, 5.0),
+            LWCSimpleChartItem(1680086572373_000000, 2.0),
+            LWCSimpleChartItem(1680086573373_000000, 3.0),
+            LWCSimpleChartItem(1680086574373_000000, 4.0),
         ]),
         plugins = Vector{LWCPlugin}([
             LWCPlugin(
                 "addVertLine",
-                LightweightCharts.LWCPlugins.VertLineSettings(
+                LightweightCharts.Plugins.VertLineSettings(
                     3,
                     "red",
                     "test",

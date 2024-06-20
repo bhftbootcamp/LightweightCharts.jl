@@ -1,8 +1,8 @@
 # test/line
 
-@testset "LWCSimpleChartData(::Int64, ::Real)" begin
-    @test LWCSimpleChartData(1680086570373_000000, 1.0) ==
-          LWCSimpleChartData(1680086570373_000000, 1.0)
+@testset "LWCSimpleChartItem(::Int64, ::Real)" begin
+    @test LWCSimpleChartItem(1680086570373_000000, 1.0) ==
+          LWCSimpleChartItem(1680086570373_000000, 1.0)
 end
 
 @testset "Line" begin
@@ -45,7 +45,7 @@ end
         label_name = "OK.ICX-USDT",
         label_color = "green",
         type = "addLineSeries",
-        settings = LightweightCharts.LWCCharts.LineChartSettings(
+        settings = LightweightCharts.Charts.LineChartSettings(
             LWC_RIGHT,
             "OK.ICX-USDT",
             true,
@@ -63,17 +63,17 @@ end
             "",
             2.0,
         ),
-        data = Vector{LWCSimpleChartData}([
-            LWCSimpleChartData(1680086570373_000000, 1.0),
-            LWCSimpleChartData(1680086571373_000000, 5.0),
-            LWCSimpleChartData(1680086572373_000000, 2.0),
-            LWCSimpleChartData(1680086573373_000000, 3.0),
-            LWCSimpleChartData(1680086574373_000000, 4.0),
+        data = LWCChartData([
+            LWCSimpleChartItem(1680086570373_000000, 1.0),
+            LWCSimpleChartItem(1680086571373_000000, 5.0),
+            LWCSimpleChartItem(1680086572373_000000, 2.0),
+            LWCSimpleChartItem(1680086573373_000000, 3.0),
+            LWCSimpleChartItem(1680086574373_000000, 4.0),
         ]),
         plugins = Vector{LWCPlugin}([
             LWCPlugin(
                 "addVertLine",
-                LightweightCharts.LWCPlugins.VertLineSettings(
+                LightweightCharts.Plugins.VertLineSettings(
                     3,
                     "red",
                     "test",
@@ -128,7 +128,7 @@ end
         label_name = "OK.ICX-USDT",
         label_color = "green",
         type = "addLineSeries",
-        settings = LightweightCharts.LWCCharts.LineChartSettings(
+        settings = LightweightCharts.Charts.LineChartSettings(
             LWC_RIGHT,
             "OK.ICX-USDT",
             true,
@@ -146,17 +146,17 @@ end
             "",
             2.0,
         ),
-        data = Vector{LWCSimpleChartData}([
-            LWCSimpleChartData(1680086570373_000000, 1.0),
-            LWCSimpleChartData(1680086571373_000000, 5.0),
-            LWCSimpleChartData(1680086572373_000000, 2.0),
-            LWCSimpleChartData(1680086573373_000000, 3.0),
-            LWCSimpleChartData(1680086574373_000000, 4.0),
+        data = LWCChartData([
+            LWCSimpleChartItem(1680086570373_000000, 1.0),
+            LWCSimpleChartItem(1680086571373_000000, 5.0),
+            LWCSimpleChartItem(1680086572373_000000, 2.0),
+            LWCSimpleChartItem(1680086573373_000000, 3.0),
+            LWCSimpleChartItem(1680086574373_000000, 4.0),
         ]),
         plugins = Vector{LWCPlugin}([
             LWCPlugin(
                 "addVertLine",
-                LightweightCharts.LWCPlugins.VertLineSettings(
+                LightweightCharts.Plugins.VertLineSettings(
                     3,
                     "red",
                     "test",

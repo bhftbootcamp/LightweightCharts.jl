@@ -142,7 +142,7 @@ nothing # hide
 # OHLC Candles
 
 ```@docs
-LWCCandle
+LWCCandleChartItem
 ```
 
 ## Candlestick
@@ -161,7 +161,7 @@ open_time = now() .+ Second.(1:500)
 x_values = map(x -> sin(2rand() + x / 10), 1:500)
 
 chart = lwc_candlestick(
-    LWCCandle.(
+    LWCCandleChartItem.(
         open_time,
         x_values,
         x_values .+ rand(500),
@@ -199,7 +199,7 @@ open_time = now() .+ Second.(1:500)
 x_values = map(x -> sin(2rand() + x / 10), 1:500)
 
 chart = lwc_bar(
-    LWCCandle.(
+    LWCCandleChartItem.(
         open_time,
         x_values,
         x_values .+ rand(500),
@@ -223,7 +223,7 @@ nothing # hide
 ## Multi-colors
 
 ```@docs
-LWCSimpleChartData
+LWCSimpleChartItem
 ```
 
 ### Example
@@ -237,7 +237,7 @@ t_range = 1:500
 
 chart = lwc_baseline(
     map(
-        x -> LWCSimpleChartData(
+        x -> LWCSimpleChartItem(
             now() + Second(x),
             cos.(x / 10);
             color = randcolor(),
@@ -262,3 +262,96 @@ nothing # hide
     <iframe src="../colors_example.html" style="height:500px;width:100%;"></iframe>
 ```
 
+## [Custom data](@id custom_data)
+
+Vectors with custom data types can also be visualized.
+
+The simplest way to add visualization support to your custom type is to define a new [conversion method](https://docs.julialang.org/en/v1/base/base/#Base.convert) from `CustomType` to `Tuple` with the following signature:
+
+For simple charts (e.g [lwc_line](@ref), [lwc_area](@ref), ...)
+```julia
+Base.convert(::Type{Tuple}, x::CustomType)::Tuple{TimeType,Real} = ...
+# OR
+Base.convert(::Type{Tuple}, x::CustomType)::Tuple{Real,Real} = ...
+```
+
+For candle charts (e.g [lwc_candlestick](@ref), [lwc_bar](@ref))
+```julia
+Base.convert(::Type{Tuple}, x::CustomType)::Tuple{TimeType,Real,Real,Real,Real} = ...
+# OR
+Base.convert(::Type{Tuple}, x::CustomType)::Tuple{Real,Real,Real,Real,Real} = ...
+```
+
+If such a conversion method is already defined for other purposes, then you can define another conversion methods that allows you to create objects `LWCSimpleChartItem` or `LWCCandleChartItem` (this method provides more flexible customization options).
+```julia
+Base.convert(::Type{LWCSimpleChartItem}, x::CustomType) = LWCSimpleChartItem(...)
+# OR / AND
+Base.convert(::Type{LWCCandleChartItem}, x::CustomType) = LWCCandleChartItem(...)
+```
+
+### Examples
+
+```@example
+using Dates
+using LightweightCharts
+
+struct Point
+    timestamp::DateTime
+    value::Float64
+end
+
+Base.convert(::Type{Tuple}, x::Point) = (x.timestamp, x.value)
+# OR
+function Base.convert(::Type{LWCSimpleChartItem}, x::Point)
+    return LWCSimpleChartItem(x.timestamp, x.value)
+end
+
+points = [Point(now() + Second(x), sin(x / 10.0)) for x in 1:500]
+
+chart = lwc_line(
+    points;
+    label_name = "custom points",
+    line_color = "#a8dadc",
+    line_width = 3,
+)
+
+lwc_save("custom_simple_type_example.html", chart)
+nothing # hide
+```
+
+```@raw html
+    <iframe src="../custom_simple_type_example.html" style="height:500px;width:100%;"></iframe>
+```
+
+```@example
+using Dates
+using LightweightCharts
+
+struct OHLC
+    timestamp::DateTime
+    open::Float64
+    high::Float64
+    low::Float64
+    close::Float64
+end
+
+Base.convert(::Type{Tuple}, x::OHLC) = (x.timestamp, x.open, x.high, x.low, x.close)
+# OR
+function Base.convert(::Type{LWCCandleChartItem}, x::OHLC)
+    return LWCCandleChartItem(x.timestamp, x.open, x.high, x.low, x.close)
+end
+
+candles = [OHLC(now() + Second(x), rand(), rand(), rand(), rand()) for x in 1:500]
+
+chart = lwc_candlestick(
+    candles;
+    label_name = "custom candles",
+)
+
+lwc_save("custom_candle_type_example.html", chart)
+nothing # hide
+```
+
+```@raw html
+    <iframe src="../custom_candle_type_example.html" style="height:500px;width:100%;"></iframe>
+```

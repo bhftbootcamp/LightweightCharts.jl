@@ -16,7 +16,7 @@ end
 Adds a vertical line based on `index` to the chart.
 
 ## Keyword arguments
-| Name::Type | Default (Posible values) | Description |
+| Name::Type | Default (Possible values) | Description |
 |:-----------|:-------------------------|:------------|
 | `label_text::String` | `""` | Vertical line label. |
 | `width::Float64` | `3.0` | Vertical line width. |
