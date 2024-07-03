@@ -8,13 +8,14 @@ import { CrosshairHighlightPrimitive } from '../plugins/highlight_bar_crosshair/
 import { TooltipPrimitive } from '../plugins/tooltip/tooltip.ts';
 
 import Label from './label.jsx';
-import { DateTimeString, DateString, TimeString } from '../helpers/time.ts';
+import { DateTimeString, DateString, TimeString, displayDateTimeString } from '../helpers/time.ts';
 import { rescaleAndShiftDates } from '../helpers/rescale.ts';
 import Copyright from './copyright.jsx';
 
 const ChartPanel = ({ settings, id, setPanels }) => {
     const panelId = `${settings.x}${settings.y}`;
     const ref = useRef(null);
+    const tooltip = useRef(null);
 
     const [panel, setPanel] = useState(null);
     const [charts, setCharts] = useState({});
@@ -91,6 +92,66 @@ const ChartPanel = ({ settings, id, setPanels }) => {
             },
         });
 
+        settings.tooltip && newChart.subscribeCrosshairMove((param) => {
+            const tooltipRef = tooltip.current;
+            if (!param || !param.seriesData) {
+                tooltipRef.style.display = 'none';
+                return;
+            }
+
+            let seriesData = new Array();
+            param.seriesData.forEach((data, key, map) => {
+                if (!key.options().visible) return;
+                let color = key.options().color || key.options().topFillColor1 || key.options().lineColor || key.options().upColor || key.options().borderColor;
+                let value = data.value !== undefined ? data.value : data.close;
+                seriesData.push({
+                    title: key.options().title,
+                    color: color,
+                    value: new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(value),
+                    time: displayDateTimeString(
+                        data.time,
+                        settings.dateShift,
+                        settings.dateScale,
+                        8
+                    ),
+                    x: newChart.timeScale().timeToCoordinate(data.time),
+                    y: key.priceToCoordinate(value),
+                })
+            });
+
+            const { point } = param;
+            if (!point || !seriesData.length) {
+                tooltipRef.style.display = 'none';
+                return;
+            }
+
+            let tooltipHTML = '';
+            seriesData.forEach(data => {
+                if (Math.abs(point.x - data.x) < 15 && Math.abs(point.y - data.y) < 15) {
+                    tooltipHTML += `
+                        <div class="tooltip">
+                            <div class="cube" style="background: ${data.color}"></div>
+                            <div>${settings.tooltipFormat.replace(/\${(.*?)}/g, (_, key) => data[key.trim()] || '')}</div>
+                        </div>
+                    `;
+                }
+            });
+            
+            const chartRect = ref.current.getBoundingClientRect();
+            if (tooltipHTML) {
+                tooltipRef.innerHTML  = tooltipHTML;
+                if (chartRect.width - point.x - parseInt(tooltipRef.style.marginLeft) < tooltipRef.offsetWidth) {
+                    tooltipRef.style.left = `${chartRect.left + point.x - tooltipRef.offsetWidth - 10}px`;
+                } else {
+                    tooltipRef.style.left = `${chartRect.left + point.x}px`;
+                }
+                tooltipRef.style.top  = `${chartRect.top + point.y - 22}px`;
+                tooltipRef.style.display = 'inline';
+            } else {
+                tooltipRef.style.display = 'none';
+            }
+        });
+
         window.addEventListener('resize', handleResize);
 
         setPanel(newChart);
@@ -104,6 +165,7 @@ const ChartPanel = ({ settings, id, setPanels }) => {
             let offset =
                 ref.current.getElementsByTagName('td')[0]?.clientWidth + 5;
             ref.current.previousSibling.style.marginLeft = offset + 'px';
+            tooltip.current.style.marginLeft = offset + "px";
         }, timeout);
     };
 
@@ -325,6 +387,7 @@ const ChartPanel = ({ settings, id, setPanels }) => {
                 <div className="charts" ref={ref}></div>
                 {settings.copyright ? <Copyright chart={ref} /> : <></>}
             </div>
+            <div ref={tooltip} className='lineSeriesTooltip' />
         </div>
     );
 };
