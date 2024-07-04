@@ -102,7 +102,13 @@ const ChartPanel = ({ settings, id, setPanels }) => {
             let seriesData = new Array();
             param.seriesData.forEach((data, key, map) => {
                 if (!key.options().visible) return;
-                let color = key.options().color || key.options().topFillColor1 || key.options().lineColor || key.options().upColor || key.options().borderColor;
+                let color = [
+                    key.options().color,
+                    key.options().topFillColor1,
+                    key.options().lineColor,
+                    key.options().upColor,
+                    key.options().borderColor
+                ].find(x => x);
                 let value = data.value !== undefined ? data.value : data.close;
                 seriesData.push({
                     title: key.options().title,
@@ -138,6 +144,7 @@ const ChartPanel = ({ settings, id, setPanels }) => {
             });
             
             const chartRect = ref.current.getBoundingClientRect();
+            tooltipRef.style.display = 'none';
             if (tooltipHTML) {
                 tooltipRef.innerHTML  = tooltipHTML;
                 if (chartRect.width - point.x - parseInt(tooltipRef.style.marginLeft) < tooltipRef.offsetWidth) {
@@ -147,8 +154,6 @@ const ChartPanel = ({ settings, id, setPanels }) => {
                 }
                 tooltipRef.style.top  = `${chartRect.top + point.y - 22}px`;
                 tooltipRef.style.display = 'inline';
-            } else {
-                tooltipRef.style.display = 'none';
             }
         });
 
