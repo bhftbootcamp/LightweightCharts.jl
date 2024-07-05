@@ -76,6 +76,7 @@ layout = lwc_layout(
             precision = 4,
             price_scale_id = LWC_RIGHT,
         );
+        tooltip = false,
         x = 1,
         y = 1,
     ),
@@ -103,9 +104,11 @@ layout = lwc_layout(
             line_width = 3,
             price_scale_id = LWC_RIGHT,
         );
+        tooltip_format = "\${title}: \${value}",
         x = 1,
         y = 2,
     );
+    min_height = 480,
     name = "Layout example",
 )
 

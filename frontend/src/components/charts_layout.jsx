@@ -38,7 +38,7 @@ const ChartLayout = ({ layout }) => {
             .map((row) => `'${row.join(' ')}'`)
             .join('\n');
         const gridTemplateRows = Array(maxY)
-            .fill(`${100 / maxY}vh`)
+            .fill(`${100 / maxY}%`)
             .join(' ');
         const gridTemplateColumns = Array(maxX)
             .fill(`${100 / maxX}%`)

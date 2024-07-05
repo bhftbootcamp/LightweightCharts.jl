@@ -24,6 +24,10 @@ body {
 
 }
 
+#root {
+    height: 100vh;
+}
+
 .grid-layout {
     display: grid;
     gap: 0;
@@ -73,6 +77,7 @@ body {
 
 .tabs .btn {
     align-items: center;
+    text-align: center;
     border: 1px solid transparent;
     border-radius: 3px;
     bottom: 0;
@@ -126,7 +131,8 @@ body {
     display: flex
 }
 
-.tabs .cube {
+.tabs .cube,
+.tooltip .cube {
     border-radius: 2px;
     display: flex;
     height: 6px;
@@ -212,4 +218,28 @@ body {
     opacity: 1;
     width: 140px;
     margin-left: 5px;
+}
+
+.lineSeriesTooltip {
+    position: absolute;
+    display: inline;
+    opacity: 0;
+    text-align: left;
+    background-color: #fff;
+    border: 1px solid #d1d4dc;
+    border-radius: 5px;
+    padding: 2px;
+    z-index: 10;
+    pointer-events: none;
+    font-family: Courier;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.lineSeriesTooltip .tooltip {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
