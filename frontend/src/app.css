@@ -222,7 +222,8 @@ body {
 
 .lineSeriesTooltip {
     position: absolute;
-    display: none;
+    display: inline;
+    opacity: 0;
     text-align: left;
     background-color: #fff;
     border: 1px solid #d1d4dc;

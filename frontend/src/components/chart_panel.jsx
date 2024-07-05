@@ -28,6 +28,15 @@ const ChartPanel = ({ settings, id, setPanels }) => {
         createPanel();
     }, []);
 
+    const debounce = (func, delay) => {
+        let timeoutId;
+        
+        return function executedFunction(...args) {
+          clearTimeout(timeoutId);
+          timeoutId = setTimeout(() => func.apply(this, args), delay);
+        };
+    };
+
     const createPanel = () => {
         if (ref.current.children[0]) return;
 
@@ -92,10 +101,10 @@ const ChartPanel = ({ settings, id, setPanels }) => {
             },
         });
 
-        settings.tooltip && newChart.subscribeCrosshairMove((param) => {
+        settings.tooltip && newChart.subscribeCrosshairMove(debounce((param) => {
             const tooltipRef = tooltip.current;
             if (!param || !param.seriesData) {
-                tooltipRef.style.display = 'none';
+                tooltipRef.style.opacity = '0';
                 return;
             }
 
@@ -127,7 +136,7 @@ const ChartPanel = ({ settings, id, setPanels }) => {
 
             const { point } = param;
             if (!point || !seriesData.length) {
-                tooltipRef.style.display = 'none';
+                tooltipRef.style.opacity = '0';
                 return;
             }
 
@@ -144,7 +153,7 @@ const ChartPanel = ({ settings, id, setPanels }) => {
             });
             
             const chartRect = ref.current.getBoundingClientRect();
-            tooltipRef.style.display = 'none';
+            tooltipRef.style.opacity = '0';
             if (tooltipHTML) {
                 tooltipRef.innerHTML  = tooltipHTML;
                 if (chartRect.width - point.x - parseInt(tooltipRef.style.marginLeft) < tooltipRef.offsetWidth) {
@@ -153,9 +162,9 @@ const ChartPanel = ({ settings, id, setPanels }) => {
                     tooltipRef.style.left = `${chartRect.left + point.x}px`;
                 }
                 tooltipRef.style.top  = `${chartRect.top + point.y - 22}px`;
-                tooltipRef.style.display = 'inline';
-            }
-        });
+                tooltipRef.style.opacity = '1';
+            };
+        }), 200);
 
         window.addEventListener('resize', handleResize);
 
