@@ -38,7 +38,7 @@
         min_bar_spacing = 1.5,
         copyright = true,
         tooltip = true,
-        tooltip_format = "\${title}: (\${time}, \${value})",
+        tooltip_format = "\${label_name}: (\${time}, \${value})",
         LWCChart(;
             id = panel_board.charts[1].id,
             label_name = "OK.ICX-USDT",

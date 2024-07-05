@@ -172,7 +172,7 @@ Creates a panel combining several [`charts`](@ref charts).
 | `min_bar_spacing::Real` | `0.5` | Minimum distance between the stripes in pixels. |
 | `copyright::Bool` | true | Enables a [TradingView](https://www.tradingview.com/) trademark symbol on the chart. |
 | `tooltip::Bool` | true | Enables tooltip for points. |
-| `tooltip_format::String` | `"\${title}: (\${time}, \${value})"` | String formatting of tooltip text. Display the variables "title", "time" and "value" in the desired format. |
+| `tooltip_format::String` | `"\${label_name}: (\${time}, \${value})"` | String formatting of tooltip text. Display the variables "title", "time" and "value" in the desired format. |
 | `min_charts_for_search` | `10` | Minimum number of charts to search. |
 """
 function lwc_panel(
@@ -191,7 +191,7 @@ function lwc_panel(
     min_bar_spacing::Real = 0.5,
     copyright::Bool = true,
     tooltip::Bool = true,
-    tooltip_format::String = "\${title}: (\${time}, \${value})",
+    tooltip_format::String = "\${label_name}: (\${time}, \${value})",
     min_charts_for_search = 10,
 )
     return LWCPanel(

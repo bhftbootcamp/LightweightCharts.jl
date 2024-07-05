@@ -114,7 +114,7 @@ const ChartPanel = ({ settings, id, setPanels }) => {
                 let color = key.options().color || key.options().topFillColor1 || key.options().lineColor || key.options().upColor || key.options().borderColor;
                 let value = data.value !== undefined ? data.value : data.close;
                 seriesData.push({
-                    title: key.options().title,
+                    label_name: key.options().title,
                     color: color,
                     value: new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(value),
                     time: displayDateTimeString(
