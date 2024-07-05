@@ -111,13 +111,7 @@ const ChartPanel = ({ settings, id, setPanels }) => {
             let seriesData = new Array();
             param.seriesData.forEach((data, key, map) => {
                 if (!key.options().visible) return;
-                let color = [
-                    key.options().color,
-                    key.options().topFillColor1,
-                    key.options().lineColor,
-                    key.options().upColor,
-                    key.options().borderColor
-                ].find(x => x);
+                let color = key.options().color || key.options().topFillColor1 || key.options().lineColor || key.options().upColor || key.options().borderColor;
                 let value = data.value !== undefined ? data.value : data.close;
                 seriesData.push({
                     title: key.options().title,
