@@ -116,12 +116,12 @@ const ChartPanel = ({ settings, id, setPanels }) => {
                 seriesData.push({
                     label_name: key.options().title,
                     color: color,
-                    value: new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(value),
-                    time: displayDateTimeString(
+                    value: value,
+                    time: DateTimeString(
                         data.time,
+                        settings.minResolution,
                         settings.dateShift,
                         settings.dateScale,
-                        8
                     ),
                     x: newChart.timeScale().timeToCoordinate(data.time),
                     y: key.priceToCoordinate(value),
