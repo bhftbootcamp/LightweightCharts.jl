@@ -12,7 +12,7 @@ Before you begin, ensure you have Node.js and npm installed on your machine.
 
 To install project dependencies, run the following command:
 
-```
+```bash
 npm install
 ```
 
@@ -20,7 +20,7 @@ npm install
 
 To start the development server and work on the project, execute:
 
-```
+```bash
 npm start
 ```
 
@@ -32,20 +32,8 @@ Each example includes mock data for demonstration purposes.
 
 ## Build
 
-To build the project for production use, follow these steps:
+To build the project for production use, execute:
 
-### Installation
-
-If not already installed, set up the project dependencies:
-
-```
-npm install
-```
-
-### Building
-
-Build the project by running:
-
-```
+```bash
 npm run build
 ```
