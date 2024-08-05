@@ -6,7 +6,7 @@ LightweightCharts integrates React and is bundled using Webpack. This project pr
 
 ### Prerequisites
 
-Before you begin, ensure you have Node.js and npm installed on your machine.
+Before you begin, ensure you have `Node.js` and npm installed on your machine.
 
 ### Installation
 
