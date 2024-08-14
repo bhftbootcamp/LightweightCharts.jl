@@ -95,9 +95,11 @@ const ChartPanel = ({ settings, id, setPanels }) => {
             },
             rightPriceScale: {
                 borderColor: 'rgba(197, 203, 206, 1)',
+                mode: settings.mode,
             },
             leftPriceScale: {
                 borderColor: 'rgba(197, 203, 206, 1)',
+                mode: settings.mode,
             },
         });
 

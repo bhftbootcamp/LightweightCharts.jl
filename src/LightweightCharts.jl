@@ -57,6 +57,11 @@ export LWC_TOOLTIP_TYPE,
     LWC_TOOLTIP_TOP,
     LWC_TOOLTIP_TRACK
 
+export LWC_NORMAL,
+    LWC_LOGARITHMIC,
+    LWC_PERCENTAGE,
+    LWC_INDEXED_TO_100
+
 using Dates
 using NanoDates
 using Serde
@@ -139,6 +144,7 @@ mutable struct LWCPanel <: AbstractChartSettings
     copyright::Bool
     tooltip::Bool
     tooltip_format::String
+    mode::Any
     charts::Tuple{Vararg{LWCChart}}
 end
 
@@ -174,6 +180,7 @@ Creates a panel combining several [`charts`](@ref charts).
 | `tooltip::Bool` | true | Enables tooltip for points. |
 | `tooltip_format::String` | `"\${label_name}: (\${time}, \${value})"` | String formatting of tooltip text. Display the variables "title", "time" and "value" in the desired format. |
 | `min_charts_for_search` | `10` | Minimum number of charts to search. |
+| `mode` | `0` | Price scale mode |
 """
 function lwc_panel(
     charts::LWCChart...;
@@ -193,6 +200,7 @@ function lwc_panel(
     tooltip::Bool = true,
     tooltip_format::String = "\${label_name}: (\${time}, \${value})",
     min_charts_for_search = 10,
+    mode = LWC_NORMAL
 )
     return LWCPanel(
         x,
@@ -211,6 +219,7 @@ function lwc_panel(
         copyright,
         tooltip,
         tooltip_format,
+        mode,
         charts,
     )
 end

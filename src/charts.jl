@@ -22,6 +22,11 @@ export LWC_SOLID,
 export LWC_RIGHT,
     LWC_LEFT
 
+export LWC_NORMAL,
+    LWC_LOGARITHMIC,
+    LWC_PERCENTAGE,
+    LWC_INDEXED_TO_100
+
 using Serde
 using Dates
 
@@ -48,9 +53,17 @@ end
     LWC_LEFT = 1
 end
 
+@enum LWC_PRICE_SCALE_MODE begin
+    LWC_NORMAL = 0
+    LWC_LOGARITHMIC = 1
+    LWC_PERCENTAGE = 2
+    LWC_INDEXED_TO_100 = 3
+end
+
 Serde.SerJson.ser_type(::Type{<:AbstractChartSettings}, x::LWC_LINE_TYPES) = Int64(x)
 Serde.SerJson.ser_type(::Type{<:AbstractChartSettings}, x::LWC_LINE_STYLES) = Int64(x)
 Serde.SerJson.ser_type(::Type{<:AbstractChartSettings}, x::LWC_PRICE_SCALE_ID) = x == LWC_RIGHT ? "right" : "left"
+Serde.SerJson.ser_type(::Type{<:AbstractChartSettings}, x::LWC_PRICE_SCALE_MODE) = Int64(x)
 Serde.SerJson.ser_ignore_null(::Type{<:AbstractChartItem}) = true
 
 include("charts/line.jl")
