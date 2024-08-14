@@ -180,7 +180,7 @@ Creates a panel combining several [`charts`](@ref charts).
 | `tooltip::Bool` | true | Enables tooltip for points. |
 | `tooltip_format::String` | `"\${label_name}: (\${time}, \${value})"` | String formatting of tooltip text. Display the variables "title", "time" and "value" in the desired format. |
 | `min_charts_for_search` | `10` | Minimum number of charts to search. |
-| `mode` | `0` | Price scale mode |
+| `mode::LWC_PRICE_SCALE_MODE` | `0` | Price scale mode |
 """
 function lwc_panel(
     charts::LWCChart...;
