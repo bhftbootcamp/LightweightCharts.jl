@@ -6,6 +6,7 @@
         seconds_visible = true,
         bar_spacing = 4,
         min_bar_spacing = 1.5,
+        mode = LWC_LOGARITHMIC,
         lwc_line(
             Vector{DateTime}([
                 DateTime("2023-03-29T10:42:50.373"),
@@ -36,6 +37,7 @@
         seconds_visible = true,
         bar_spacing = 4,
         min_bar_spacing = 1.5,
+        mode = LWC_LOGARITHMIC,
         copyright = true,
         tooltip = true,
         tooltip_format = "\${label_name}: (\${time}, \${value})",
