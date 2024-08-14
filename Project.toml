@@ -9,5 +9,5 @@ NanoDates = "46f1a544-deae-4307-8689-c12aa3c955c6"
 
 [compat]
 Serde = "3.0"
-NanoDates = "0.3"
+NanoDates = "1.0"
 julia = "1.8"

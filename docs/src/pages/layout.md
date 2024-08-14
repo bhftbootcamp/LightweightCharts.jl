@@ -104,7 +104,7 @@ layout = lwc_layout(
             line_width = 3,
             price_scale_id = LWC_RIGHT,
         );
-        tooltip_format = "\${title}: \${value}",
+        tooltip_format = "\${label_name}: \${value}",
         x = 1,
         y = 2,
     );
