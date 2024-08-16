@@ -199,7 +199,7 @@ function lwc_panel(
     copyright::Bool = true,
     tooltip::Bool = true,
     tooltip_format::String = "\${label_name}: (\${time}, \${value})",
-    min_charts_for_search = 10,
+    min_charts_for_search::Int64 = 10,
     mode::LWC_PRICE_SCALE_MODE = LWC_NORMAL
 )
     return LWCPanel(
