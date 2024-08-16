@@ -200,7 +200,7 @@ function lwc_panel(
     tooltip::Bool = true,
     tooltip_format::String = "\${label_name}: (\${time}, \${value})",
     min_charts_for_search = 10,
-    mode = LWC_NORMAL
+    mode::LWC_PRICE_SCALE_MODE = LWC_NORMAL
 )
     return LWCPanel(
         x,
