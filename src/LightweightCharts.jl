@@ -144,7 +144,7 @@ mutable struct LWCPanel <: AbstractChartSettings
     copyright::Bool
     tooltip::Bool
     tooltip_format::String
-    mode::Any
+    mode::LWC_PRICE_SCALE_MODE
     charts::Tuple{Vararg{LWCChart}}
 end
 
