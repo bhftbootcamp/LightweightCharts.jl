@@ -362,15 +362,25 @@ function Serde.SerJson.ser_name(::Type{A}, ::Val{T}) where {A<:AbstractPluginSet
     return to_camelcase(T)
 end
 
+function detectwsl()
+    Sys.islinux() &&
+    isfile("/proc/sys/kernel/osrelease") &&
+    occursin(r"Microsoft|WSL"i, read("/proc/sys/kernel/osrelease", String))
+end
+
 function open_browser(url::String)
     if Sys.isapple()
         Base.run(`open $url`)
         true
+    elseif detectwsl()
+        wsl_path = chomp(read(`wslpath -w $url`, String))
+        run(`wslview $wsl_path`)
+        true
+    elseif Sys.iswindows()
+        Base.run(`powershell.exe Start "'$url'"`)
+        true
     elseif Sys.islinux()
         Base.run(`xdg-open $url`)
-        true
-    elseif Sys.iswindows() || detectwsl()
-        Base.run(`powershell.exe Start "'$url'"`)
         true
     else
         false
