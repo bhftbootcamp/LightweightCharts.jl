@@ -376,11 +376,11 @@ function open_browser(url::String)
         path_for_wsl = chomp(read(`wslpath -w $url`, String))
         run(`wslview $path_for_wsl`)
         true
-    elseif Sys.iswindows()
-        Base.run(`powershell.exe Start "'$url'"`)
-        true
     elseif Sys.islinux()
         Base.run(`xdg-open $url`)
+        true
+    elseif Sys.iswindows()
+        Base.run(`powershell.exe Start "'$url'"`)
         true
     else
         false
