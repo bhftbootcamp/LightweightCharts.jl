@@ -141,7 +141,7 @@ const ChartPanel = ({ settings, id, setPanels }) => {
                 tooltipHTML += `
                     <div class="tooltip">
                         <div class="cube" style="background: ${data.color}"></div>
-                        <div>${settings.tooltipFormat.replace(/\${(.*?)}/g, (_, key) => data[key.trim()] || '')}</div>
+                        <div>${settings.tooltipFormat.replace(/\${(.*?)}/g, (_, key) => data[key.trim()] ?? 0)}</div>
                     </div>
                 `;
             });
