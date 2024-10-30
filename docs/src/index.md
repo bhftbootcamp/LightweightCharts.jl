@@ -93,7 +93,8 @@ lwc_show(panel)
 Composite layout featuring diverse chart types:
 
 ```julia
-using Dates, NanoDates
+using Dates
+using NanoDates
 using LightweightCharts
 
 layout = lwc_layout(

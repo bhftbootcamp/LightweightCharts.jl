@@ -57,8 +57,7 @@ export LWC_TOOLTIP_TYPE,
     LWC_TOOLTIP_TOP,
     LWC_TOOLTIP_TRACK
 
-export LWC_PRICE_SCALE_MODE,
-    LWC_NORMAL,
+export LWC_NORMAL,
     LWC_LOGARITHMIC,
     LWC_PERCENTAGE,
     LWC_INDEXED_TO_100
@@ -363,14 +362,24 @@ function Serde.SerJson.ser_name(::Type{A}, ::Val{T}) where {A<:AbstractPluginSet
     return to_camelcase(T)
 end
 
+function is_wsl()
+    Sys.islinux() &&
+    isfile("/proc/sys/kernel/osrelease") &&
+    occursin(r"Microsoft|WSL"i, read("/proc/sys/kernel/osrelease", String))
+end
+
 function open_browser(url::String)
     if Sys.isapple()
         Base.run(`open $url`)
         true
+    elseif is_wsl()
+        path_for_wsl = chomp(read(`wslpath -w $url`, String))
+        run(`wslview $path_for_wsl`)
+        true
     elseif Sys.islinux()
         Base.run(`xdg-open $url`)
         true
-    elseif Sys.iswindows() || detectwsl()
+    elseif Sys.iswindows()
         Base.run(`powershell.exe Start "'$url'"`)
         true
     else
