@@ -138,14 +138,12 @@ const ChartPanel = ({ settings, id, setPanels }) => {
 
             let tooltipHTML = '';
             seriesData.forEach(data => {
-                if (Math.abs(point.x - data.x) < 15 && Math.abs(point.y - data.y) < 15) {
-                    tooltipHTML += `
-                        <div class="tooltip">
-                            <div class="cube" style="background: ${data.color}"></div>
-                            <div>${settings.tooltipFormat.replace(/\${(.*?)}/g, (_, key) => data[key.trim()] || '')}</div>
-                        </div>
-                    `;
-                }
+                tooltipHTML += `
+                    <div class="tooltip">
+                        <div class="cube" style="background: ${data.color}"></div>
+                        <div>${settings.tooltipFormat.replace(/\${(.*?)}/g, (_, key) => data[key.trim()] || '')}</div>
+                    </div>
+                `;
             });
             
             const chartRect = ref.current.getBoundingClientRect();
