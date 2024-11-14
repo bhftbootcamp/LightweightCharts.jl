@@ -62,6 +62,23 @@ export LWC_NORMAL,
     LWC_PERCENTAGE,
     LWC_INDEXED_TO_100
 
+export LWC_CROSSHAIR_NORMAL,
+    LWC_CROSSHAIR_MAGNET,
+    LWC_CROSSHAIR_HIDDEN
+
+export LWC_CROSSHAIR_SOLID,
+    LWC_CROSSHAIR_DOTTED,
+    LWC_CROSSHAIR_DASHED,
+    LWC_CROSSHAIR_LARGE_DASHED,
+    LWC_CROSSHAIR_SPARSE_DOTTED
+
+export LWC_CURSOR,
+    LWC_CURSOR_DEFAULT,
+    LWC_CURSOR_CROSSHAIR
+
+export CrosshairOptions,
+    CrosshairLineOptions
+
 using Dates
 using NanoDates
 using Serde
@@ -76,6 +93,9 @@ include("color_utils.jl")
 
 include("chart_data.jl")
 using .ChartData
+
+include("crosshair.jl")
+using .Crosshair
 
 """
     LWCPlugin
@@ -146,6 +166,10 @@ mutable struct LWCPanel <: AbstractChartSettings
     tooltip_format::String
     mode::LWC_PRICE_SCALE_MODE
     charts::Tuple{Vararg{LWCChart}}
+    crosshair_settings::CrosshairOptions
+    cursor::LWC_CURSOR
+    last_value_visible::Bool
+    title_visible::Bool
 end
 
 function Base.show(io::IO, x::LWCPanel)
@@ -180,7 +204,11 @@ Creates a panel combining several [`charts`](@ref charts).
 | `tooltip::Bool` | true | Enables tooltip for points. |
 | `tooltip_format::String` | `"\${label_name}: (\${time}, \${value})"` | String formatting of tooltip text. Display the variables "title", "time" and "value" in the desired format. |
 | `min_charts_for_search` | `10` | Minimum number of charts to search. |
-| `mode::LWC_PRICE_SCALE_MODE` | `0` | Price scale mode |
+| `mode::LWC_PRICE_SCALE_MODE` | `0` | Price scale mode. |
+| `crosshair_settings::CrosshairOptions` | `CrosshairOptions()` | Structure describing crosshair options. |
+| `cursor::LWC_CURSOR` | `LWC_CURSOR_DEFAUL` | Cursor type. |
+| `last_value_visible::Bool` | `true` | Visibility of the label with the latest visible price on the price scale. |
+| `title_visible::Bool` | `true` | Visibility of the name that will be displayed on the label next to the last value label. |
 """
 function lwc_panel(
     charts::LWCChart...;
@@ -200,7 +228,11 @@ function lwc_panel(
     tooltip::Bool = true,
     tooltip_format::String = "\${label_name}: (\${time}, \${value})",
     min_charts_for_search::Int64 = 10,
-    mode::LWC_PRICE_SCALE_MODE = LWC_NORMAL
+    mode::LWC_PRICE_SCALE_MODE = LWC_NORMAL,
+    crosshair_settings::CrosshairOptions = CrosshairOptions(),
+    cursor::LWC_CURSOR = LWC_CURSOR_DEFAULT,
+    last_value_visible::Bool = true,
+    title_visible::Bool = true,
 )
     return LWCPanel(
         x,
@@ -221,6 +253,10 @@ function lwc_panel(
         tooltip_format,
         mode,
         charts,
+        crosshair_settings,
+        cursor,
+        last_value_visible,
+        title_visible
     )
 end
 
