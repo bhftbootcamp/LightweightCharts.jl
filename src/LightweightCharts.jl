@@ -170,6 +170,7 @@ mutable struct LWCPanel <: AbstractChartSettings
     cursor::LWC_CURSOR
     last_value_visible::Bool
     title_visible::Bool
+    default_labels_visible::Bool
 end
 
 function Base.show(io::IO, x::LWCPanel)
@@ -207,8 +208,9 @@ Creates a panel combining several [`charts`](@ref charts).
 | `mode::LWC_PRICE_SCALE_MODE` | `0` | Price scale mode. |
 | `crosshair_settings::CrosshairOptions` | `CrosshairOptions()` | Structure describing crosshair options. |
 | `cursor::LWC_CURSOR` | `LWC_CURSOR_DEFAUL` | Cursor type. |
-| `last_value_visible::Bool` | `true` | Visibility of the label with the latest visible price on the price scale. |
-| `title_visible::Bool` | `true` | Visibility of the name that will be displayed on the label next to the last value label. |
+| `last_value_visible::Bool` | `false` | Visibility of the label with the latest visible price on the price scale. |
+| `title_visible::Bool` | `false` | Visibility of the name that will be displayed on the label next to the last value label. |
+| `default_labels_visible::Bool` | `false` | Default visibility of the chart labels. |
 """
 function lwc_panel(
     charts::LWCChart...;
@@ -231,8 +233,9 @@ function lwc_panel(
     mode::LWC_PRICE_SCALE_MODE = LWC_NORMAL,
     crosshair_settings::CrosshairOptions = CrosshairOptions(),
     cursor::LWC_CURSOR = LWC_CURSOR_DEFAULT,
-    last_value_visible::Bool = true,
-    title_visible::Bool = true,
+    last_value_visible::Bool = false,
+    title_visible::Bool = false,
+    default_labels_visible::Bool = false,
 )
     return LWCPanel(
         x,
@@ -256,7 +259,8 @@ function lwc_panel(
         crosshair_settings,
         cursor,
         last_value_visible,
-        title_visible
+        title_visible,
+        default_labels_visible
     )
 end
 

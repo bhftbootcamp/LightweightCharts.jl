@@ -395,7 +395,6 @@ const ChartPanel = ({ settings, id, setPanels }) => {
                 downColor: highlight ? options.downColor : convertToRGBA(options.downColor, 0.3),
             });
         } else if (series.seriesType() == "Line") {
-            console.log(options);
             series.applyOptions({
                 color: highlight ? options.color : convertToRGBA(options.color, 0.3),
                 pointMarkersRadius: highlight ? options.pointMarkersRadius : 1,
@@ -543,6 +542,7 @@ const ChartPanel = ({ settings, id, setPanels }) => {
                     panelId={panelId}
                     labels={labels}
                     minChartsForSearch={settings.minChartsForSearch}
+                    defaultVisible={settings.defaultLabelsVisible}
                     charts={chartsSeries.current}
                     panel={panel}
                     searchLabel={searchLabel}

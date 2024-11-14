@@ -132,6 +132,8 @@ layout = lwc_layout(
             line_width = 3,
             price_scale_id = LWC_RIGHT,
         );
+        last_value_visible = true,
+        title_visible = true,
         x = 1,
         y = 1,
     ),
@@ -147,6 +149,7 @@ layout = lwc_layout(
             precision = 4,
             price_scale_id = LWC_RIGHT,
         );
+        default_labels_visible = true,
         x = 2,
         y = 1,
     );
@@ -188,6 +191,9 @@ chart = lwc_panel(
         point_markers_visible = true,
         line_visible = false,
     );
+    last_value_visible = true,
+    title_visible = true,
+    default_labels_visible = true,
     max_y = 1.6
 )
 
