@@ -60,8 +60,8 @@
                 label_background_color = "#4c525e",
             ),
         ),
-        last_value_visible = true,
-        title_visible = true,
+        last_value_visible = false,
+        title_visible = false,
         LWCChart(;
             id = panel_board.charts[1].id,
             label_name = "OK.ICX-USDT",
