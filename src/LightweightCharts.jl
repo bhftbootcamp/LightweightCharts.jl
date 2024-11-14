@@ -208,9 +208,9 @@ Creates a panel combining several [`charts`](@ref charts).
 | `mode::LWC_PRICE_SCALE_MODE` | `0` | Price scale mode. |
 | `crosshair_settings::CrosshairOptions` | `CrosshairOptions()` | Structure describing crosshair options. |
 | `cursor::LWC_CURSOR` | `LWC_CURSOR_DEFAUL` | Cursor type. |
-| `last_value_visible::Bool` | `false` | Visibility of the label with the latest visible price on the price scale. |
-| `title_visible::Bool` | `false` | Visibility of the name that will be displayed on the label next to the last value label. |
-| `default_labels_visible::Bool` | `false` | Default visibility of the chart labels. |
+| `last_value_visible::Bool` | `false` | Shows the latest price label on the price scale. |
+| `title_visible::Bool` | `false` | Shows the chart name next to the latest price label. |
+| `default_legend_visible::Bool` | `false` | Shows the legend box with data charts names and colors. |
 """
 function lwc_panel(
     charts::LWCChart...;
@@ -235,7 +235,7 @@ function lwc_panel(
     cursor::LWC_CURSOR = LWC_CURSOR_DEFAULT,
     last_value_visible::Bool = false,
     title_visible::Bool = false,
-    default_labels_visible::Bool = false,
+    default_legend_visible::Bool = false,
 )
     return LWCPanel(
         x,
@@ -260,7 +260,7 @@ function lwc_panel(
         cursor,
         last_value_visible,
         title_visible,
-        default_labels_visible
+        default_legend_visible
     )
 end
 

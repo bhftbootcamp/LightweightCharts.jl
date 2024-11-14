@@ -44,6 +44,21 @@ Serde.SerJson.ser_type(::Type{<:AbstractChartSettings}, x::LWC_CROSSHAIR_MODE) =
 Serde.SerJson.ser_type(::Type{<:AbstractChartSettings}, x::LWC_CROSSHAIR_LINE_STYLE) = Int64(x)
 Serde.SerJson.ser_type(::Type{<:AbstractChartSettings}, x::LWC_CURSOR) = x == LWC_CURSOR_DEFAULT ? "default" : "crosshair"
 
+"""
+    CrosshairLineOptions(; kw...)
+
+Structure describing a crosshair line (vertical or horizontal).
+
+## Keyword arguments
+| Name::Type | Default (Possible values) | Description |
+|:-----------|:-------------------------|:------------|
+| `color::String` | `'#758696'` | Crosshair line color. |
+| `width::Int64` | `1` | Crosshair line width. |
+| `style::LWC_CROSSHAIR_LINE_STYLE` | `LWC_CROSSHAIR_LARGE_DASHED` | Crosshair line style. |
+| `visible::Bool` | `true` | Display the crosshair line. |
+| `label_visible::Bool` | `true` | Display the crosshair label on the relevant scale. |
+| `label_background_color::String` | `'#4c525e'` | Crosshair label background color. |
+"""
 struct CrosshairLineOptions <: AbstractChartSettings
     color::String
     width::Int64 
@@ -71,6 +86,18 @@ struct CrosshairLineOptions <: AbstractChartSettings
     end
 end
 
+"""
+    CrosshairOptions(; kw...)
+
+Structure describing crosshair options.
+
+## Keyword arguments
+| Name::Type | Default (Possible values) | Description |
+|:-----------|:-------------------------|:------------|
+| `mode::LWC_CROSSHAIR_MODE` | `LWC_CROSSHAIR_MAGNET` | Crosshair mode. |
+| `vert_line::CrosshairLineOptions` | `CrosshairLineOptions()` | Vertical line options. |
+| `horz_line::CrosshairLineOptions` | `CrosshairLineOptions()` | Horizontal line options. |
+"""
 struct CrosshairOptions <: AbstractChartSettings
     mode::LWC_CROSSHAIR_MODE
     vert_line::CrosshairLineOptions 
