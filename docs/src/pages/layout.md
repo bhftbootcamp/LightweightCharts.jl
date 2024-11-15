@@ -36,6 +36,19 @@ panel = lwc_panel(
         price_scale_id = LWC_RIGHT,
     );
     name = "Panel example",
+    crosshair_settings = CrosshairOptions(;
+        mode = LWC_CROSSHAIR_NORMAL,
+        vert_line = CrosshairLineOptions(;
+            style = LWC_CROSSHAIR_SOLID,
+            color = "#C3BCDB44",
+            label_background_color = "#9B7DFF",
+            width = 8,
+        ),
+        horz_line = CrosshairLineOptions(;
+            color = "#9B7DFF",
+            label_background_color = "#9B7DFF",
+        )
+    ),
 )
 
 lwc_save("panel_example.html", panel)
@@ -77,6 +90,8 @@ layout = lwc_layout(
             price_scale_id = LWC_RIGHT,
         );
         tooltip = false,
+        last_value_visible = true,
+        title_visible = true,
         x = 1,
         y = 1,
     ),
@@ -105,6 +120,7 @@ layout = lwc_layout(
             price_scale_id = LWC_RIGHT,
         );
         tooltip_format = "\${label_name}: \${value}",
+        default_legend_visible = true,
         x = 1,
         y = 2,
     );

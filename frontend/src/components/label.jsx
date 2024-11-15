@@ -7,6 +7,7 @@ import LabelItem from './label_item.jsx';
 function Label({
     panelId,
     minChartsForSearch,
+    defaultVisible,
     labels,
     charts,
     panel,
@@ -126,7 +127,7 @@ function Label({
 
     return (
         <div id={`tabs${panelId}`} className="tabs" ref={ref}>
-            <div id={`labels${panelId}`} className="labels">
+            <div id={`labels${panelId}`} className={`labels ${!defaultVisible ? "unshow-label": ""}`}>
                 {Object.keys(charts).length > minChartsForSearch ? (
                     <Search panelId={panelId} onChange={searchLabel} />
                 ) : (
@@ -162,7 +163,7 @@ function Label({
                         );
                     })}
             </div>
-            <div id={'btn'} className="btn" onClick={showLabels}>
+            <div id={'btn'} className={`btn ${!defaultVisible ? "svg-rotate" : ""}`} onClick={showLabels}>
                 <svg
                     className="btn-icon svg-rotate"
                     width="10"

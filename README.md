@@ -93,6 +93,7 @@ panel = lwc_panel(
         precision = 4,
     );
     name = "LightweightCharts ❤️ TimeArrays",
+    default_legend_visible = false,
 )
 
 lwc_show(panel)
@@ -132,6 +133,9 @@ layout = lwc_layout(
             line_width = 3,
             price_scale_id = LWC_RIGHT,
         );
+        last_value_visible = true,
+        title_visible = true,
+        default_legend_visible = false,
         x = 1,
         y = 1,
     ),
@@ -188,6 +192,21 @@ chart = lwc_panel(
         point_markers_visible = true,
         line_visible = false,
     );
+    crosshair_settings = CrosshairOptions(;
+        mode = LWC_CROSSHAIR_NORMAL,
+        vert_line = CrosshairLineOptions(;
+            style = LWC_CROSSHAIR_SOLID,
+            color = "#C3BCDB44",
+            label_background_color = "#9B7DFF",
+            width = 8,
+        ),
+        horz_line = CrosshairLineOptions(;
+            color = "#9B7DFF",
+            label_background_color = "#9B7DFF",
+        )
+    ),
+    last_value_visible = true,
+    title_visible = true,
     max_y = 1.6
 )
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { createChart, TickMarkType, LineStyle } from 'lightweight-charts';
+import { createChart, TickMarkType } from 'lightweight-charts';
+import * as Color from 'color';
 
 import { VertLine } from '../plugins/vertical_line/vertical_line.ts';
 import { DeltaTooltipPrimitive } from '../plugins/delta_tooltip/delta_tooltip.ts';
@@ -8,9 +9,46 @@ import { CrosshairHighlightPrimitive } from '../plugins/highlight_bar_crosshair/
 import { TooltipPrimitive } from '../plugins/tooltip/tooltip.ts';
 
 import Label from './label.jsx';
-import { DateTimeString, DateString, TimeString, displayDateTimeString } from '../helpers/time.ts';
+import { DateTimeString, DateString, TimeString } from '../helpers/time.ts';
 import { rescaleAndShiftDates } from '../helpers/rescale.ts';
 import Copyright from './copyright.jsx';
+
+function convertToRGBA(color, alpha = 1) {
+    if (!color) return;
+    const namedColors = {
+        Crimson: "DC143C",
+        DarkTurquoise: "00CED1",
+        ForestGreen: "228B22",
+        RoyalBlue: "4169E1",
+        Indigo: "4B0082",
+        DarkOrange: "FF8C00",
+        DarkRed: "8B0000",
+        DarkSlateGray: "2F4F4F",
+        OliveDrab: "6B8E23",
+        MediumPurple: "9370DB",
+        SteelBlue: "4682B4",
+        Goldenrod: "DAA520",
+        Teal: "008080",
+        SlateBlue: "6A5ACD",
+        FireBrick: "B22222",
+        Sienna: "A0522D",
+        DarkOliveGreen: "556B2F",
+    };
+
+    if (namedColors[color]) {
+        const hex = namedColors[color];
+        const r = parseInt(hex.slice(0, 2), 16);
+        const g = parseInt(hex.slice(2, 4), 16);
+        const b = parseInt(hex.slice(4, 6), 16);
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+    try {
+        let colorModel = Color(color);
+        return `rgba(${colorModel.color[0]}, ${colorModel.color[1]}, ${colorModel.color[2]}, ${alpha})`;
+    } catch (err) {
+        return color;
+    }
+}
 
 const ChartPanel = ({ settings, id, setPanels }) => {
     const panelId = `${settings.x}${settings.y}`;
@@ -18,8 +56,10 @@ const ChartPanel = ({ settings, id, setPanels }) => {
     const tooltip = useRef(null);
 
     const [panel, setPanel] = useState(null);
-    const [charts, setCharts] = useState({});
     const [labels, setLabels] = useState([]);
+    const chartsSeries = useRef({});
+    const activeSeries = useRef(null);
+    const styleSettings = useRef({});
 
     useEffect(() => {
         if (!settings.rescale) {
@@ -44,6 +84,12 @@ const ChartPanel = ({ settings, id, setPanels }) => {
             newChart.applyOptions({ width: ref.current.clientWidth });
             newChart.applyOptions({ height: ref.current.clientHeight });
         };
+
+        let styles = {};
+        settings.charts.forEach((chart) => {
+            styles[chart.id] = chart.settings;
+        });
+        styleSettings.current = styles;
 
         let newChart = createChart(ref.current, {
             width: ref.current.offsetWidth,
@@ -111,12 +157,12 @@ const ChartPanel = ({ settings, id, setPanels }) => {
             }
 
             let seriesData = new Array();
-            param.seriesData.forEach((data, key, map) => {
-                if (!key.options().visible) return;
+            param.seriesData.forEach((data, key) => {
+                if (!key.options().visible || (activeSeries.current && key !== activeSeries.current)) return;
                 let color = key.options().color || key.options().topFillColor1 || key.options().lineColor || key.options().upColor || key.options().borderColor;
                 let value = data.value !== undefined ? data.value : data.close;
                 seriesData.push({
-                    label_name: key.options().title,
+                    label_name: key.options().title2,
                     color: color,
                     value: value,
                     time: DateTimeString(
@@ -151,11 +197,16 @@ const ChartPanel = ({ settings, id, setPanels }) => {
             if (tooltipHTML) {
                 tooltipRef.innerHTML  = tooltipHTML;
                 if (chartRect.width - point.x - parseInt(tooltipRef.style.marginLeft) < tooltipRef.offsetWidth) {
-                    tooltipRef.style.left = `${chartRect.left + point.x - tooltipRef.offsetWidth - 10}px`;
+                    tooltipRef.style.left = `${chartRect.left + point.x - tooltipRef.offsetWidth - 15}px`;
                 } else {
-                    tooltipRef.style.left = `${chartRect.left + point.x}px`;
+                    tooltipRef.style.left = `${chartRect.left + point.x + 10}px`;
                 }
-                tooltipRef.style.top  = `${chartRect.top + point.y - 22}px`;
+                if (chartRect.bottom < chartRect.top + point.y  + tooltipRef.clientHeight + 10) {
+                    let delta = chartRect.bottom - chartRect.top - point.y - 10;
+                    tooltipRef.style.top  = `${chartRect.top + point.y + 10 - delta}px`;
+                } else  {
+                    tooltipRef.style.top  = `${chartRect.top + point.y + 10}px`;
+                }
                 tooltipRef.style.opacity = '1';
             };
         }), 200);
@@ -170,8 +221,7 @@ const ChartPanel = ({ settings, id, setPanels }) => {
 
     const setMarginLabels = (timeout) => {
         setTimeout(() => {
-            let offset =
-                ref.current.getElementsByTagName('td')[0]?.clientWidth + 5;
+            let offset = ref.current.getElementsByTagName('td')[0]?.clientWidth + 5;
             ref.current.previousSibling.style.marginLeft = offset + 'px';
             tooltip.current.style.marginLeft = offset + "px";
         }, timeout);
@@ -195,7 +245,15 @@ const ChartPanel = ({ settings, id, setPanels }) => {
                     precision: chart.settings.precision,
                     minMove: 1 / 10 ** chart.settings.precision,
                 },
+                lastValueVisible: settings.lastValueVisible,
+                title2: chart.settings.title,
             });
+
+            if (!settings.titleVisible) {
+                charts[chart.id].applyOptions({
+                    title: "",
+                });
+            }
 
             charts[chart.id].applyOptions({
                 autoscaleInfoProvider: (original) => {
@@ -232,19 +290,13 @@ const ChartPanel = ({ settings, id, setPanels }) => {
                     );
                     label?.classList.add(`hide-chart`);
                 }, 50);
-            }
+            };
 
-            if (
-                chart.settings.priceScaleId === 'left' &&
-                chart.settings.visible
-            ) {
+            if (chart.settings.priceScaleId === 'left' &&chart.settings.visible) {
                 visibleLeftScale = true;
             }
 
-            if (
-                chart.settings.priceScaleId === 'right' &&
-                chart.settings.visible
-            ) {
+            if (chart.settings.priceScaleId === 'right' && chart.settings.visible) {
                 visibleRightScale = true;
             }
 
@@ -260,31 +312,23 @@ const ChartPanel = ({ settings, id, setPanels }) => {
             },
         });
 
-        if (settings.crosshair) {
-            panel.applyOptions({
-                crosshair: {
-                    vertLine: {
-                        width: 8,
-                        color: '#C3BCDB44',
-                        style: LineStyle.Solid,
-                        labelBackgroundColor: '#9B7DFF',
-                    },
-                    horzLine: {
-                        color: '#9B7DFF',
-                        labelBackgroundColor: '#9B7DFF',
-                    },
-                },
-            });
-        }
+        panel.applyOptions({
+            crosshair: settings.crosshairSettings
+        });
 
-        setCharts(charts);
         setLabels(settings.charts);
-        createPlagin(charts, panel);
+        createPlugin(charts, panel);
+
+        panel.subscribeClick((params) => handleClickChart(params));
+
+        chartsSeries.current = charts;
+        setLabels(settings.charts);
+        createPlugin(charts, panel);
 
         if (settings.charts.length > 1) sortCharts(settings.charts);
     };
 
-    const createPlagin = (seriesMap, panel) => {
+    const createPlugin = (seriesMap, panel) => {
         for (const chart of settings.charts) {
             for (const plugin of chart.plugins) {
                 switch (plugin.type) {
@@ -325,8 +369,7 @@ const ChartPanel = ({ settings, id, setPanels }) => {
                         seriesMap[chart.id].attachPrimitive(trend);
                         break;
                     case 'addCrosshairHighlightBar':
-                        const highlightPrimitive =
-                            new CrosshairHighlightPrimitive(plugin.settings);
+                        const highlightPrimitive = new CrosshairHighlightPrimitive(plugin.settings);
                         seriesMap[chart.id].attachPrimitive(highlightPrimitive);
                         break;
                     case 'addTooltip':
@@ -341,6 +384,117 @@ const ChartPanel = ({ settings, id, setPanels }) => {
                         break;
                 }
             }
+        }
+    };
+
+    function setSeriesHighlight(series, highlight, styleSettings) {
+        let options = styleSettings ?? series.options();
+        if (series.seriesType() == "Bar") {
+            series.applyOptions({
+                upColor: highlight ? options.upColor : convertToRGBA(options.upColor, 0.3),
+                downColor: highlight ? options.downColor : convertToRGBA(options.downColor, 0.3),
+            });
+        } else if (series.seriesType() == "Line") {
+            series.applyOptions({
+                color: highlight ? options.color : convertToRGBA(options.color, 0.3),
+                crosshairMarkerBorderColor: highlight ? options.crosshairMarkerBorderColor : convertToRGBA(options.crosshairMarkerBorderColor, 0.3),
+                crosshairMarkerBackgroundColor: highlight ? options.crosshairMarkerBackgroundColor : convertToRGBA(options.crosshairMarkerBackgroundColor, 0.3),
+            });
+        } else if (series.seriesType() == "Candlestick") {
+            series.applyOptions({
+                upColor: highlight ? options.upColor : convertToRGBA(options.upColor, 0.3),
+                downColor: highlight ? options.downColor : convertToRGBA(options.downColor, 0.3),
+                borderColor: highlight ? options.borderColor : convertToRGBA(options.borderColor, 0.3),
+                borderUpColor: highlight ? options.borderUpColor : convertToRGBA(options.borderUpColor, 0.3),
+                borderDownColor: highlight ? options.borderDownColor : convertToRGBA(options.borderDownColor, 0.3),
+                wickColor: highlight ? options.wickColor : convertToRGBA(options.wickColor, 0.3),
+                wickUpColor: highlight ? options.wickUpColor : convertToRGBA(options.wickUpColor, 0.3),
+                wickDownColor: highlight ? options.wickDownColor : convertToRGBA(options.wickDownColor, 0.3),
+            });
+        } else if (series.seriesType() == "Area") {
+            series.applyOptions({
+                topColor: highlight ? options.topColor : convertToRGBA(options.topColor, 0.3),
+                bottomColor: highlight ? options.bottomColor : convertToRGBA(options.bottomColor, 0.1),
+                lineColor: highlight ? options.lineColor : convertToRGBA(options.lineColor, 0.3),
+                crosshairMarkerBorderColor: highlight ? options.crosshairMarkerBorderColor : convertToRGBA(options.crosshairMarkerBorderColor, 0.3),
+                crosshairMarkerBackgroundColor: highlight ? options.crosshairMarkerBackgroundColor : convertToRGBA(options.crosshairMarkerBackgroundColor, 0.3),
+            });
+        } else if (series.seriesType() == "Baseline") {
+            series.applyOptions({
+                topLineColor: highlight ? options.topLineColor : convertToRGBA(options.topLineColor, 0.1),
+                topFillColor1: highlight ? options.topFillColor1 : convertToRGBA(options.topFillColor1, 0.1),
+                topFillColor2: highlight ? options.topFillColor2 : convertToRGBA(options.topFillColor2, 0.05),
+                bottomLineColor: highlight ? options.bottomLineColor : convertToRGBA(options.bottomLineColor, 0.1),
+                bottomFillColor1: highlight ? options.bottomFillColor1 : convertToRGBA(options.bottomFillColor1, 0.1),
+                bottomFillColor2: highlight ? options.bottomFillColor2 : convertToRGBA(options.bottomFillColor2, 0.05),
+            });
+        }
+    }
+    
+    function resetSeriesHighlight(charts) {
+        Object.entries(charts).forEach(([chartId, series]) => {
+            setSeriesHighlight(series, true, styleSettings.current[chartId]);
+        });
+        activeSeries.current = null;
+    }
+
+    function highlightSeries(currentSeries, charts) {
+        Object.entries(charts).forEach(([chartId, series]) => {
+            if (series === currentSeries) setSeriesHighlight(series, true, styleSettings.current[chartId]) 
+            else setSeriesHighlight(series, false, styleSettings.current[chartId]);
+        });
+        activeSeries.current = currentSeries;
+    }
+
+    const sortSeries = (param) => {
+        const seriesByDistance = [];
+        param.seriesData.forEach((value, serie, map)=> {
+            let refPrice = undefined;
+            const serieType = serie.seriesType();
+            if (serieType == 'Line') {
+              refPrice = value.value;
+            } else if (serieType == 'Candlestick') {
+                refPrice = value.close;
+            } else if (serieType == 'Histogram') {
+                refPrice = value.value;
+            } else if (serieType == 'Area') {
+                refPrice = value.value;
+            } else if (serieType == 'Bar') {
+                refPrice = value.close;
+            } else if (serieType == 'Baseline') {
+                refPrice = value.value;
+            }
+            if(refPrice != undefined) {
+              const distance = refPrice - serie.coordinateToPrice(param.point.y);
+              seriesByDistance.push({
+                'distance': Math.abs(distance),
+                'serie': serie,
+              });
+            }
+        });
+        seriesByDistance.sort((a, b) => a.distance - b.distance);
+        return seriesByDistance;
+    }
+    
+
+    const handleClickChart = (param) => {
+        if (!param.sourceEvent.metaKey && !param.sourceEvent.ctrlKey) {
+            activeSeries.current && resetSeriesHighlight(chartsSeries.current); 
+            return;
+        }
+        if (!param || !param.seriesData || param.seriesData.length === 0) {
+            activeSeries.current && resetSeriesHighlight(chartsSeries.current); 
+            return;
+        }
+        if (!param.seriesData.size) {
+            activeSeries.current && resetSeriesHighlight(chartsSeries.current);
+            return;
+        }
+        const seriesByDistance = sortSeries(param);
+        if (seriesByDistance[0].distance <= 5) {
+            highlightSeries(seriesByDistance[0].serie, chartsSeries.current);
+        } else {
+            activeSeries.current && resetSeriesHighlight(chartsSeries.current);
         }
     };
 
@@ -382,12 +536,13 @@ const ChartPanel = ({ settings, id, setPanels }) => {
 
     return (
         <div className="grid-item" style={{ gridArea: `${id}` }}>
-            <div className="grid-area">
+            <div className="grid-area" style={{cursor: settings.cursor}}>
                 <Label
                     panelId={panelId}
                     labels={labels}
                     minChartsForSearch={settings.minChartsForSearch}
-                    charts={charts}
+                    defaultVisible={settings.defaultLabelsVisible}
+                    charts={chartsSeries.current}
                     panel={panel}
                     searchLabel={searchLabel}
                     setMarginLabels={setMarginLabels}

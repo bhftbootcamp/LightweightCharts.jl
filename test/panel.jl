@@ -41,6 +41,27 @@
         copyright = true,
         tooltip = true,
         tooltip_format = "\${label_name}: (\${time}, \${value})",
+        crosshair_settings = CrosshairOptions(
+            mode = LWC_CROSSHAIR_MAGNET,
+            vert_line = CrosshairLineOptions(
+                color = "#758696",
+                width = 1,
+                style = LWC_CROSSHAIR_LARGE_DASHED,
+                visible = true,
+                label_visible = true,
+                label_background_color = "#4c525e",
+            ),
+            horz_line = CrosshairLineOptions(
+                color = "#758696",
+                width = 1,
+                style = LWC_CROSSHAIR_LARGE_DASHED,
+                visible = true,
+                label_visible = true,
+                label_background_color = "#4c525e",
+            ),
+        ),
+        last_value_visible = false,
+        title_visible = false,
         LWCChart(;
             id = panel_board.charts[1].id,
             label_name = "OK.ICX-USDT",

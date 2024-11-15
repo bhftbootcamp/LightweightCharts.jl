@@ -87,12 +87,13 @@ body {
     max-width: 20px;
     min-height: 16px;
     min-width: 20px;
-    position: sticky
+    position: sticky;
+    background-color: #f8f8ff;
+    border-color: #d1d4dc
 }
 
 .tabs .btn:hover {
-    background-color: #f8f8ff;
-    border-color: #d1d4dc
+    background-color: #e0e3eb;
 }
 
 .tabs .searchs {
