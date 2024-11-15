@@ -210,7 +210,7 @@ Creates a panel combining several [`charts`](@ref charts).
 | `cursor::LWC_CURSOR` | `LWC_CURSOR_DEFAUL` | Cursor type. |
 | `last_value_visible::Bool` | `false` | Shows the latest price label on the price scale. |
 | `title_visible::Bool` | `false` | Shows the chart name next to the latest price label. |
-| `default_legend_visible::Bool` | `false` | Shows the legend box with data charts names and colors. |
+| `default_legend_visible::Bool` | `true` | Shows the legend box with data charts names and colors. |
 """
 function lwc_panel(
     charts::LWCChart...;
@@ -235,7 +235,7 @@ function lwc_panel(
     cursor::LWC_CURSOR = LWC_CURSOR_DEFAULT,
     last_value_visible::Bool = false,
     title_visible::Bool = false,
-    default_legend_visible::Bool = false,
+    default_legend_visible::Bool = true,
 )
     return LWCPanel(
         x,

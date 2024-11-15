@@ -93,6 +93,7 @@ panel = lwc_panel(
         precision = 4,
     );
     name = "LightweightCharts ❤️ TimeArrays",
+    default_legend_visible = false,
 )
 
 lwc_show(panel)
@@ -134,6 +135,7 @@ layout = lwc_layout(
         );
         last_value_visible = true,
         title_visible = true,
+        default_legend_visible = false,
         x = 1,
         y = 1,
     ),
@@ -149,7 +151,6 @@ layout = lwc_layout(
             precision = 4,
             price_scale_id = LWC_RIGHT,
         );
-        default_legend_visible = true,
         x = 2,
         y = 1,
     );
@@ -206,7 +207,6 @@ chart = lwc_panel(
     ),
     last_value_visible = true,
     title_visible = true,
-    default_legend_visible = true,
     max_y = 1.6
 )
 
