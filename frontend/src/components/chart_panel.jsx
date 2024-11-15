@@ -397,7 +397,6 @@ const ChartPanel = ({ settings, id, setPanels }) => {
         } else if (series.seriesType() == "Line") {
             series.applyOptions({
                 color: highlight ? options.color : convertToRGBA(options.color, 0.3),
-                pointMarkersRadius: highlight ? options.pointMarkersRadius : 1,
                 crosshairMarkerBorderColor: highlight ? options.crosshairMarkerBorderColor : convertToRGBA(options.crosshairMarkerBorderColor, 0.3),
                 crosshairMarkerBackgroundColor: highlight ? options.crosshairMarkerBackgroundColor : convertToRGBA(options.crosshairMarkerBackgroundColor, 0.3),
             });
