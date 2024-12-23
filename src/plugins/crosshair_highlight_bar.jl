@@ -5,7 +5,7 @@ struct CrosshairHighlightBarSettings <: AbstractPluginSettings
 end
 
 """
-    lwc_vert_line(; kw...) -> LWCPlugin
+    lwc_crosshair_highlight_bar(; kw...) -> LWCPlugin
 
 Adds additional highlighting to the cursor crosshairs.
 
