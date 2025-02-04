@@ -38,7 +38,6 @@
         bar_spacing = 4,
         min_bar_spacing = 1.5,
         mode = LWC_LOGARITHMIC,
-        copyright = true,
         tooltip = true,
         tooltip_format = "\${label_name}: (\${time}, \${value})",
         crosshair_settings = CrosshairOptions(

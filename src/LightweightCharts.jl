@@ -150,6 +150,7 @@ See also: [`lwc_panel`](@ref).
 mutable struct LWCPanel <: AbstractChartSettings
     x::Int64
     y::Int64
+    h::Float64
     name::String
     min_y::Union{Real,Nothing}
     left_min_y::Union{Real,Nothing}
@@ -161,7 +162,6 @@ mutable struct LWCPanel <: AbstractChartSettings
     bar_spacing::Real
     min_bar_spacing::Real
     min_charts_for_search::Int64
-    copyright::Bool
     tooltip::Bool
     tooltip_format::String
     mode::LWC_PRICE_SCALE_MODE
@@ -191,6 +191,7 @@ Creates a panel combining several [`charts`](@ref charts).
 |:-----------|:-----------------------|:------------|
 | `x::Int64` | `-999` | Panel's horizontal coordinates |
 | `y::Int64` | `-999` | Panel's vertical coordinates |
+| `h::Float64` | `0.5` | Panel’s height as a fraction of the window height. |
 | `name::String` |` "LightweightCharts ❤️ Julia"` | Panel name (will be displayed in the browser tab title). |
 | `min_y::Union{Real,Nothing}` | `nothing` | Lower bound on the y-axis. |
 | `left_min_y::Union{Real,Nothing}` | `nothing` | Lower bound on the left y-axis. |
@@ -201,7 +202,6 @@ Creates a panel combining several [`charts`](@ref charts).
 | `seconds_visible::Bool` | `false` | Seconds visibility on the x-axis. |
 | `bar_spacing::Real` | `6` | Distance between the stripes in pixels. |
 | `min_bar_spacing::Real` | `0.5` | Minimum distance between the stripes in pixels. |
-| `copyright::Bool` | true | Enables a [TradingView](https://www.tradingview.com/) trademark symbol on the chart. |
 | `tooltip::Bool` | true | Enables tooltip for points. |
 | `tooltip_format::String` | `"\${label_name}: (\${time}, \${value})"` | String formatting of tooltip text. Display the variables "title", "time" and "value" in the desired format. |
 | `min_charts_for_search` | `10` | Minimum number of charts to search. |
@@ -216,6 +216,7 @@ function lwc_panel(
     charts::LWCChart...;
     x::Int64 = -999,
     y::Int64 = -999,
+    h::Float64 = 0.5,
     name::String = "LightweightCharts ❤️ Julia",
     min_y::Union{Real,Nothing} = nothing,
     left_min_y::Union{Real,Nothing} = nothing,
@@ -226,7 +227,6 @@ function lwc_panel(
     seconds_visible::Bool = false,
     bar_spacing::Real = 6,
     min_bar_spacing::Real = 0.5,
-    copyright::Bool = true,
     tooltip::Bool = true,
     tooltip_format::String = "\${label_name}: (\${time}, \${value})",
     min_charts_for_search::Int64 = 10,
@@ -240,6 +240,7 @@ function lwc_panel(
     return LWCPanel(
         x,
         y,
+        h,
         name,
         min_y,
         left_min_y,
@@ -251,7 +252,6 @@ function lwc_panel(
         bar_spacing,
         min_bar_spacing,
         min_charts_for_search,
-        copyright,
         tooltip,
         tooltip_format,
         mode,
@@ -275,6 +275,8 @@ mutable struct LWCLayout <: AbstractChartSettings
     name::String
     sync::Bool
     min_height::Integer
+    row_height::Integer
+    resizable::Bool
     panels::Dict{String,LWCPanel}
 end
 
@@ -312,12 +314,15 @@ Combines multiple `panels` into a common layout.
 | `name::String` | `"LightweightCharts ❤️ Julia"` | Layout name (will be displayed in the browser tab title). |
 | `sync::Bool` | `true` | Synchronization of chart scrolling. |
 | `min_height::Integer` | `300` | Minimum of layout height in px. |
+| `resizable::Bool` | true | Enables resize mode of panels.  |
 """
 function lwc_layout(
     panels::LWCPanel...;
     name::String = "LightweightCharts ❤️ Julia",
     sync::Bool = true,
     min_height::Integer = 300,
+    row_height::Integer = 10,
+    resizable::Bool = true,
 )
     update_not_set_coords!(panels)
 
@@ -351,15 +356,15 @@ function lwc_layout(
         end
     end
 
-    return LWCLayout(name, sync, min_height, grids)
+    return LWCLayout(name, sync, min_height, row_height, resizable, grids)
 end
 
 function Base.string(chart::LWCChart)
-    return string(lwc_layout(lwc_panel(chart), name = chart.label_name))
+    return string(lwc_layout(lwc_panel(chart, h = 1.0), name = chart.label_name, resizable = false))
 end
 
 function Base.string(panel::LWCPanel)
-    return string(lwc_layout(panel, name = panel.name))
+    return string(lwc_layout(panel, name = panel.name, resizable = false))
 end
 
 function Base.string(layout::LWCLayout)

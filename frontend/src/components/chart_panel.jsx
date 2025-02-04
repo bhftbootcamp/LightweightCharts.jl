@@ -11,7 +11,6 @@ import { TooltipPrimitive } from '../plugins/tooltip/tooltip.ts';
 import Label from './label.jsx';
 import { DateTimeString, DateString, TimeString } from '../helpers/time.ts';
 import { rescaleAndShiftDates } from '../helpers/rescale.ts';
-import Copyright from './copyright.jsx';
 
 function convertToRGBA(color, alpha = 1) {
     if (!color) return;
@@ -192,26 +191,26 @@ const ChartPanel = ({ settings, id, setPanels }) => {
                 `;
             });
             
-            const chartRect = ref.current.getBoundingClientRect();
-            tooltipRef.style.opacity = '0';
-            if (tooltipHTML) {
+            const chartRect = ref.current?.getBoundingClientRect();
+            if (tooltipRef) tooltipRef.style.opacity = '0';
+            if (tooltipHTML && tooltipRef && chartRect) {
                 tooltipRef.innerHTML  = tooltipHTML;
-                if (chartRect.width - point.x - parseInt(tooltipRef.style.marginLeft) < tooltipRef.offsetWidth) {
-                    tooltipRef.style.left = `${chartRect.left + point.x - tooltipRef.offsetWidth - 15}px`;
+                if (window.innerWidth - param?.sourceEvent?.pageX < tooltipRef.offsetWidth) {
+                    tooltipRef.style.left = `${param?.sourceEvent?.pageX - tooltipRef.offsetWidth - 10}px`;
                 } else {
-                    tooltipRef.style.left = `${chartRect.left + point.x + 10}px`;
+                    tooltipRef.style.left = `${param?.sourceEvent?.pageX + 10}px`;
                 }
-                if (chartRect.bottom < chartRect.top + point.y  + tooltipRef.clientHeight + 10) {
-                    let delta = chartRect.bottom - chartRect.top - point.y - 10;
-                    tooltipRef.style.top  = `${chartRect.top + point.y + 10 - delta}px`;
+                if (window.innerHeight - param?.sourceEvent?.pageY < tooltipRef.offsetHeight) {
+                    tooltipRef.style.top  = `${param?.sourceEvent?.pageY - window.scrollY - tooltipRef.offsetHeight - 15}px`;
                 } else  {
-                    tooltipRef.style.top  = `${chartRect.top + point.y + 10}px`;
+                    tooltipRef.style.top  = `${param?.sourceEvent?.pageY - window.scrollY - 15}px`;
                 }
                 tooltipRef.style.opacity = '1';
             };
         }), 200);
 
-        window.addEventListener('resize', handleResize);
+        const resizeObserver = new ResizeObserver(handleResize);
+        resizeObserver.observe(ref.current);
 
         setPanel(newChart);
         setPanels((state) => [...state, newChart]);
@@ -223,7 +222,6 @@ const ChartPanel = ({ settings, id, setPanels }) => {
         setTimeout(() => {
             let offset = ref.current.getElementsByTagName('td')[0]?.clientWidth + 5;
             ref.current.previousSibling.style.marginLeft = offset + 'px';
-            tooltip.current.style.marginLeft = offset + "px";
         }, timeout);
     };
 
@@ -535,7 +533,7 @@ const ChartPanel = ({ settings, id, setPanels }) => {
     };
 
     return (
-        <div className="grid-item" style={{ gridArea: `${id}` }}>
+        <div className="grid-item">
             <div className="grid-area" style={{cursor: settings.cursor}}>
                 <Label
                     panelId={panelId}
@@ -548,7 +546,6 @@ const ChartPanel = ({ settings, id, setPanels }) => {
                     setMarginLabels={setMarginLabels}
                 />
                 <div className="charts" ref={ref}></div>
-                {settings.copyright ? <Copyright chart={ref} /> : <></>}
             </div>
             <div ref={tooltip} className='lineSeriesTooltip' />
         </div>

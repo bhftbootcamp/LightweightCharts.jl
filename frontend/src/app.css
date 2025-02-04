@@ -2,7 +2,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: "tnum" on, "lnum" on;
-    background-color: #e0e3eb;
+    background-color: #f6f6f6;
     font-family: -apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif;
     font-size: 14px;
     margin: 0;
@@ -29,24 +29,20 @@ body {
 }
 
 .grid-layout {
-    display: grid;
-    gap: 0;
-    height: 100%;
-    width: 100%
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
 }
 
-.grid-item {
-    padding: 2px;
+.tv-lightweight-charts {
+    border: 1.5px solid #e1e1e1;
 }
 
 .grid-area,
 .grid-item {
     height: 100%;
     width: 100%;
-}
-
-.grid-area {
-    position: relative
 }
 
 .tabs {
@@ -87,13 +83,12 @@ body {
     max-width: 20px;
     min-height: 16px;
     min-width: 20px;
-    position: sticky;
-    background-color: #f8f8ff;
-    border-color: #d1d4dc
+    position: sticky
 }
 
 .tabs .btn:hover {
-    background-color: #e0e3eb;
+    background-color: #f8f8ff;
+    border-color: #d1d4dc
 }
 
 .tabs .searchs {
@@ -222,7 +217,7 @@ body {
 }
 
 .lineSeriesTooltip {
-    position: absolute;
+    position: fixed;
     display: inline;
     opacity: 0;
     text-align: left;
@@ -243,4 +238,20 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+
+.react-grid-item  {
+    width: 100%;
+}
+
+.react-resizable-handle {
+    padding: 0 5px 5px 0 !important;
+}
+
+.react-grid-item.react-grid-placeholder {
+    background: #1068bf !important;
+}
+.react-grid-item > .react-resizable-handle::after {
+    right: 5px;
+    bottom: 5px;
 }
