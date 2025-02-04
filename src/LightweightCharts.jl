@@ -360,11 +360,11 @@ function lwc_layout(
 end
 
 function Base.string(chart::LWCChart)
-    return string(lwc_layout(lwc_panel(chart, h = 1.0), name = chart.label_name, resizable = false))
+    return string(lwc_layout(lwc_panel(chart, h = 1.0), name = chart.label_name))
 end
 
 function Base.string(panel::LWCPanel)
-    return string(lwc_layout(panel, name = panel.name, resizable = false))
+    return string(lwc_layout(panel, name = panel.name))
 end
 
 function Base.string(layout::LWCLayout)

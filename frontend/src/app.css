@@ -163,59 +163,6 @@ body {
     display: none
 }
 
-.copyright-tv {
-    position: absolute;
-    bottom: 5%;
-    left: 5%;
-    z-index: 100;
-    padding: 8px 5px;
-    font-family: -apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif;
-    font-feature-settings: "tnum", "lnum";
-    font-weight: 600;
-    font-size: 13px;
-    opacity: 1;
-    color: #131722;
-    background-color: white;
-    border: none;
-    border-radius: 17px;
-    box-shadow: -0.5px 0px 0px 1px rgba(30, 30, 30, 0.1),
-                 0.5px 0px 0px 1px rgba(30, 30, 30, 0.1);
-}
-
-.copyright-tv a {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-}
-
-.logo-tv {
-    padding-top: 3px;
-}
-
-.copyright-tv a:link,
-.copyright-tv a:visited,
-.copyright-tv a:hover,
-.copyright-tv a:active {
-    color: #131722;
-}
-
-.shield-tv {
-    display: inline-block;
-    opacity: 0;
-    width: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-align: start;
-    transition: width .3s cubic-bezier(.4, .01, .25, 1) 0s, background .3s cubic-bezier(.4, .01, .22, 1) 0s;
-}
-
-.copyright-tv:hover .shield-tv {
-    opacity: 1;
-    width: 140px;
-    margin-left: 5px;
-}
-
 .lineSeriesTooltip {
     position: fixed;
     display: inline;
