@@ -2,7 +2,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: "tnum" on, "lnum" on;
-    background-color: #e0e3eb;
+    background-color: #f6f6f6;
     font-family: -apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif;
     font-size: 14px;
     margin: 0;
@@ -29,24 +29,21 @@ body {
 }
 
 .grid-layout {
-    display: grid;
-    gap: 0;
-    height: 100%;
-    width: 100%
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
 }
 
-.grid-item {
-    padding: 2px;
+.tv-lightweight-charts {
+    width: 100% !important;
+    border: 1.5px solid #e1e1e1;
 }
 
 .grid-area,
 .grid-item {
     height: 100%;
     width: 100%;
-}
-
-.grid-area {
-    position: relative
 }
 
 .tabs {
@@ -87,13 +84,12 @@ body {
     max-width: 20px;
     min-height: 16px;
     min-width: 20px;
-    position: sticky;
-    background-color: #f8f8ff;
-    border-color: #d1d4dc
+    position: sticky
 }
 
 .tabs .btn:hover {
-    background-color: #e0e3eb;
+    background-color: #f8f8ff;
+    border-color: #d1d4dc
 }
 
 .tabs .searchs {
@@ -168,61 +164,8 @@ body {
     display: none
 }
 
-.copyright-tv {
-    position: absolute;
-    bottom: 5%;
-    left: 5%;
-    z-index: 100;
-    padding: 8px 5px;
-    font-family: -apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif;
-    font-feature-settings: "tnum", "lnum";
-    font-weight: 600;
-    font-size: 13px;
-    opacity: 1;
-    color: #131722;
-    background-color: white;
-    border: none;
-    border-radius: 17px;
-    box-shadow: -0.5px 0px 0px 1px rgba(30, 30, 30, 0.1),
-                 0.5px 0px 0px 1px rgba(30, 30, 30, 0.1);
-}
-
-.copyright-tv a {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-}
-
-.logo-tv {
-    padding-top: 3px;
-}
-
-.copyright-tv a:link,
-.copyright-tv a:visited,
-.copyright-tv a:hover,
-.copyright-tv a:active {
-    color: #131722;
-}
-
-.shield-tv {
-    display: inline-block;
-    opacity: 0;
-    width: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-align: start;
-    transition: width .3s cubic-bezier(.4, .01, .25, 1) 0s, background .3s cubic-bezier(.4, .01, .22, 1) 0s;
-}
-
-.copyright-tv:hover .shield-tv {
-    opacity: 1;
-    width: 140px;
-    margin-left: 5px;
-}
-
-.lineSeriesTooltip {
-    position: absolute;
+.line-series-tooltip {
+    position: fixed;
     display: inline;
     opacity: 0;
     text-align: left;
@@ -239,8 +182,100 @@ body {
     white-space: nowrap;
 }
 
-.lineSeriesTooltip .tooltip {
+.line-series-tooltip .tooltip {
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+
+.react-grid-item  {
+    width: 100%;
+}
+
+.react-resizable-handle {
+    padding: 0 4px 4px 0 !important;
+}
+
+.react-grid-item.react-grid-placeholder {
+    background: #1068bf !important;
+}
+.react-grid-item > .react-resizable-handle::after {
+    right: 4px;
+    bottom: 4px;
+}
+
+.grid-item {
+    display: flex;
+    flex-direction: column;
+    position: relative; 
+    width: 100%; 
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.grid-item-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    width: 100%;
+    min-height: 30px;
+    max-height: 30px;
+    box-sizing: border-box;
+    border: 1.5px solid #e1e1e1;
+    border-bottom: none;
+    cursor: grab;
+}
+
+.grid-item-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: end;
+    height: 30px;
+}
+
+.grid-item-name {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 100%;
+    text-align: left;
+    padding: 0px 8px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: --apple-system, 'system-ui', 'Trebuchet MS', Roboto, Ubuntu, sans-serif;
+    color: rgb(48, 48, 48);
+    text-transform: uppercase;
+}
+
+.grid-item-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 500;
+    height: 100%;
+    min-width: 32px;
+    border-left: 1.5px solid #e1e1e1;
+}
+
+.grid-item-button:hover {
+    background-color: #ededed;
+}
+
+.fullscreen {
+    position: fixed;
+    width: 100%;
+    height: calc(100% + 0px);
+    min-width: 0px;
+    overflow: hidden;
+    left: 0px;
+    top: 0px;
+    z-index: 999;
+}
+
+.fullscreen .grid-item-header {
+    border: none;
 }

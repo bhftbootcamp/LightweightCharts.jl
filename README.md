@@ -94,6 +94,7 @@ panel = lwc_panel(
     );
     name = "LightweightCharts ❤️ TimeArrays",
     default_legend_visible = false,
+    h = 1.0,
 )
 
 lwc_show(panel)
@@ -207,7 +208,8 @@ chart = lwc_panel(
     ),
     last_value_visible = true,
     title_visible = true,
-    max_y = 1.6
+    max_y = 1.6,
+    h = 1.0
 )
 
 lwc_show(chart)

@@ -1,55 +1,52 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import ChartPanel from './chart_panel.jsx';
 import { lcm } from '../helpers/utils.ts';
+import '/node_modules/react-grid-layout/css/styles.css';
+import '/node_modules/react-resizable/css/styles.css';
+import RGL, { WidthProvider } from "react-grid-layout";
+
+const ResponsiveReactGridLayout = WidthProvider(RGL);
 
 const ChartLayout = ({ layout }) => {
     const [panels, setPanels] = useState([]);
 
-    const grid = useMemo(() => {
+    const rowCounts = useMemo(() => {
+        const rowMap = {};
+        Object.values(layout.panels).forEach((panel) => {
+            if (!rowMap[panel.y]) {
+                rowMap[panel.y] = 0;
+            }
+            rowMap[panel.y] += 1;
+        });
+        return rowMap;
+    }, [layout.panels]);
+
+    const colCounts = useMemo(() => {
         const initPanels = Object.values(layout.panels);
         const setX = new Set(initPanels.map((panel) => panel.x));
-        const setY = new Set(initPanels.map((panel) => panel.y));
 
         const maxX = [...setX].reduce(lcm);
-        const maxY = setY.size;
+        return maxX * 12;
+    }, [layout.panels]);
 
-        const areas = Array.from({ length: maxY }, () =>
-            new Array(maxX).fill('')
-        );
 
-        for (let column = 0; column < maxY; column++) {
-            const cols = initPanels.filter(
-                (panel) => panel.y === column + 1
-            ).length;
-            const step = Math.floor(maxX / cols);
-            let iden = 1;
+    const rowHeight = useMemo(() => {
+        return (window.innerHeight - 8) / 100; 
+    }, []);
 
-            for (let index = 0; index < maxX; index++) {
-                const cell = `cell${iden}${column + 1}`;
-                areas[column][index] = cell;
 
-                if ((index + 1) % step === 0 && iden < cols) {
-                    iden++;
-                }
-            }
-        }
-
-        const gridTemplateAreas = areas
-            .map((row) => `'${row.join(' ')}'`)
-            .join('\n');
-        const gridTemplateRows = Array(maxY)
-            .fill(`${100 / maxY}%`)
-            .join(' ');
-        const gridTemplateColumns = Array(maxX)
-            .fill(`${100 / maxX}%`)
-            .join(' ');
-
-        return {
-            gridTemplateAreas,
-            gridTemplateRows,
-            gridTemplateColumns,
-        };
-    }, [layout]);
+    const gridLayout = useMemo(() => {
+        return Object.entries(layout.panels).map(([key, panel]) => {
+            const countInRow = rowCounts[panel.y] || 1;
+            return {
+                i: key,
+                x: (panel.x - 1) * Math.floor(colCounts / countInRow) || 0,
+                y: (panel.y - 1) || 0,
+                w: Math.floor(colCounts / countInRow),
+                h: panel.h  * 100
+            };
+        });
+    }, [rowCounts, colCounts]);
 
     useEffect(() => {
         if (layout.sync) {
@@ -71,24 +68,28 @@ const ChartLayout = ({ layout }) => {
     }, [panels]);
 
     return (
-        <div
+        <ResponsiveReactGridLayout
             className="grid-layout"
-            style={{
-                gridTemplateAreas: grid.gridTemplateAreas,
-                gridTemplateColumns: grid.gridTemplateColumns,
-                gridTemplateRows: grid.gridTemplateRows,
-            }}>
-            {Object.keys(layout.panels).map((panel) => {
-                return (
+            layout={gridLayout}
+            cols={colCounts}
+            rowHeight={rowHeight} 
+            margin={[0, 0]}
+            containerPadding={[4, 4]}
+            isResizable={layout.resizable}
+            useCSSTransforms={false}
+            draggableCancel='.draggable-сancel'
+            draggableHandle='.draggable-handle'
+        >
+            {gridLayout.map((panel) => (
+                <div key={panel.i} data-grid={panel} style={{padding: "4px"}}>
                     <ChartPanel
-                        key={panel}
-                        settings={layout.panels[panel]}
+                        settings={layout.panels[panel.i]}
                         setPanels={setPanels}
-                        id={panel}
+                        id={panel.i}
                     />
-                );
-            })}
-        </div>
+                </div>
+            ))}
+        </ResponsiveReactGridLayout>
     );
 };
 
