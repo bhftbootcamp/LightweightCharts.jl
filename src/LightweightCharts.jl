@@ -192,7 +192,7 @@ Creates a panel combining several [`charts`](@ref charts).
 | `x::Int64` | `-999` | Panel's horizontal coordinates |
 | `y::Int64` | `-999` | Panel's vertical coordinates |
 | `h::Float64` | `0.5` | Height of the panel as a fraction of the total window height. |
-| `name::String` |` ""` | Panel name (will be displayed in the browser tab title). |
+| `name::String` |` ""` | Panel name (will be displayed in the panel header). |
 | `min_y::Union{Real,Nothing}` | `nothing` | Lower bound on the y-axis. |
 | `left_min_y::Union{Real,Nothing}` | `nothing` | Lower bound on the left y-axis. |
 | `right_min_y::Union{Real,Nothing}` | `nothing` | Lower bound on the right y-axis. |
