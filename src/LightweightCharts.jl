@@ -192,7 +192,7 @@ Creates a panel combining several [`charts`](@ref charts).
 | `x::Int64` | `-999` | Panel's horizontal coordinates |
 | `y::Int64` | `-999` | Panel's vertical coordinates |
 | `h::Float64` | `0.5` | Panel’s height as a fraction of the window height. |
-| `name::String` |` "LightweightCharts ❤️ Julia"` | Panel name (will be displayed in the browser tab title). |
+| `name::String` |` ""` | Panel name (will be displayed in the browser tab title). |
 | `min_y::Union{Real,Nothing}` | `nothing` | Lower bound on the y-axis. |
 | `left_min_y::Union{Real,Nothing}` | `nothing` | Lower bound on the left y-axis. |
 | `right_min_y::Union{Real,Nothing}` | `nothing` | Lower bound on the right y-axis. |
@@ -217,7 +217,7 @@ function lwc_panel(
     x::Int64 = -999,
     y::Int64 = -999,
     h::Float64 = 0.5,
-    name::String = "LightweightCharts ❤️ Julia",
+    name::String = "",
     min_y::Union{Real,Nothing} = nothing,
     left_min_y::Union{Real,Nothing} = nothing,
     right_min_y::Union{Real,Nothing} = nothing,
@@ -275,7 +275,6 @@ mutable struct LWCLayout <: AbstractChartSettings
     name::String
     sync::Bool
     min_height::Integer
-    row_height::Integer
     resizable::Bool
     panels::Dict{String,LWCPanel}
 end
@@ -321,7 +320,6 @@ function lwc_layout(
     name::String = "LightweightCharts ❤️ Julia",
     sync::Bool = true,
     min_height::Integer = 300,
-    row_height::Integer = 10,
     resizable::Bool = true,
 )
     update_not_set_coords!(panels)
@@ -356,7 +354,7 @@ function lwc_layout(
         end
     end
 
-    return LWCLayout(name, sync, min_height, row_height, resizable, grids)
+    return LWCLayout(name, sync, min_height, resizable, grids)
 end
 
 function Base.string(chart::LWCChart)

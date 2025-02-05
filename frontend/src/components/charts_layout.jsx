@@ -26,7 +26,7 @@ const ChartLayout = ({ layout }) => {
         const setX = new Set(initPanels.map((panel) => panel.x));
 
         const maxX = [...setX].reduce(lcm);
-        return maxX * 6;
+        return maxX * 12;
     }, [layout.panels]);
 
 
@@ -77,6 +77,8 @@ const ChartLayout = ({ layout }) => {
             containerPadding={[4, 4]}
             isResizable={layout.resizable}
             useCSSTransforms={false}
+            draggableCancel='.draggable-сancel'
+            draggableHandle='.draggable-handle'
         >
             {gridLayout.map((panel) => (
                 <div key={panel.i} data-grid={panel} style={{padding: "4px"}}>

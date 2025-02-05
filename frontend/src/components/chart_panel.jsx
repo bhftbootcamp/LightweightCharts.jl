@@ -50,15 +50,18 @@ function convertToRGBA(color, alpha = 1) {
 }
 
 const ChartPanel = ({ settings, id, setPanels }) => {
-    const panelId = `${settings.x}${settings.y}`;
-    const ref = useRef(null);
-    const tooltip = useRef(null);
+    const panelId  = `${settings.x}${settings.y}`;
+    const ref      = useRef(null);
+    const panelRef = useRef(null);
+    const tooltip  = useRef(null);
 
-    const [panel, setPanel] = useState(null);
+    const [panel, setPanel]   = useState(null);
     const [labels, setLabels] = useState([]);
-    const chartsSeries = useRef({});
-    const activeSeries = useRef(null);
-    const styleSettings = useRef({});
+    const chartsSeries        = useRef({});
+    const activeSeries        = useRef(null);
+    const styleSettings       = useRef({});
+
+    const [fullscreen, setFullscreen] = useState(false);
 
     useEffect(() => {
         if (!settings.rescale) {
@@ -79,10 +82,11 @@ const ChartPanel = ({ settings, id, setPanels }) => {
     const createPanel = () => {
         if (ref.current.children[0]) return;
 
-        const handleResize = () => {
-            newChart.applyOptions({ width: ref.current.clientWidth });
-            newChart.applyOptions({ height: ref.current.clientHeight });
-        };
+        const handleResize = debounce(() => {
+            if (newChart) {
+                newChart.applyOptions({ width: ref.current.clientWidth, height: ref.current.clientHeight - 1 });
+            }
+        }, 0);
 
         let styles = {};
         settings.charts.forEach((chart) => {
@@ -532,9 +536,27 @@ const ChartPanel = ({ settings, id, setPanels }) => {
         setLabels(searchArray);
     };
 
+    const handleFullScreen = (e) => {
+        e.stopPropagation();
+        panelRef.current?.classList.toggle("fullscreen");
+        setFullscreen(state => !state);
+    };
+
     return (
-        <div className="grid-item">
-            <div className="grid-area" style={{cursor: settings.cursor}}>
+        <div className="grid-item" ref={panelRef}>
+             <div className='grid-item-header draggable-handle'>
+                <div className='grid-item-name'><span>{settings.name}</span></div>
+                <div className='grid-item-buttons'>
+                    <div className="grid-item-button" onMouseDown={handleFullScreen}>
+                    {
+                        fullscreen
+                        ? <svg viewBox="0 0 24 24" width={16} height={16} xmlns="http://www.w3.org/2000/svg"><path d="M4.621 21.5l3.44-3.439 3.439 3.44v-9h-9l3.44 3.439-3.44 3.44 2.121 2.12zM12.5 2.5l3.44 3.44 3.439-3.44L21.5 4.622l-3.44 3.44L21.5 11.5h-9v-9z" fill="#5f6368"></path></svg>
+                        : <svg viewBox="0 0 24 24" width={16} height={16} xmlns="http://www.w3.org/2000/svg"><path d="M14.121 12l3.44-3.44L21 12V3h-9l3.44 3.44L12 9.878l2.121 2.12zM3 12l3.44 3.44L9.878 12 12 14.12l-3.44 3.44L12 21H3v-9z" fill="#5f6368"></path></svg>
+                    }                    
+                    </div>
+                </div>
+            </div>
+            <div className="grid-area draggable-сancel" style={{cursor: settings.cursor}}>
                 <Label
                     panelId={panelId}
                     labels={labels}
@@ -547,7 +569,7 @@ const ChartPanel = ({ settings, id, setPanels }) => {
                 />
                 <div className="charts" ref={ref}></div>
             </div>
-            <div ref={tooltip} className='lineSeriesTooltip' />
+            <div ref={tooltip} className='line-series-tooltip' />
         </div>
     );
 };
