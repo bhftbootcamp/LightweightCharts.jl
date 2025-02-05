@@ -197,7 +197,7 @@ const ChartPanel = ({ settings, id, setPanels }) => {
             
             const chartRect = ref.current?.getBoundingClientRect();
             if (tooltipRef) tooltipRef.style.opacity = '0';
-            if (tooltipHTML && tooltipRef && chartRect) {
+            if (tooltipHTML && tooltipRef && chartRect && param?.sourceEvent?.pageX) {
                 tooltipRef.innerHTML  = tooltipHTML;
                 if (window.innerWidth - param?.sourceEvent?.pageX < tooltipRef.offsetWidth) {
                     tooltipRef.style.left = `${param?.sourceEvent?.pageX - tooltipRef.offsetWidth - 10}px`;
