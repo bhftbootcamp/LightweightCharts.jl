@@ -39,17 +39,11 @@ function Label({
                 visible: hideAll ? false : true,
             });
 
-            if (
-                charts[id].options().priceScaleId === 'left' &&
-                charts[id].options().visible
-            ) {
+            if (charts[id].options().priceScaleId === 'left' && charts[id].options().visible) {
                 visibleLeftScale = true;
             }
 
-            if (
-                charts[id].options().priceScaleId === 'right' &&
-                charts[id].options().visible
-            ) {
+            if (charts[id].options().priceScaleId === 'right' && charts[id].options().visible) {
                 visibleRightScale = true;
             }
         }
