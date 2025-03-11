@@ -1,7 +1,7 @@
 import React from 'react';
 
 function ToolItem({ panelId, tool, onClick }) {
-    const formatter = Intl.NumberFormat("en-IN", { notation: 'compact', compactDisplay: "short", minimumFractionDigits: 3, maximumFractionDigits: 3, style: "decimal" });
+    const formatter = Intl.NumberFormat("en-US", { notation: 'compact', compactDisplay: "short", minimumFractionDigits: 3, maximumFractionDigits: 3, style: "decimal" });
     
     return (
         <tr id={`tool${panelId}${tool.id}`} className="label-item" onClick={(e) => onClick(e, tool.id)}>
