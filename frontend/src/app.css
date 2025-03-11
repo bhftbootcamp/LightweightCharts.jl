@@ -23,6 +23,7 @@ body {
         position: relative;
         border: 1.5px solid #e1e1e1;
         flex-grow: 4;
+        background-color: #fff;
     }
 
 }
@@ -40,6 +41,7 @@ body {
 
 .tv-lightweight-charts {
     width: 100% !important;
+    background-color: #fff;
 }
 
 .grid-area,
@@ -422,8 +424,7 @@ body {
     border-spacing: 0;
 }
 
-.label-item th 
-.label-header th{
+.label-header th {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -436,9 +437,19 @@ body {
     text-overflow: ellipsis;
 }
 
-.label-item td,
-.tool-table th,
-.label-header th {
+.label-item td:not(:first-child),
+.label-header th:not(:first-child) {
     min-width: 75px;
-    align-items: center;
+    max-width: 75px;
+    width: 75px;
+}
+
+.label-item td:first-child,
+.label-header th:first-child {
+    width: 100%;
+}
+
+.tool-table {
+    column-span: 0;
+    border-spacing: 0px;
 }
