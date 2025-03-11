@@ -92,10 +92,6 @@ body {
     overflow: auto;
 }
 
-.chart-tool .labels::-webkit-scrollbar {
-    display: none;
-}
-
 .tabs .btn {
     align-items: center;
     text-align: center;
@@ -419,7 +415,6 @@ body {
 }
 
 .tool-table {
-    table-layout: fixed;
     width: 100%;
     border-spacing: 0;
 }

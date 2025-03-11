@@ -554,16 +554,7 @@ const ChartPanel = ({ settings, id, setPanels }) => {
                 <div className='grid-item-buttons draggable-сancel'>
                    {settings.legendMode == "table" && (
                         <div className="grid-item-button" onMouseDown={toogleTool}>
-                        {openTool
-                            ? <svg width="16" height="16" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="10" y="1" width="5" height="14" fill="#5f6368" stroke="#5f6368" stroke-width="2"/>
-                                <rect x="1" y="1" width="9" height="14" stroke="#5f6368" stroke-width="2"/>
-                            </svg>
-                            : <svg width="16" height="16" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="1" y="1" width="9" height="14" stroke="#5f6368" stroke-width="2"/>
-                                <rect x="1" y="1" width="14" height="14" stroke="#5f6368" stroke-width="2"/>
-                            </svg>
-                        }
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#5f6368"><path d="M179-214v-98h602v98H179Zm0-157v-98h602v98H179Zm0-149.65v-114.53l229.57-139.91L588-647.27 781-784.7v119.86L588-527.43 404.73-657.6 179-520.65Z"/></svg>
                         </div>
                     )}
                     <div className="grid-item-button draggable-сancel" onMouseDown={handleFullScreen}>
