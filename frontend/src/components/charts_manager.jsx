@@ -10,7 +10,7 @@ function ChartsManager({
     panel,
     setMarginLabels,
 }) {
-    const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });
+    const [sortConfig, setSortConfig] = useState(null);
     const selected = useRef(new Set([]));
     const hidden = useRef(new Set([]));
 
@@ -136,8 +136,10 @@ function ChartsManager({
 
     const handleSort = (key) => {
         setSortConfig((prev) => {
-            if (prev.key === key) {
-                return { key, direction: prev.direction === 'asc' ? 'desc' : 'asc' };
+            if (prev?.key === key) {
+                let direction = prev.direction === 'asc' ? 'desc' : prev.direction === 'desc' ? null : 'asc';
+                if (!direction) return null;
+                return { key, direction };
             }
             return { key, direction: 'asc' };
         });
@@ -156,7 +158,7 @@ function ChartsManager({
             <Resizable
                 defaultSize={{ width: 500, height: "100%" }}
                 maxWidth={1000}
-                minWidth={410}
+                minWidth={200}
                 enable={{
                     right: false,
                     left:  true,
@@ -174,25 +176,25 @@ function ChartsManager({
                         <table className="tool-table" id={`table${panelId}`}>
                             <thead>
                                 <tr className="label-header">
-                                    <th>
-                                        <div onClick={() => handleSort('labelName')}>Name</div>
-                                        <div style={{marginTop: "4px"}}>{sortConfig.key == "labelName" && sortConfig.direction == 'asc' ? asc : sortConfig.key == "labelName" && sortConfig.direction == 'desc' && desc}</div>
+                                    <th onClick={() => handleSort('labelName')}>
+                                        <div>Name</div>
+                                        <div style={{marginTop: "4px"}}>{sortConfig?.key == "labelName" && sortConfig?.direction == 'asc' ? asc : sortConfig?.key == "labelName" && sortConfig?.direction == 'desc' && desc}</div>
                                     </th>
-                                    <th>
-                                        <div onClick={() => handleSort('first')}>First</div>
-                                        <div style={{marginTop: "4px"}}>{sortConfig.key == "first" && sortConfig.direction == 'asc' ? asc : sortConfig.key == "first" && sortConfig.direction == 'desc' && desc}</div>
+                                    <th onClick={() => handleSort('first')}>
+                                        <div>First</div>
+                                        <div style={{marginTop: "4px"}}>{sortConfig?.key == "first" && sortConfig?.direction == 'asc' ? asc : sortConfig?.key == "first" && sortConfig?.direction == 'desc' && desc}</div>
                                     </th>
-                                    <th>
-                                        <div onClick={() => handleSort('min')}>Min</div>
-                                        <div style={{marginTop: "4px"}}>{sortConfig.key == "min" && sortConfig.direction == 'asc' ? asc : sortConfig.key == "min" && sortConfig.direction == 'desc' && desc}</div>
+                                    <th onClick={() => handleSort('min')}>
+                                        <div>Min</div>
+                                        <div style={{marginTop: "4px"}}>{sortConfig?.key == "min" && sortConfig?.direction == 'asc' ? asc : sortConfig?.key == "min" && sortConfig?.direction == 'desc' && desc}</div>
                                     </th>
-                                    <th>
-                                        <div onClick={() => handleSort('max')}>Max</div>
-                                        <div style={{marginTop: "4px"}}>{sortConfig.key == "max" && sortConfig.direction == 'asc' ? asc : sortConfig.key == "max" && sortConfig.direction == 'desc' && desc}</div>
+                                    <th onClick={() => handleSort('max')}>
+                                        <div>Max</div>
+                                        <div style={{marginTop: "4px"}}>{sortConfig?.key == "max" && sortConfig?.direction == 'asc' ? asc : sortConfig?.key == "max" && sortConfig?.direction == 'desc' && desc}</div>
                                     </th>
-                                    <th>
-                                        <div onClick={() => handleSort('last')}>Last</div>
-                                        <div style={{marginTop: "4px"}}>{sortConfig.key == "last" && sortConfig.direction == 'asc' ? asc : sortConfig.key == "last" && sortConfig.direction == 'desc' && desc}</div>
+                                    <th onClick={() => handleSort('last')}>
+                                        <div>Last</div>
+                                        <div style={{marginTop: "4px"}}>{sortConfig?.key == "last" && sortConfig?.direction == 'asc' ? asc : sortConfig?.key == "last" && sortConfig?.direction == 'desc' && desc}</div>
                                     </th>
                                 </tr>
                             </thead>

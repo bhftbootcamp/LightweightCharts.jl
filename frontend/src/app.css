@@ -444,6 +444,11 @@ body {
     width: 75px;
 }
 
+.label-header th,
+.label-item td {
+    min-width: 75px;
+}
+
 .label-item td:first-child,
 .label-header th:first-child {
     width: 100%;
