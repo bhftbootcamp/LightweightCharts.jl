@@ -76,6 +76,9 @@ export LWC_CURSOR,
     LWC_CURSOR_DEFAULT,
     LWC_CURSOR_CROSSHAIR
 
+export LWC_LEGEND_LIST_MODE,
+    LWC_LEGEND_TABLE_MODE
+
 export CrosshairOptions,
     CrosshairLineOptions
 
@@ -140,6 +143,13 @@ using .Charts
 include("plugins.jl")
 using .Plugins
 
+@enum LWC_LEGEND_MODE begin
+    LWC_LEGEND_LIST_MODE = 0
+    LWC_LEGEND_TABLE_MODE = 1
+end
+
+Serde.SerJson.ser_type(::Type{<:AbstractChartSettings}, x::LWC_LEGEND_MODE) = x == LWC_LEGEND_LIST_MODE ? "list" : "table"
+
 """
     LWCPanel
 
@@ -170,7 +180,8 @@ mutable struct LWCPanel <: AbstractChartSettings
     cursor::LWC_CURSOR
     last_value_visible::Bool
     title_visible::Bool
-    default_labels_visible::Bool
+    legend_mode::LWC_LEGEND_MODE
+    default_legend_visible::Bool
 end
 
 function Base.show(io::IO, x::LWCPanel)
@@ -210,6 +221,7 @@ Creates a panel combining several [`charts`](@ref charts).
 | `cursor::LWC_CURSOR` | `LWC_CURSOR_DEFAUL` | Cursor type. |
 | `last_value_visible::Bool` | `false` | Shows the latest price label on the price scale. |
 | `title_visible::Bool` | `false` | Shows the chart name next to the latest price label. |
+| `legend_mode::LWC_LEGEND_MODE`| `LWC_LEGEND_LIST_MODE` (`LWC_LEGEND_LIST_MODE`, `LWC_LEGEND_TABLE_MODE`) | Legend box display type. |
 | `default_legend_visible::Bool` | `true` | Shows the legend box with data charts names and colors. |
 """
 function lwc_panel(
@@ -235,6 +247,7 @@ function lwc_panel(
     cursor::LWC_CURSOR = LWC_CURSOR_DEFAULT,
     last_value_visible::Bool = false,
     title_visible::Bool = false,
+    legend_mode::LWC_LEGEND_MODE = LWC_LEGEND_LIST_MODE,
     default_legend_visible::Bool = true,
 )
     return LWCPanel(
@@ -260,6 +273,7 @@ function lwc_panel(
         cursor,
         last_value_visible,
         title_visible,
+        legend_mode,
         default_legend_visible
     )
 end

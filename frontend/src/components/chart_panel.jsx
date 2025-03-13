@@ -11,6 +11,7 @@ import { TooltipPrimitive } from '../plugins/tooltip/tooltip.ts';
 import Label from './label.jsx';
 import { DateTimeString, DateString, TimeString } from '../helpers/time.ts';
 import { rescaleAndShiftDates } from '../helpers/rescale.ts';
+import ChartsManager from './charts_manager.jsx';
 
 function convertToRGBA(color, alpha = 1) {
     if (!color) return;
@@ -55,12 +56,12 @@ const ChartPanel = ({ settings, id, setPanels }) => {
     const panelRef = useRef(null);
     const tooltip  = useRef(null);
 
-    const [panel, setPanel]   = useState(null);
-    const [labels, setLabels] = useState([]);
-    const chartsSeries        = useRef({});
-    const activeSeries        = useRef(null);
-    const styleSettings       = useRef({});
-
+    const [openTool, setOpenTool] = useState(settings.defaultLegendVisible);
+    const [panel, setPanel]       = useState(null);
+    const [labels, setLabels]     = useState([]);
+    const chartsSeries            = useRef({});
+    const activeSeries            = useRef(null);
+    const styleSettings           = useRef({});
     const [fullscreen, setFullscreen] = useState(false);
 
     useEffect(() => {
@@ -81,12 +82,6 @@ const ChartPanel = ({ settings, id, setPanels }) => {
 
     const createPanel = () => {
         if (ref.current.children[0]) return;
-
-        const handleResize = debounce(() => {
-            if (newChart) {
-                newChart.applyOptions({ width: ref.current.clientWidth, height: ref.current.clientHeight - 1 });
-            }
-        }, 0);
 
         let styles = {};
         settings.charts.forEach((chart) => {
@@ -213,6 +208,12 @@ const ChartPanel = ({ settings, id, setPanels }) => {
             };
         }), 200);
 
+        const handleResize = debounce(() => {
+            if (newChart) {
+                newChart.applyOptions({ width: ref.current.clientWidth, height: ref.current.clientHeight - 1 });
+            }
+        }, 0);
+
         const resizeObserver = new ResizeObserver(handleResize);
         resizeObserver.observe(ref.current);
 
@@ -223,6 +224,7 @@ const ChartPanel = ({ settings, id, setPanels }) => {
     };
 
     const setMarginLabels = (timeout) => {
+        if (!ref.current?.previousSibling) return;
         setTimeout(() => {
             let offset = ref.current.getElementsByTagName('td')[0]?.clientWidth + 5;
             ref.current.previousSibling.style.marginLeft = offset + 'px';
@@ -467,18 +469,17 @@ const ChartPanel = ({ settings, id, setPanels }) => {
                 refPrice = value.value;
             }
             if(refPrice != undefined) {
-              const distance = refPrice - serie.coordinateToPrice(param.point.y);
-              seriesByDistance.push({
-                'distance': Math.abs(distance),
-                'serie': serie,
-              });
+                const distance = param.point.y - serie.priceToCoordinate(refPrice);
+                seriesByDistance.push({
+                    'distance': Math.abs(distance),
+                    'serie': serie,
+                });
             }
         });
         seriesByDistance.sort((a, b) => a.distance - b.distance);
         return seriesByDistance;
     }
     
-
     const handleClickChart = (param) => {
         if (!param.sourceEvent.metaKey && !param.sourceEvent.ctrlKey) {
             activeSeries.current && resetSeriesHighlight(chartsSeries.current); 
@@ -493,7 +494,7 @@ const ChartPanel = ({ settings, id, setPanels }) => {
             return;
         }
         const seriesByDistance = sortSeries(param);
-        if (seriesByDistance[0].distance <= 5) {
+        if (seriesByDistance[0].distance <= 10) {
             highlightSeries(seriesByDistance[0].serie, chartsSeries.current);
         } else {
             activeSeries.current && resetSeriesHighlight(chartsSeries.current);
@@ -542,12 +543,21 @@ const ChartPanel = ({ settings, id, setPanels }) => {
         setFullscreen(state => !state);
     };
 
+    const toogleTool = () => {
+        setOpenTool(state => !state);
+    };
+    
     return (
         <div className="grid-item" ref={panelRef}>
              <div className='grid-item-header draggable-handle'>
                 <div className='grid-item-name'><span>{settings.name}</span></div>
-                <div className='grid-item-buttons'>
-                    <div className="grid-item-button" onMouseDown={handleFullScreen}>
+                <div className='grid-item-buttons draggable-сancel'>
+                   {settings.legendMode == "table" && (
+                        <div className="grid-item-button" onMouseDown={toogleTool}>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#5f6368"><path d="M179-214v-98h602v98H179Zm0-157v-98h602v98H179Zm0-149.65v-114.53l229.57-139.91L588-647.27 781-784.7v119.86L588-527.43 404.73-657.6 179-520.65Z"/></svg>
+                        </div>
+                    )}
+                    <div className="grid-item-button draggable-сancel" onMouseDown={handleFullScreen}>
                     {
                         fullscreen
                         ? <svg viewBox="0 0 24 24" width={16} height={16} xmlns="http://www.w3.org/2000/svg"><path d="M4.621 21.5l3.44-3.439 3.439 3.44v-9h-9l3.44 3.439-3.44 3.44 2.121 2.12zM12.5 2.5l3.44 3.44 3.439-3.44L21.5 4.622l-3.44 3.44L21.5 11.5h-9v-9z" fill="#5f6368"></path></svg>
@@ -557,17 +567,26 @@ const ChartPanel = ({ settings, id, setPanels }) => {
                 </div>
             </div>
             <div className="grid-area draggable-сancel" style={{cursor: settings.cursor}}>
-                <Label
+                {settings.legendMode == "list" && <Label
                     panelId={panelId}
                     labels={labels}
                     minChartsForSearch={settings.minChartsForSearch}
-                    defaultVisible={settings.defaultLabelsVisible}
+                    defaultVisible={settings.defaultLegendVisible}
                     charts={chartsSeries.current}
                     panel={panel}
                     searchLabel={searchLabel}
                     setMarginLabels={setMarginLabels}
-                />
+                />}
                 <div className="charts" ref={ref}></div>
+                {settings.legendMode == "table" && <ChartsManager
+                    openTool={openTool}
+                    panelId={panelId}
+                    labels={labels}
+                    charts={chartsSeries.current}
+                    defaultVisible={settings.defaultLegendVisible}
+                    panel={panel}
+                    setMarginLabels={setMarginLabels}
+                />}
             </div>
             <div ref={tooltip} className='line-series-tooltip' />
         </div>

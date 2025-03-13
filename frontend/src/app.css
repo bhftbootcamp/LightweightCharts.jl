@@ -3,7 +3,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: "tnum" on, "lnum" on;
     background-color: #f6f6f6;
-    font-family: -apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif;
+    font-family: Inter, Helvetica, Arial, sans-serif !important;
     font-size: 14px;
     margin: 0;
     padding: 0
@@ -18,8 +18,12 @@ body {
 
     .charts {
         height: 100%;
-        width: 100%;
+        max-height: 100%;
+        width: calc(100% - 1000px);
         position: relative;
+        border: 1px solid #e1e1e1;
+        flex-grow: 4;
+        background-color: #fff;
     }
 
 }
@@ -37,13 +41,15 @@ body {
 
 .tv-lightweight-charts {
     width: 100% !important;
-    border: 1.5px solid #e1e1e1;
+    background-color: #fff;
 }
 
 .grid-area,
 .grid-item {
-    height: 100%;
+    height: calc(100% - 30px);
     width: 100%;
+    display: flex;
+    flex-direction: row;
 }
 
 .tabs {
@@ -69,7 +75,21 @@ body {
     background-color: hsla(0, 0%, 100%, .85);
     border-radius: 5px;
     overflow: hidden;
-    padding: 5px
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.chart-tool .labels {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    background-color: #fff;
+    box-sizing: border-box;
+    height: 100%;
+    max-height: 100%;
+    width: 100%;
+    overflow: auto;
 }
 
 .tabs .btn {
@@ -113,23 +133,45 @@ body {
     padding-right: 5px
 }
 
+.chart-tool .label-item,
+.chart-tool .label-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: stretch;
+    padding-right: 5px;
+    width: 100%;
+}
+
 .tabs .label-item:hover {
     background-color: #fff;
     border-color: #d1d4dc;
     border-radius: 3px
 }
 
-.tabs .label-item:last-child {
+.tabs .label-item:last-child,
+.chart-tool .label-item:last-child,
+.chart-tool .label-header:last-child {
     margin-bottom: 0
 }
 
 .tabs .label {
     align-items: center;
-    display: flex
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.chart-tool .label {
+    align-items: center;
+    display: flex;
+    justify-content: stretch;
+    width: 100%;
 }
 
 .tabs .cube,
-.tooltip .cube {
+.tooltip .cube,
+.chart-tool .cube {
     border-radius: 2px;
     display: flex;
     height: 6px;
@@ -137,26 +179,35 @@ body {
     width: 6px
 }
 
-.tabs .name {
+.chart-tool .cube {
+    width: 14px;
+    min-width: 14px;
+    height: 4px;
+    border-radius: 999px;
+}
+
+.tabs .name,
+.chart-tool .name {
     display: flex;
     font-family: Courier;
     font-size: 13px;
     font-weight: 400;
     padding: 2px;
-    text-decoration: none;
     white-space: nowrap
 }
 
-.tabs .hide-chart {
+.tabs .hide-chart,
+.chart-tool .hide-chart {
     color: #a9a9a9;
-    text-decoration: line-through
 }
 
-.tabs .unshow-label {
+.tabs .unshow-label,
+.chart-tool .unshow-label{
     display: none
 }
 
-.tabs .svg-rotate {
+.tabs .svg-rotate,
+.chart-tool .svg-rotate {
     transform: rotate(180deg)
 }
 
@@ -178,7 +229,6 @@ body {
     font-family: Courier;
     font-size: 13px;
     font-weight: 500;
-    text-decoration: none;
     white-space: nowrap;
 }
 
@@ -210,6 +260,7 @@ body {
     position: relative; 
     width: 100%; 
     height: 100%;
+    max-height: 100%;
     box-sizing: border-box;
 }
 
@@ -223,7 +274,7 @@ body {
     min-height: 30px;
     max-height: 30px;
     box-sizing: border-box;
-    border: 1.5px solid #e1e1e1;
+    border: 1px solid #e1e1e1;
     border-bottom: none;
     cursor: grab;
 }
@@ -258,7 +309,7 @@ body {
     z-index: 500;
     height: 100%;
     min-width: 32px;
-    border-left: 1.5px solid #e1e1e1;
+    border-left: 1px solid #e1e1e1;
 }
 
 .grid-item-button:hover {
@@ -278,4 +329,127 @@ body {
 
 .fullscreen .grid-item-header {
     border: none;
+}
+
+.chart-tool {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    border: 1px solid #e1e1e1;
+    border-left: none;
+    box-sizing: border-box;
+    padding: 15px;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.tool-table {
+    width: 100%;
+    column-gap: 0;
+    table-layout: auto; 
+}
+
+.tool-table tr {
+    height: 25px;
+    cursor: pointer;
+    border-bottom: 1px solid #e1e1e1;
+    font-size: 12px;
+    user-select: none;
+}
+
+.tool-table th {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+.tool-table th:first-child {
+    justify-content: flex-start;
+}
+
+.tool-table .label-item:hover {
+    background-color: #f0f0f0;
+}
+
+.tool-table .label-item th {
+    background: transparent;
+}
+
+.tool-table th, .tool-table td {
+    text-align: right;
+    white-space: nowrap; 
+    width: 100%;
+    padding: 0px 8px;
+}
+
+.tool-table th:first-child,
+.tool-table td:first-child {
+    text-align: left;
+}
+
+.tool-table .label-name {
+    display: flex;
+    align-items: center; 
+    gap: 8px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    user-select: none;
+}
+
+.tool-table.hide-all .label-item {
+    color: #a9a9a9;
+}
+
+.tool-table.hide-all .hide-chart.label-item {
+    color: #000;
+}
+
+.relative {
+    position: relative;
+}
+
+.fullscreen-chart {
+    width: 100%;
+}
+
+.tool-table {
+    width: 100%;
+    border-spacing: 0;
+}
+
+.label-header th {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.label-item td:first-child,
+.label-header td:first-child {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.label-item td:not(:first-child),
+.label-header th:not(:first-child) {
+    min-width: 75px;
+    max-width: 75px;
+    width: 75px;
+}
+
+.label-header th,
+.label-item td {
+    min-width: 75px;
+}
+
+.label-item td:first-child,
+.label-header th:first-child {
+    width: 100%;
+}
+
+.tool-table {
+    column-span: 0;
+    border-spacing: 0px;
 }
