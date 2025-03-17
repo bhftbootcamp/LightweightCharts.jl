@@ -359,13 +359,11 @@ const ChartPanel = ({ settings, id, setPanels }) => {
                             panel,
                             seriesMap[chart.id],
                             {
-                                time: chart.data[plugin.settings.point1.index]
-                                    .time,
+                                time: chart.data[plugin.settings.point1.index].time,
                                 price: plugin.settings.point1.price,
                             },
                             {
-                                time: chart.data[plugin.settings.point2.index]
-                                    .time,
+                                time: chart.data[plugin.settings.point2.index].time,
                                 price: plugin.settings.point2.price,
                             },
                             plugin.settings
