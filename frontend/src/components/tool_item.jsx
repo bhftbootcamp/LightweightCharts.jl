@@ -15,6 +15,7 @@ function ToolItem({ panelId, tool, onClick }) {
             <td>{formatter.format(tool.min)}</td>
             <td>{formatter.format(tool.max)}</td>
             <td>{formatter.format(tool.last)}</td>
+            <td>{formatter.format(tool.diff)}</td>
         </tr>
     );
 }

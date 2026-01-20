@@ -312,8 +312,16 @@ body {
     border-left: 1px solid #e1e1e1;
 }
 
+.grid-item-button.selected {
+    background-color: #ededed;
+}
+
 .grid-item-button:hover {
     background-color: #ededed;
+}
+
+.grid-item-button svg {
+    fill: #5f6368;
 }
 
 .fullscreen {
@@ -361,7 +369,6 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    gap: 5px;
 }
 
 .tool-table th:first-child {
@@ -423,6 +430,11 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
+    color: #1068bf;
+}
+
+.label-header svg {
+    fill: #1068bf;
 }
 
 .label-item td:first-child,
