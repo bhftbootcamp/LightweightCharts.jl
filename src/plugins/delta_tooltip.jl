@@ -7,7 +7,7 @@ struct DeltaTooltipSettings <: AbstractPluginSettings
 end
 
 """
-    lwc_vert_line(; kw...) -> LWCPlugin
+    lwc_delta_tooltip(; kw...) -> LWCPlugin
 
 Adds a dynamic tooltip to the chart following the cursor and displaying the values (and their change, while holding down the mouse button).
 
