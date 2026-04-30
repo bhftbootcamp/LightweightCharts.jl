@@ -1,4 +1,4 @@
-# charts/candlestick
+#__ charts/candlestick
 # https://LightweightCharts.github.io/lightweight-charts/docs/api/interfaces/CandlestickStyleOptions
 
 struct CandlestickChartSettings <: AbstractChartSettings

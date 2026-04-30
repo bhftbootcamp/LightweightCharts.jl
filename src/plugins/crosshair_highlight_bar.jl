@@ -1,4 +1,4 @@
-# plugins/crosshair_highlight_bar
+#__ plugins/crosshair_highlight_bar
 
 struct CrosshairHighlightBarSettings <: AbstractPluginSettings
     color::String
@@ -23,6 +23,6 @@ function lwc_crosshair_highlight_bar(;
 
     return LWCPlugin(
         "addCrosshairHighlightBar",
-        settings
+        settings,
     )
 end

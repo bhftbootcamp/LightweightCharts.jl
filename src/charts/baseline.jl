@@ -1,4 +1,4 @@
-# charts/baseline
+#__ charts/baseline
 # https://LightweightCharts.github.io/lightweight-charts/docs/api/interfaces/BaselineStyleOptions
 
 struct LWCBaseValue

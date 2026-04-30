@@ -1,4 +1,4 @@
-# charts/area
+#__ charts/area
 # https://LightweightCharts.github.io/lightweight-charts/docs/api/interfaces/AreaStyleOptions
 
 struct AreaChartSettings <: AbstractChartSettings

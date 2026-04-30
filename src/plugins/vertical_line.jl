@@ -1,4 +1,4 @@
-# plugins/vertical_line
+#__ plugins/vertical_line
 
 struct VertLineSettings <: AbstractPluginSettings
     index::Int64
@@ -41,11 +41,11 @@ function lwc_vert_line(
         width,
         label_background_color,
         label_text_color,
-        show_label
+        show_label,
     )
 
     return LWCPlugin(
         "addVertLine",
-        settings
+        settings,
     )
 end
