@@ -1,4 +1,4 @@
-# plugins/trend_line
+#__ plugins/trend_line
 
 struct TrendPoint <: AbstractPluginSettings
     index::Int64
@@ -52,6 +52,6 @@ function lwc_trend_line(
 
     return LWCPlugin(
         "addTrendLine",
-        settings
+        settings,
     )
 end

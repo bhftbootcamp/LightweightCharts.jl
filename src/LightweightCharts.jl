@@ -274,7 +274,7 @@ function lwc_panel(
         last_value_visible,
         title_visible,
         legend_mode,
-        default_legend_visible
+        default_legend_visible,
     )
 end
 

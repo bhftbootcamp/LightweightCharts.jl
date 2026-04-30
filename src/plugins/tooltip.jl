@@ -1,4 +1,4 @@
-# plugins/tooltip
+#__ plugins/tooltip
 
 struct TooltipSubSettings <: AbstractPluginSettings
     title::String
@@ -48,11 +48,11 @@ function lwc_tooltip(;
             vertical_deadzone_height,
             vertical_spacing,
             top_offset,
-        )
+        ),
     )
 
     return LWCPlugin(
         "addTooltip",
-        settings
+        settings,
     )
 end

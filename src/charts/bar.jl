@@ -1,4 +1,4 @@
-# charts/bar
+#__ charts/bar
 # https://LightweightCharts.github.io/lightweight-charts/docs/api/interfaces/BarStyleOptions
 
 struct BarChartSettings <: AbstractChartSettings

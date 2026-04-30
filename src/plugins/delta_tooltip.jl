@@ -1,4 +1,4 @@
-# plugins/delta_tooltip
+#__ plugins/delta_tooltip
 
 struct DeltaTooltipSettings <: AbstractPluginSettings
     line_color::String
@@ -26,11 +26,11 @@ function lwc_delta_tooltip(;
     settings = DeltaTooltipSettings(
         line_color,
         show_time,
-        top_offset
+        top_offset,
     )
 
     return LWCPlugin(
         "addDeltaTooltip",
-        settings
+        settings,
     )
 end

@@ -1,4 +1,4 @@
-# charts/line
+#__ charts/line
 # https://LightweightCharts.github.io/lightweight-charts/docs/api/interfaces/LineStyleOptions
 
 struct LineChartSettings <: AbstractChartSettings

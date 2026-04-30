@@ -1,4 +1,4 @@
-# charts/histogram
+#__ charts/histogram
 # https://LightweightCharts.github.io/lightweight-charts/docs/api/interfaces/HistogramStyleOptions
 
 struct HistogramChartSettings <: AbstractChartSettings
