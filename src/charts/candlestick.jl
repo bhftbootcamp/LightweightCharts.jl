@@ -38,8 +38,8 @@ Wrapper function for [`Candlestick`](https://tradingview.github.io/lightweight-c
 | `wick_visible::Bool` | `true` | Wick visibility. |
 | `border_visible::Bool` | `true` | Candle borders visibility. |
 | `border_color::String` | `"#378658"` | Candle border color. |
-| `border_up_color::String` | `"#26a69a"` | Boder color of bullish candle. |
-| `border_down_color::String` | `"#ef5350"` | Boder color of bearish candle. |
+| `border_up_color::String` | `"#26a69a"` | Border color of bullish candle. |
+| `border_down_color::String` | `"#ef5350"` | Border color of bearish candle. |
 | `wick_color::String` | `"#737375"` | Wick color. |
 | `wick_up_color::String` | `"#26a69a"` | Wick color of bullish candle. |
 | `wick_down_color::String` | `"#ef5350"` | Wick color of bearish candle. |

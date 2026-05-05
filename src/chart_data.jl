@@ -122,6 +122,10 @@ function Base.:(==)(left::LWCSimpleChartItem, right::LWCSimpleChartItem)
            isequal(lwc_value(left), lwc_value(right))
 end
 
+function Base.hash(x::LWCSimpleChartItem, h::UInt)
+    return hash((lwc_time(x), lwc_value(x)), h)
+end
+
 """
     LWCCandleChartItem(time::Int64, open::Real, high::Real, low::Real, close::Real; kw...)
     LWCCandleChartItem(time::TimeType, open::Real, high::Real, low::Real, close::Real; kw...)
@@ -212,6 +216,10 @@ function Base.:(==)(left::LWCCandleChartItem, right::LWCCandleChartItem)
     )
 end
 
+function Base.hash(x::LWCCandleChartItem, h::UInt)
+    return hash((lwc_time(x), lwc_open(x), lwc_high(x), lwc_low(x), lwc_close(x)), h)
+end
+
 const UNIXEPOCH_NS = Dates.UNIXEPOCH * Int128(1_000_000)
 
 datetime2epochns(x::DateTime)::Int64 = (Dates.value(x) - Dates.UNIXEPOCH) * 1_000_000
@@ -272,7 +280,7 @@ function to_lwc_data(
     timestamps::AbstractVector{<:Union{Real,TimeType}},
     values::AbstractVector{<:Real},
 )
-    @assert length(timestamps) === length(values) "length(timestamps) ≠ length(values)"
+    length(timestamps) === length(values) || throw(ArgumentError("length(timestamps) ≠ length(values)"))
 
     return map(timestamps, values) do timestamp, value
         return LWCSimpleChartItem(timestamp, value)
@@ -294,10 +302,10 @@ function to_lwc_data(
     low::AbstractVector{<:Real},
     close::AbstractVector{<:Real},
 )
-    @assert length(timestamps) === length(open) "length(timestamps) ≠ length(open)"
-    @assert length(timestamps) === length(high) "length(timestamps) ≠ length(high)"
-    @assert length(timestamps) === length(low) "length(timestamps) ≠ length(low)"
-    @assert length(timestamps) === length(close) "length(timestamps) ≠ length(close)"
+    length(timestamps) === length(open) || throw(ArgumentError("length(timestamps) ≠ length(open)"))
+    length(timestamps) === length(high) || throw(ArgumentError("length(timestamps) ≠ length(high)"))
+    length(timestamps) === length(low) || throw(ArgumentError("length(timestamps) ≠ length(low)"))
+    length(timestamps) === length(close) || throw(ArgumentError("length(timestamps) ≠ length(close)"))
 
     return map(timestamps, open, high, low, close) do t, o, h, l, c
         return LWCCandleChartItem(t, o, h, l, c)

@@ -218,7 +218,7 @@ Creates a panel combining several [`charts`](@ref charts).
 | `min_charts_for_search` | `10` | Minimum number of charts to search. |
 | `mode::LWC_PRICE_SCALE_MODE` | `0` | Price scale mode. |
 | `crosshair_settings::CrosshairOptions` | `CrosshairOptions()` | Structure describing crosshair options. |
-| `cursor::LWC_CURSOR` | `LWC_CURSOR_DEFAUL` | Cursor type. |
+| `cursor::LWC_CURSOR` | `LWC_CURSOR_DEFAULT` | Cursor type. |
 | `last_value_visible::Bool` | `false` | Shows the latest price label on the price scale. |
 | `title_visible::Bool` | `false` | Shows the chart name next to the latest price label. |
 | `legend_mode::LWC_LEGEND_MODE`| `LWC_LEGEND_LIST_MODE` (`LWC_LEGEND_LIST_MODE`, `LWC_LEGEND_TABLE_MODE`) | Legend box display type. |
@@ -313,7 +313,7 @@ function update_not_set_coords!(panels::Tuple{Vararg{LWCPanel}})
         prev_y = panel.y
     end
     xy = map(p -> (p.x, p.y), panels)
-    @assert length(Set(xy)) === length(xy) "has duplicate panel"
+    length(Set(xy)) === length(xy) || throw(ArgumentError("has duplicate panel"))
 end
 
 """
@@ -341,10 +341,10 @@ function lwc_layout(
     setX = Set(map(panel -> panel.x, panels))
     setY = Set(map(panel -> panel.y, panels))
 
-    @assert setX == Set(minimum(setX):maximum(setX)) "incorrect order of the X-axis numbers"
-    @assert setY == Set(minimum(setY):maximum(setY)) "incorrect order of the Y-axis numbers"
+    setX == Set(minimum(setX):maximum(setX)) || throw(ArgumentError("incorrect order of the X-axis numbers"))
+    setY == Set(minimum(setY):maximum(setY)) || throw(ArgumentError("incorrect order of the Y-axis numbers"))
 
-    maxX = lcm(setX...)
+    maxX = maximum(setX)
     maxY = length(setY)
 
     areas = Matrix{String}(undef, maxY, maxX)

@@ -70,7 +70,7 @@ end
 """
     lwc_bar(arg...; kw...) -> LWCChart
 
-Creates a [`LWCChart`](@ref) from the passed `arg` that describes the corresponding candlestick values.
+Creates a [`LWCChart`](@ref) from the passed `arg` that describes the corresponding bar values.
 
 ## Arguments
 - `timestamps::Vector{Union{Real,TimeType}}`
