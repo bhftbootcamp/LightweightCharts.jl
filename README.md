@@ -220,3 +220,9 @@ lwc_show(chart)
 ## Contributing
 
 Contributions to LightweightCharts are welcome! If you encounter a bug, have a feature request, or would like to contribute code, please open an issue or a pull request on GitHub.
+
+## Useful Links
+
+- [tradingview/lightweight-charts](https://github.com/tradingview/lightweight-charts) – Performant financial charts built with HTML5 canvas
+- [Lightweight Charts™ Documentation](https://www.tradingview.com/lightweight-charts/) – Official TradingView Lightweight Charts documentation
+- [LightweightCharts.jl Documentation](https://bhftbootcamp.github.io/LightweightCharts.jl/stable/) – Stable documentation for LightweightCharts.jl
